@@ -171,6 +171,9 @@ export class TimeManagementVM {
               description,
             });
             this._confirmExtraEmployment = null;
+          },
+          onClose: () => {
+            this._confirmExtraEmployment = null;
           }
         })
       },

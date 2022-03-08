@@ -10,9 +10,22 @@
     background: rgba(0, 0, 0, 0.8);
 
     &__popup {
+        position: relative;
         background: lightpink;
-        padding: 12px;
+        padding: 24px;
         border-radius: 4px;
         border: 1px solid;
+    }
+
+    &__cross {
+        position: absolute;
+        cursor: pointer;
+        width: 8px;
+        height: 8px;
+        line-height: 8px;
+        top: 4px;
+        right: 4px;
+        border: 1px solid black;
+        padding: 2px;
     }
 }
