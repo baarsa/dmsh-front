@@ -6,7 +6,7 @@ let items = [
   {
     id: current++,
     schedule: 1,
-    lessonTaker: 50,
+    lessonTaker: 1,
     teacher: 1,
     subject: 1,
     weekDay: 0,
@@ -16,7 +16,7 @@ let items = [
   {
     id: current++,
     schedule: 1,
-    lessonTaker: 50,
+    lessonTaker: 1,
     teacher: 1,
     subject: 1,
     weekDay: 0,

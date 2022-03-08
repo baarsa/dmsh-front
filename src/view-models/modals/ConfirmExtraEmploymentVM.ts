@@ -2,7 +2,7 @@ import {StringFieldVM} from "../fields/StringField";
 import { makeObservable, observable} from "mobx";
 import {ModalVM} from "./ModalVM";
 
-type ConfirmParameters = {
+type SubmitParameters = {
     start: number;
     end: number;
     description: string;
@@ -38,22 +38,21 @@ export class ConfirmExtraEmploymentVM extends ModalVM {
             description: this._description.value,
         });
     }
-    _onConfirm: (parameters: ConfirmParameters) => void;
+    _onConfirm: (parameters: SubmitParameters) => void;
 
     constructor({
                     start,
                     end,
                     onConfirm,
                     onClose
-                }: { start: number; end: number; onConfirm: (parameters: ConfirmParameters) => void; onClose: () => void }) {
+                }: { start: number; end: number; onConfirm: (parameters: SubmitParameters) => void; onClose: () => void }) {
         super(onClose);
         this._start = start;
         this._end = end;
         this._onConfirm = onConfirm;
-        makeObservable<ConfirmExtraEmploymentVM, '_start' | '_end' | '_description'>(this, {
+        makeObservable<ConfirmExtraEmploymentVM, '_start' | '_end'>(this, {
             _start: observable,
             _end: observable,
-            _description: observable,
         });
     }
 }

@@ -3,6 +3,7 @@ import { TimeManagementVM } from "../view-models/pages/TimeManagementViewModel";
 import { LinkField } from "./fields/LinkField";
 import {Timeline} from "./Timeline";
 import {ConfirmExtraEmployment} from "./ConfirmExtraEmployment/ConfirmExtraEmployment";
+import {ConfirmLesson} from "./ConfirmLesson/ConfirmLesson";
 
 export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
   return (
@@ -12,7 +13,7 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
         onChange={(e) => props.vm.handleDayChange(Number(e.target.value))}
       >
         {props.vm.dayOptions.map((option) => (
-          <option value={option.value}>{option.text}</option>
+          <option key={option.value} value={option.value}>{option.text}</option>
         ))}
       </select>
       <LinkField field={props.vm.teacherField} />
@@ -25,7 +26,10 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
       <LinkField field={props.vm.pupilField} />
       <LinkField field={props.vm.groupField} />
         <Timeline vm={props.vm.teacherTimeline} />
+        <Timeline vm={props.vm.commonTimeline} />
+        <Timeline vm={props.vm.takerTimeline} />
         { props.vm.confirmExtraEmployment && <ConfirmExtraEmployment vm={props.vm.confirmExtraEmployment} /> }
+        { props.vm.confirmLesson && <ConfirmLesson vm={props.vm.confirmLesson} /> }
     </div>
   );
 });

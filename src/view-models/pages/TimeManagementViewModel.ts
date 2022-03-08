@@ -8,6 +8,7 @@ import {TimelineVM} from "../TimelineVM";
 import {ScheduleEntity} from "../../models/schedule/ScheduleEntity";
 import { ConfirmExtraEmploymentVM } from "../modals/ConfirmExtraEmploymentVM";
 import {extraEmploymentRepository} from "../../models/extra-employment/ExtraEmploymentRepository";
+import {ConfirmLessonVM} from "../modals/ConfirmLessonVM";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -29,52 +30,17 @@ export class TimeManagementVM {
   private _lessonTakerType: "pupil" | "group" = "pupil";
   private _pupilField: LinkFieldVM<PupilEntity>;
   private _groupField: LinkFieldVM<GroupEntity>;
-  private _teacherTimeline: TimelineVM;
-  //private _takerTimeline: TimelineVM;
-  //private _commonTimeline: TimelineVM;
+  private readonly _teacherTimeline: TimelineVM;
+  private readonly _takerTimeline: TimelineVM;
+  private readonly _commonTimeline: TimelineVM;
 
   //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
-  // confirmLesson: ConfirmExtraEmploymentVM
-  // these inherit from some ModalVM with isOpen: boolean and show time adjustment controls
-  // and subject select (!)
-  // and description input for employment and buttons ok/cancel
-
-  // handling actions
-  async _createLesson({
-    start,
-    end,
-    subjectId
-  }: {
-    start: number;
-    end: number;
-    subjectId: number;
-  }) {
-    const lessonTakerId =
-      this._lessonTakerType === "pupil"
-        ? this._pupilField.value?.id
-        : this._groupField.value?.id; // take care of nulls
-    if (lessonTakerId === undefined || this._teacherField.value === null) {
-      throw new Error(); // todo error handling
-    }
-    lessonRepository.addEntity({
-      schedule: this._schedule.id,
-      lessonTaker: lessonTakerId,
-      teacher: this._teacherField.value.id,
-      subject: subjectId,
-      weekDay: this._selectedDay,
-      start,
-      end
-    });
-  }
+  private _confirmLesson: ConfirmLessonVM | null = null;
 
   // view handlers
   handleDayChange(day: number) {
     this._selectedDay = day;
-  }
-
-  handleEndOfDrawing() {
-    // show relevant modal
   }
 
   // getters for view
@@ -105,27 +71,36 @@ export class TimeManagementVM {
     return this._teacherTimeline;
   }
 
+  get takerTimeline() {
+    return this._takerTimeline;
+  }
+
+  get commonTimeline() {
+    return this._commonTimeline;
+  }
+
   get confirmExtraEmployment() {
     return this._confirmExtraEmployment;
+  }
+
+  get confirmLesson() {
+    return this._confirmLesson;
   }
 
   //effects
   // set teacher timeline spans
   async setTeacherTimelineSpans() {
-    // get spans for selected teacher
-    console.log(getObserverTree(extraEmploymentRepository, 'entities'));
     const currentTeacher = this._teacherField.value;
     if (currentTeacher === null) {
       return;
     }
 
-    const allLessons = lessonRepository.entities;
+    const relevantLessons = this._schedule.lessons
+        .filter(lesson => lesson.teacher === currentTeacher.id && lesson.weekDay === this.selectedDay);
+
     if (!lessonRepository.isSynchronized) {
       return;
     }
-    const relevantLessons = this._schedule.lessons
-        .map(id => allLessons[id])
-        .filter(lesson => lesson.teacher === currentTeacher.id && lesson.weekDay === this.selectedDay);
 
     const relevantExtraEmployments = this._schedule.extraEmployments
         .filter(employment => employment.person === currentTeacher.id && employment.weekDay === this.selectedDay);
@@ -142,6 +117,43 @@ export class TimeManagementVM {
           end: employment.end,
           text: String(employment.description),
         }))
+    ];
+  }
+
+  async setTakerTimelineSpans() {
+    const currentTaker = this._lessonTakerType === 'pupil' ? this._pupilField.value : this._groupField.value;
+    if (currentTaker === null) {
+      return;
+    }
+
+    const relevantLessons = this._schedule.lessons
+        .filter(lesson => lesson.lessonTaker === currentTaker.lessonTakerId && lesson.weekDay === this.selectedDay);
+    if (!lessonRepository.isSynchronized) {
+      return;
+    }
+
+    const relevantExtraEmployments = this._schedule.extraEmployments
+        .filter(employment => employment.person === currentTaker.id && employment.weekDay === this.selectedDay);
+    if (!extraEmploymentRepository.isSynchronized) { // proxy issynced to schedule entity
+      return;
+    }
+    this._takerTimeline.spans = [...relevantLessons.map(lesson => ({
+      start: lesson.start,
+      end: lesson.end,
+      text: String(lesson.subject), // todo map to subject name
+    })),
+      ...relevantExtraEmployments.map(employment => ({
+        start: employment.start,
+        end: employment.end,
+        text: String(employment.description),
+      }))
+    ];
+  }
+
+  async setCommonTimelineSpans() {
+    this._commonTimeline.spans = [
+        ...this._teacherTimeline.spans,
+        ...this._takerTimeline.spans,
     ];
   }
 
@@ -178,7 +190,66 @@ export class TimeManagementVM {
         })
       },
     });
+    this._takerTimeline = new TimelineVM({
+      spans: [], // only allow drawing if taker is pupil not group!
+      onSpanDrawingEnd: ({ start, end }) => {
+        this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
+          start,
+          end,
+          onConfirm: ({ start, end, description }) => {
+            const currentPupil = this._pupilField.value;
+            if (currentPupil === null) {
+              throw new Error('No pupil found'); // TODO: handle errors
+            }
+            extraEmploymentRepository.addEntity({
+              schedule: this._schedule.id,
+              person: currentPupil.id,
+              weekDay: this._selectedDay,
+              start,
+              end,
+              description,
+            });
+            this._confirmExtraEmployment = null;
+          },
+          onClose: () => {
+            this._confirmExtraEmployment = null;
+          }
+        })
+      },
+    });
+    this._commonTimeline = new TimelineVM({
+      spans: [], // only allow drawing if taker is pupil not group!
+      onSpanDrawingEnd: ({ start, end }) => {
+        this._confirmLesson = new ConfirmLessonVM({
+          start,
+          end,
+          filterSubjects: () => true, //fix
+          onSubmit: ({ start, end, subject }) => {
+            const currentTaker = this._lessonTakerType === 'pupil' ? this._pupilField.value : this._groupField.value;
+            const currentTeacher = this._teacherField.value;
+            if (currentTaker === null || currentTeacher === null) {
+              throw new Error('No pupil or teacher found'); // TODO: handle errors
+            }
+            lessonRepository.addEntity({
+              schedule: this._schedule.id,
+              lessonTaker: currentTaker.lessonTakerId,
+              teacher: currentTeacher.id,
+              weekDay: this._selectedDay,
+              start,
+              end,
+              subject,
+            });
+            this._confirmLesson = null;
+          },
+          onClose: () => {
+            this._confirmLesson = null;
+          }
+        })
+      },
+    });
     makeAutoObservable(this);
     autorun(() => this.setTeacherTimelineSpans());
+    autorun(() => this.setTakerTimelineSpans());
+    autorun(() => this.setCommonTimelineSpans());
   }
 }
