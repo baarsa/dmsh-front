@@ -17,6 +17,11 @@ class ExtraEmploymentRepository extends GenericEntityRepository<
       createEntity: createExtraEmploymentEntity
     });
   }
+
+  getByParameters(parameters: Partial<IExtraEmployment>) {
+    return Object.values(this.entities)
+        .filter(entity => Object.entries(parameters).every(([key, value]) => (entity as any)[key] === value));
+  }
 }
 
 export const extraEmploymentRepository = new ExtraEmploymentRepository();

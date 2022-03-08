@@ -2,28 +2,45 @@ import { IEntityService } from "./shared";
 import { ITeacher } from "../entities/ITeacher";
 
 // total fake
+let current = 1;
+let items = [
+  {
+    id: current++,
+    name: "Obi-Wan Kenobi",
+    canAssist: true,
+    subjects: [1, 2, 3]
+  },
+  {
+    id: current++,
+    name: "Qui-Gonn Jinn",
+    canAssist: false,
+    subjects: [2]
+  },
+];
+
 export const teacherService: IEntityService<ITeacher> = {
-  async fetchById(id: number) {
-    return {
-      id,
-      name: "Obi-Wan Kenobi",
-      canAssist: true,
-      subjects: [1, 2, 3]
-    };
+  async fetchAll() {
+    return items;
+  },
+  async fetchById(_id: number) {
+    return items.find(({ id }) => id === _id) ?? null;
   },
   async saveToServer(data: ITeacher) {
-    return {
-      id: 1,
+    const newItem = {
+      id: current++,
       ...data
     };
+    items = [...items, newItem];
+    return newItem;
   },
   async update(id: number, data: ITeacher) {
+    items = items.map((teacher) => teacher.id === id ? { ...teacher, ...data } : teacher);
     return {
       id,
       ...data
     };
   },
-  async remove(id: number) {
-    return;
+  async remove(_id: number) {
+    items = items.filter(({ id }) => id !== _id);
   }
 };

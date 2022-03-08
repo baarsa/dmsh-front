@@ -4,7 +4,7 @@ import { Option } from "./Option";
 
 export interface ILinkField extends IField {
   setValue(id: number): void;
-  getOptions(): Option[];
+  options: Option[];
   getValueText(): string;
   getValueId(): number | null;
   fieldType: FieldType.LINK;

@@ -3,6 +3,7 @@ import { Stored } from "../shared";
 
 export class ExtraEmploymentEntity implements IExtraEmployment {
   id: number;
+  schedule: number;
   weekDay: number;
   start: number;
   end: number;
@@ -11,6 +12,7 @@ export class ExtraEmploymentEntity implements IExtraEmployment {
 
   constructor(props: Stored<IExtraEmployment>) {
     this.id = props.id;
+    this.schedule = props.schedule;
     this.weekDay = props.weekDay;
     this.start = props.start;
     this.end = props.end;
