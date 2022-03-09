@@ -1,32 +1,23 @@
 import { IEntityService } from "../services/shared";
 import {IPupil} from "../entities/IPupil";
 import {IGroup} from "../entities/IGroup";
-import {action, computed, getObserverTree, makeAutoObservable, makeObservable, observable, runInAction} from "mobx";
-
-export interface IEntity {
-  // сущность, не сохраненная на сервер. remove (no need)
-}
+import { computed, makeObservable, observable, runInAction} from "mobx";
 
 export interface INamedEntity {
   name: string;
 }
 
-export interface StoredEntity extends IEntity {
-  // сохраненная на сервер и получившая id
-  id: number;
-}
-
 // maybe put somewhere else
-export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup ? { lessonTakerId: number } : {});
+export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup ? { lessonTakerId: number } : Record<string, never>);
 
-export interface IEntityRepository<T extends IEntity> {
+export interface IEntityRepository<T> {
   // класс сущности; данные для инстанцирования
   readonly entities: Record<number, Stored<T>>;
   getEntityById(id: number): Promise<Stored<T> | null>;
   // addEntity(entityData: K): Promise<boolean>; // whether is has been successfully persisted
 }
 
-export abstract class GenericEntityRepository<T extends IEntity, K>
+export abstract class GenericEntityRepository<T, K>
   implements IEntityRepository<T> {
   private _entityService: IEntityService<K>;
   private createEntity: (props: Stored<K>) => Stored<T>;

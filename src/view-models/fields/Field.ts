@@ -12,6 +12,13 @@ export abstract class FieldVM {
   set isDisabled(value: boolean) {
     this._isDisabled = value;
   }
+
+  get isDisabled(): boolean {
+    return (
+        this._isDisabled ||
+        (this.controllingField !== null && !this.controllingField.value)
+    );
+  }
   protected abstract fieldType: FieldType;
   abstract isValid(): boolean;
   protected controllingField: IBooleanField | null = null;
@@ -19,12 +26,6 @@ export abstract class FieldVM {
   private _isDisabled: boolean;
   getFieldType() {
     return this.fieldType;
-  }
-  get isDisabled(): boolean {
-    return (
-      this._isDisabled ||
-      (this.controllingField !== null && !this.controllingField.value)
-    );
   }
   getLabel() {
     return this.label;

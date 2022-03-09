@@ -39,7 +39,7 @@ export class TimelineVM {
     private _spans: Span[];
     _drawingSpan: DrawingSpan | null = null;
     private readonly _onSpanDrawingEnd: (params: { start: number; end: number }) => void;
-    private _canDrawSpan: boolean = true;
+    private _canDrawSpan = true;
     // + on span dragging end
     // + on span right click (delete)
 

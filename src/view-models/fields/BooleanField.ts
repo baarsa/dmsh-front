@@ -4,7 +4,7 @@ import { IBooleanField } from "./IBooleanField";
 
 export class BooleanFieldVM extends FieldVM implements IBooleanField {
   fieldType: FieldType.BOOLEAN = FieldType.BOOLEAN;
-  value: boolean = false;
+  value = false;
   setValue(newValue: boolean) {
     this.value = newValue;
   }

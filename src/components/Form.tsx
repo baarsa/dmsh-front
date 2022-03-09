@@ -4,8 +4,8 @@ import { Field } from "./fields/Field";
 export const Form = (props: { form: IFormModel }) => (
   <div>
     This is a form {props.form.title}
-    {props.form.getFields().map((field) => (
-      <Field field={field} />
+    {props.form.getFields().map((field, i) => (
+      <Field key={i} field={field} />
     ))}
     {props.form.mode === "edit" && (
       <button

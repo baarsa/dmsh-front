@@ -12,7 +12,7 @@ export class StringFieldVM extends FieldVM {
     this._value = value;
   }
   fieldType: FieldType.STRING = FieldType.STRING;
-  _value: string = "";
+  _value = "";
   isValid() {
     return this._value.length > 0;
   }

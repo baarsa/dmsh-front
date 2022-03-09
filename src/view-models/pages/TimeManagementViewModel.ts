@@ -23,7 +23,7 @@ type Params = {
 
 export class TimeManagementVM {
   private _schedule: ScheduleEntity;
-  private _selectedDay: number = 0;
+  private _selectedDay = 0;
   private _dayOptions = [
     { value: 0, text: "Понедельник" },
     { value: 1, text: "Вторник" }

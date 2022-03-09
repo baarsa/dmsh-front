@@ -15,7 +15,7 @@ export class LinkFieldVM<T extends INamedEntity> extends FieldVM
     return Object.values(this.entityModel.entities);
   };
   _isLoading = true;
-  get isLoading() { return this._isLoading };
+  get isLoading() { return this._isLoading }
   get options() {
     return this._entities()
       .filter(this.entitiesFilter)
