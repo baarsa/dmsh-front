@@ -3,7 +3,7 @@ import { subjectService } from "../../services/subjectService";
 import { GenericEntityRepository } from "../shared";
 import { SubjectEntity, createSubjectEntity } from "./SubjectEntity";
 
-class SubjectEntityRepository extends GenericEntityRepository<
+class SubjectRepository extends GenericEntityRepository<
   SubjectEntity,
   ISubject
 > {
@@ -16,6 +16,6 @@ class SubjectEntityRepository extends GenericEntityRepository<
   }
 }
 
-export const subjectEntityRepository = new SubjectEntityRepository();
+export const subjectRepository = new SubjectRepository();
 
 // maybe export only instantiated object? or as a singleton?

@@ -1,7 +1,7 @@
 import {ModalVM} from "./ModalVM";
 import {LinkFieldVM} from "../fields/LinkField";
 import {SubjectEntity} from "../../models/subject/SubjectEntity";
-import {subjectEntityRepository} from "../../models/subject/SubjectRepository";
+import {subjectRepository} from "../../models/subject/SubjectRepository";
 import {makeObservable, observable} from "mobx";
 
 type SubmitParameters = {
@@ -58,7 +58,7 @@ export class ConfirmLessonVM extends ModalVM {
         super(onClose);
         this._start = start;
         this._end = end;
-        this._subject = new LinkFieldVM<SubjectEntity>({ label: 'Предмет' }, subjectEntityRepository, filterSubjects);
+        this._subject = new LinkFieldVM<SubjectEntity>({ label: 'Предмет' }, subjectRepository, filterSubjects);
         this._onSubmit = onSubmit;
         makeObservable<ConfirmLessonVM, '_start' | '_end'>(this, {
             _start: observable,

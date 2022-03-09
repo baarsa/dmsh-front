@@ -1,4 +1,4 @@
-import { subjectEntityRepository } from "../../models/subject/SubjectRepository";
+import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { BooleanFieldVM } from "../fields/BooleanField";
 import { LinkFieldVM } from "../fields/LinkField";
 import { StringFieldVM } from "../fields/StringField";
@@ -22,7 +22,7 @@ export class CreateSubjectViewModel {
         isSpecial: isSpecialField,
         specialityGroup: new LinkFieldVM(
           { label: "speciality group", controllingField: isSpecialField },
-          subjectEntityRepository
+          subjectRepository
         )
       },
       mapFieldsToProps: (fields) => ({
@@ -31,7 +31,7 @@ export class CreateSubjectViewModel {
         specialityGroup: fields.specialityGroup.getValueId()
       }),
       submitHandler: (data: Subject) => {
-        subjectEntityRepository.addEntity(data); // return id and
+        subjectRepository.addEntity(data); // return id and
         // go to view: /subjects/view/{id}
       },
       cancelHandler: () => {

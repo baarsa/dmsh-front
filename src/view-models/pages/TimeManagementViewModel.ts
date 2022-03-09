@@ -11,6 +11,7 @@ import {extraEmploymentRepository} from "../../models/extra-employment/ExtraEmpl
 import {ConfirmLessonVM} from "../modals/ConfirmLessonVM";
 import {SubjectEntity} from "../../models/subject/SubjectEntity";
 import {groupRepository} from "../../models/group/GroupRepository";
+import {subjectRepository} from "../../models/subject/SubjectRepository";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -140,15 +141,16 @@ export class TimeManagementVM {
     if (!extraEmploymentRepository.isSynchronized) { // proxy issynced to schedule entity
       return;
     }
+    const subjects = subjectRepository.entities;
     this._teacherTimeline.spans = [...relevantLessons.map(lesson => ({
       start: lesson.start,
       end: lesson.end,
-      text: String(lesson.subject), // todo map to subject name
+      text: subjects[lesson.subject]?.name,
     })),
         ...relevantExtraEmployments.map(employment => ({
           start: employment.start,
           end: employment.end,
-          text: String(employment.description),
+          text: employment.description,
         }))
     ];
   }
@@ -177,15 +179,16 @@ export class TimeManagementVM {
     if (!extraEmploymentRepository.isSynchronized) { // proxy issynced to schedule entity
       return;
     }
+    const subjects = subjectRepository.entities;
     this._takerTimeline.spans = [...[...relevantLessons, ...groupLessonsForPupil].map(lesson => ({
       start: lesson.start,
       end: lesson.end,
-      text: String(lesson.subject), // todo map to subject name
+      text: subjects[lesson.subject]?.name,
     })),
       ...relevantExtraEmployments.map(employment => ({
         start: employment.start,
         end: employment.end,
-        text: String(employment.description),
+        text: employment.description,
       }))
     ];
   }
