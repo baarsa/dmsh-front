@@ -2,7 +2,7 @@ import { FieldType } from "./FieldType";
 
 export interface IField {
   getLabel(): string;
-  isEnabled(): boolean;
+  isDisabled: boolean;
   isValid(): boolean;
   fieldType: FieldType;
 }

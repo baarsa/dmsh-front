@@ -3,6 +3,7 @@ import {observer} from "mobx-react-lite";
 
 export const LinkField = observer((props: { field: ILinkField }) => (
   <select
+    disabled={props.field.isDisabled}
     value={props.field.getValueId() ?? undefined} // display loader for isLoading
     onChange={(e) => props.field.setValue(Number(e.target.value))}
   >

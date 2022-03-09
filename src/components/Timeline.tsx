@@ -26,6 +26,9 @@ const timeline = createCn('timeline');
 export const Timeline = observer((props: { vm: TimelineVM }) => {
     const ref = useRef<HTMLDivElement>(null);
     const handleMouseDown: MouseEventHandler = (e) => {
+        if (!props.vm.canDrawSpan) {
+            return;
+        }
         props.vm.drawingSpan = {
             initialX: e.nativeEvent.offsetX,
             currentX: e.nativeEvent.offsetX,

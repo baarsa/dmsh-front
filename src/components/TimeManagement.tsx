@@ -25,8 +25,8 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
       <input type="radio" name="ltType" value="group"  onChange={e => {
           if (e.target.checked) props.vm.lessonTakerType = 'group'
       }}/>
-      <LinkField field={props.vm.pupilField} />
-      <LinkField field={props.vm.groupField} />
+        { props.vm.lessonTakerType === 'pupil' && <LinkField field={props.vm.pupilField} /> }
+        { props.vm.lessonTakerType === 'group' && <LinkField field={props.vm.groupField} /> }
         <Timeline vm={props.vm.teacherTimeline} />
         <Timeline vm={props.vm.commonTimeline} />
         <Timeline vm={props.vm.takerTimeline} />

@@ -291,5 +291,8 @@ export class TimeManagementVM {
     autorun(() => this.setTeacherTimelineSpans());
     autorun(() => this.setTakerTimelineSpans());
     autorun(() => this.setCommonTimelineSpans());
+    autorun(() => {
+      this._takerTimeline.canDrawSpan = this._lessonTakerType === 'pupil';
+    });
   }
 }

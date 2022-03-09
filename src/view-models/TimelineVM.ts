@@ -12,24 +12,37 @@ type DrawingSpan = {
 }
 
 export class TimelineVM {
-    private _spans: Span[];
-    _drawingSpan: DrawingSpan | null = null;
-    private readonly _onSpanDrawingEnd: (params: { start: number; end: number }) => void;
-    // + on span dragging end
-    // + on span right click (delete)
+    get canDrawSpan(): boolean {
+        return this._canDrawSpan;
+    }
+
+    set canDrawSpan(value: boolean) {
+        this._canDrawSpan = value;
+    }
 
     get spans() {
         return this._spans;
     }
+
     set spans(newSpans: Span[]) {
         this._spans = newSpans;
     }
+
     get drawingSpan() {
         return this._drawingSpan;
     }
+
     set drawingSpan(newDrawingSpan) {
-         this._drawingSpan = newDrawingSpan;
+        this._drawingSpan = newDrawingSpan;
     }
+
+    private _spans: Span[];
+    _drawingSpan: DrawingSpan | null = null;
+    private readonly _onSpanDrawingEnd: (params: { start: number; end: number }) => void;
+    private _canDrawSpan: boolean = true;
+    // + on span dragging end
+    // + on span right click (delete)
+
     handleSpanDrawingEnd(params: { start: number; end: number }) {
         this._onSpanDrawingEnd(params);
         this._drawingSpan = null; // TODO: make async, add preloader animation?
