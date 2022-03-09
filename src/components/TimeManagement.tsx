@@ -17,9 +17,11 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
         ))}
       </select>
       <LinkField field={props.vm.teacherField} />
+        <label>Ученик</label>
         <input type="radio" name="ltType" value="pupil" checked={props.vm.lessonTakerType === 'pupil'} onChange={e => {
             if (e.target.checked) props.vm.lessonTakerType = 'pupil'
         }}/>
+        <label>Группа</label>
       <input type="radio" name="ltType" value="group"  onChange={e => {
           if (e.target.checked) props.vm.lessonTakerType = 'group'
       }}/>

@@ -3,6 +3,7 @@ import {ISchedule} from "../../entities/ISchedule";
 import {extraEmploymentRepository} from "../extra-employment/ExtraEmploymentRepository";
 import {computed, makeObservable} from "mobx";
 import { lessonRepository } from "../lesson/LessonRepository";
+import {loadRepository} from "../load/LoadRepository";
 
 export class ScheduleEntity implements IEntity, ISchedule {
     id: number;
@@ -12,6 +13,9 @@ export class ScheduleEntity implements IEntity, ISchedule {
     }
     get extraEmployments() {
         return extraEmploymentRepository.getByParameters({ schedule: this.id });
+    }
+    get loads() {
+        return loadRepository.getByParameters({ schedule: this.id });
     }
 
     constructor(props: Stored<ISchedule>) {

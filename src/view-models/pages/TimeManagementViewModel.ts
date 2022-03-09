@@ -9,6 +9,7 @@ import {ScheduleEntity} from "../../models/schedule/ScheduleEntity";
 import { ConfirmExtraEmploymentVM } from "../modals/ConfirmExtraEmploymentVM";
 import {extraEmploymentRepository} from "../../models/extra-employment/ExtraEmploymentRepository";
 import {ConfirmLessonVM} from "../modals/ConfirmLessonVM";
+import {SubjectEntity} from "../../models/subject/SubjectEntity";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -26,10 +27,10 @@ export class TimeManagementVM {
     { value: 1, text: "Вторник" }
   ];
   private _canChangeTeacher: boolean;
-  private _teacherField: LinkFieldVM<TeacherEntity>;
   private _lessonTakerType: "pupil" | "group" = "pupil";
-  private _pupilField: LinkFieldVM<PupilEntity>;
-  private _groupField: LinkFieldVM<GroupEntity>;
+  private readonly _teacherField: LinkFieldVM<TeacherEntity>;
+  private readonly _pupilField: LinkFieldVM<PupilEntity>;
+  private readonly _groupField: LinkFieldVM<GroupEntity>;
   private readonly _teacherTimeline: TimelineVM;
   private readonly _takerTimeline: TimelineVM;
   private readonly _commonTimeline: TimelineVM;
@@ -37,6 +38,37 @@ export class TimeManagementVM {
   //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
   private _confirmLesson: ConfirmLessonVM | null = null;
+
+  private _getAvailableSubjectsForAssign() {
+    const currentTeacher = this._teacherField.value;
+    if (currentTeacher === null) {
+      throw new Error('No teacher selected');
+    }
+    const loads = this._schedule.loads.filter(load => load.teacher === currentTeacher.id);
+    if (this._lessonTakerType === 'pupil') {
+      const currentPupil = this._pupilField.value;
+      if (currentPupil === null) {
+        throw new Error('No pupil selected');
+      }
+      return loads.filter(load => load.pupil === currentPupil.id).map(load => load.subject);
+    } else {
+      const currentGroup = this._groupField.value;
+      if (currentGroup === null) {
+        throw new Error('No group selected');
+      }
+      const pupilsInGroup = currentGroup.pupils;
+      const subjectsForPupils = pupilsInGroup.map(pupil => loads.reduce((acc: number[], load) => load.pupil === pupil ? [...acc, load.subject] : acc, []))
+      const subjectSet = new Set(subjectsForPupils[0]);
+      for (let i = 1; i < subjectsForPupils.length; i++) {
+        subjectSet.forEach(subject => {
+          if (!subjectsForPupils[i].includes(subject)) {
+            subjectSet.delete(subject);
+          }
+        })
+      }
+      return Array.from(subjectSet); // TODO: optimize/simplify
+    }
+  }
 
   // view handlers
   handleDayChange(day: number) {
@@ -223,7 +255,7 @@ export class TimeManagementVM {
         this._confirmLesson = new ConfirmLessonVM({
           start,
           end,
-          filterSubjects: () => true, //fix
+          filterSubjects: (subject: SubjectEntity) => this._getAvailableSubjectsForAssign().includes(subject.id),
           onSubmit: ({ start, end, subject }) => {
             const currentTaker = this._lessonTakerType === 'pupil' ? this._pupilField.value : this._groupField.value;
             const currentTeacher = this._teacherField.value;
