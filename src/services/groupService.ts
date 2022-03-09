@@ -9,13 +9,13 @@ let items = [
     id: current++,
     lessonTakerId: currentLt++,
     name: "All the kins",
-    pupils: [1, 2, 3]
+    pupils: [50, 51, 52]
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
     name: "Second class",
-    pupils: [2, 3]
+    pupils: [51, 52]
   },
 ];
 

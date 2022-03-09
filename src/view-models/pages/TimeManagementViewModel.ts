@@ -10,6 +10,7 @@ import { ConfirmExtraEmploymentVM } from "../modals/ConfirmExtraEmploymentVM";
 import {extraEmploymentRepository} from "../../models/extra-employment/ExtraEmploymentRepository";
 import {ConfirmLessonVM} from "../modals/ConfirmLessonVM";
 import {SubjectEntity} from "../../models/subject/SubjectEntity";
+import {groupRepository} from "../../models/group/GroupRepository";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -160,16 +161,23 @@ export class TimeManagementVM {
 
     const relevantLessons = this._schedule.lessons
         .filter(lesson => lesson.lessonTaker === currentTaker.lessonTakerId && lesson.weekDay === this.selectedDay);
-    if (!lessonRepository.isSynchronized) {
+    const groupLessonsForPupil = this._lessonTakerType === 'pupil'
+        ? // get all groups for pupil; get all lessons for every group
+        this._schedule.lessons
+            .filter(lesson => groupRepository.getByPupil(currentTaker.id).some(group => lesson.lessonTaker === group.lessonTakerId))
+            : [];
+    if (!lessonRepository.isSynchronized) { // do we still need it?
       return;
     }
 
-    const relevantExtraEmployments = this._schedule.extraEmployments
-        .filter(employment => employment.person === currentTaker.id && employment.weekDay === this.selectedDay);
+    const relevantExtraEmployments = this._lessonTakerType === 'pupil'
+        ? this._schedule.extraEmployments
+        .filter(employment => employment.person === currentTaker.id && employment.weekDay === this.selectedDay)
+    : [];
     if (!extraEmploymentRepository.isSynchronized) { // proxy issynced to schedule entity
       return;
     }
-    this._takerTimeline.spans = [...relevantLessons.map(lesson => ({
+    this._takerTimeline.spans = [...[...relevantLessons, ...groupLessonsForPupil].map(lesson => ({
       start: lesson.start,
       end: lesson.end,
       text: String(lesson.subject), // todo map to subject name

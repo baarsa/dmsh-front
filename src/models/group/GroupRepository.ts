@@ -11,6 +11,10 @@ class GroupRepository extends GenericEntityRepository<GroupEntity, IGroup> {
       createEntity: createGroupEntity
     });
   }
+
+  getByPupil(pupilId: number) {
+    return Object.values(this.entities).filter(group => group.pupils.includes(pupilId));
+  }
 }
 
 export const groupRepository = new GroupRepository();

@@ -23,6 +23,16 @@ let items = [
     start: 10 * 60,
     end: 11.5 * 60,
   },
+  {
+    id: current++,
+    schedule: 1,
+    lessonTaker: 50,
+    teacher: 1,
+    subject: 1,
+    weekDay: 0,
+    start: 17.5 * 60,
+    end: 18.5 * 60,
+  },
 ];
 
 // total fake
