@@ -5,16 +5,6 @@ import "./Timeline.css";
 import { observer } from "mobx-react-lite";
 import { createCn } from "../utils";
 
-const TIME_START = 10 * 60;
-const TIME_END = 20 * 60;
-
-const getSpanStyle = ({ start, end }: { start: number; end: number }) => {
-  const left = (100 * (start - TIME_START)) / (TIME_END - TIME_START);
-  const right = (100 * (end - TIME_START)) / (TIME_END - TIME_START);
-  const width = right - left;
-  return { left: `${left}%`, width: `${width}%` };
-};
-
 const getDrawingSpanStyle = ({
   initialX,
   currentX,
@@ -27,68 +17,120 @@ const getDrawingSpanStyle = ({
   return { left: `${left}px`, width: `${width}px` };
 };
 
-const timeline = createCn("timeline");
+const cn = createCn("timeline");
 
-export const Timeline = observer((props: { vm: TimelineVM }) => {
+type TimeLabel = {
+  time: number;
+  isBig: boolean;
+  text: string;
+};
+
+const getTimeText = (time: number) => {
+  const hours = Math.floor(time / 60);
+  let minutes = String(time % 60);
+  if (minutes.length === 1) {
+    minutes = "0" + minutes;
+  }
+  return `${hours}:${minutes}`;
+};
+
+const getTimeLabels = (start: number, end: number): TimeLabel[] => {
+  let labels: TimeLabel[] = [];
+  for (let i = start; i <= end; i += 10) {
+    labels.push({
+      time: i,
+      isBig: i % 60 === 0,
+      text: i % 60 === 0 ? getTimeText(i) : "",
+    });
+  }
+  return labels;
+};
+
+type Props = {
+  vm: TimelineVM;
+  className?: string;
+};
+
+export const Timeline = observer(({ vm, className }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
+  const { dayStart, dayEnd } = vm.timeBorders;
+  const getSpanStyle = ({ start, end }: { start: number; end: number }) => {
+    const left = (100 * (start - dayStart)) / (dayEnd - dayStart);
+    const right = (100 * (end - dayStart)) / (dayEnd - dayStart);
+    const width = right - left;
+    return { left: `${left}%`, width: `${width}%` };
+  };
   const handleMouseDown: MouseEventHandler = (e) => {
-    if (!props.vm.canDrawSpan) {
+    if (!vm.canDrawSpan) {
       return;
     }
-    props.vm.drawingSpan = {
+    vm.drawingSpan = {
       initialX: e.nativeEvent.offsetX,
       currentX: e.nativeEvent.offsetX,
     };
   };
   const handleMouseMove: MouseEventHandler = (e) => {
-    if (props.vm.drawingSpan === null) {
+    if (vm.drawingSpan === null) {
       return;
     }
-    props.vm.drawingSpan = {
-      initialX: props.vm.drawingSpan.initialX,
+    vm.drawingSpan = {
+      initialX: vm.drawingSpan.initialX,
       currentX: e.nativeEvent.offsetX, // wrong, sometimes it's counted within draweing span.
     };
   };
   const handleMouseUp: MouseEventHandler = () => {
-    if (ref.current === null || props.vm.drawingSpan === null) {
+    if (ref.current === null || vm.drawingSpan === null) {
       //error
       return;
     }
     const startX =
-      props.vm.drawingSpan.currentX < props.vm.drawingSpan.initialX
-        ? props.vm.drawingSpan.currentX
-        : props.vm.drawingSpan.initialX;
+      vm.drawingSpan.currentX < vm.drawingSpan.initialX
+        ? vm.drawingSpan.currentX
+        : vm.drawingSpan.initialX;
     const endX =
-      props.vm.drawingSpan.currentX < props.vm.drawingSpan.initialX
-        ? props.vm.drawingSpan.initialX
-        : props.vm.drawingSpan.currentX;
+      vm.drawingSpan.currentX < vm.drawingSpan.initialX
+        ? vm.drawingSpan.initialX
+        : vm.drawingSpan.currentX;
     const width = ref.current.offsetWidth;
-    props.vm.handleSpanDrawingEnd({
-      start: Math.round(
-        TIME_START + (startX / width) * (TIME_END - TIME_START)
-      ),
-      end: Math.round(TIME_START + (endX / width) * (TIME_END - TIME_START)),
+    vm.handleSpanDrawingEnd({
+      start: Math.round(dayStart + (startX / width) * (dayEnd - dayStart)),
+      end: Math.round(dayStart + (endX / width) * (dayEnd - dayStart)),
     });
   };
   return (
-    <div
-      ref={ref}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      className={timeline()}
-    >
-      {props.vm.spans.map((span, i) => (
-        <div className={timeline("span")} key={i} style={getSpanStyle(span)}>
-          {span.text}
-        </div>
-      ))}
-      {props.vm.drawingSpan && (
-        <div
-          className="timeline__span"
-          style={getDrawingSpanStyle(props.vm.drawingSpan)}
-        />
-      )}
+    <div className={`${cn()} ${className}`}>
+      <div
+        ref={ref}
+        className={cn("ribbon")}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+      >
+        {vm.spans.map((span, i) => (
+          <div className={cn("span")} key={i} style={getSpanStyle(span)}>
+            {span.text}
+          </div>
+        ))}
+        {vm.drawingSpan && (
+          <div
+            className="timeline__span"
+            style={getDrawingSpanStyle(vm.drawingSpan)}
+          />
+        )}
+      </div>
+      <div className={cn("labels")}>
+        {getTimeLabels(dayStart, dayEnd).map((item) => (
+          <div
+            className={cn("label", { big: item.isBig })}
+            style={{
+              left: `${(100 * (item.time - dayStart)) / (dayEnd - dayStart)}%`,
+            }}
+          >
+            <div className={cn("label-line")} />
+            <div className={cn("label-text")}>{item.text}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 });

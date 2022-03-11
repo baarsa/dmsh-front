@@ -1,0 +1,6 @@
+.time-management {
+  padding-left: 24px;
+  &__timeline {
+    margin-bottom: 24px;
+  }
+}

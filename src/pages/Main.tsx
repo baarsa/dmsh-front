@@ -8,6 +8,7 @@ import { MainViewModel } from "../view-models/pages/MainViewModel";
 import { observer } from "mobx-react-lite";
 import { withPermission } from "../components/withPermission";
 import { Permission } from "../models/rolesAndPermissions";
+import { configStore } from "../models/config-store/ConfigStore";
 
 const WrTimeManagement = withPermission(
   Permission.TimeManagementPage,
@@ -16,7 +17,7 @@ const WrTimeManagement = withPermission(
 
 const MainComponent = () => {
   const navigate = useNavigate();
-  const [mainVM] = useState(() => new MainViewModel(authStore));
+  const [mainVM] = useState(() => new MainViewModel(authStore, configStore));
   useEffect(() => {
     if (!mainVM.isLoading && !mainVM.isAuth) {
       navigate("/login");

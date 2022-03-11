@@ -1,13 +1,41 @@
 .timeline {
   position: relative;
-  height: 40px;
   width: 800px;
-  background: aquamarine;
+
+  &__ribbon {
+    height: 40px;
+    background: aquamarine;
+  }
 
   &__span {
     position: absolute;
     height: 100%;
     background: indianred;
     pointer-events: none; /* possibly remove and do the math in js */
+  }
+
+  &__labels {
+    position: relative;
+  }
+
+  &__label {
+    --height: 8px;
+    position: absolute;
+    top: calc(-1 * var(--height) / 2);
+    width: 1px;
+
+    &-line {
+      height: var(--height);
+      background: black;
+    }
+
+    &-text {
+      display: flex;
+      justify-content: center;
+    }
+
+    &_big {
+      --height: 12px;
+    }
   }
 }

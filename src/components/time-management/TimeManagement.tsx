@@ -1,13 +1,17 @@
 import { observer } from "mobx-react-lite";
-import { TimeManagementVM } from "../view-models/pages/TimeManagementViewModel";
-import { LinkField } from "./fields/LinkField";
-import { Timeline } from "./Timeline";
-import { ConfirmExtraEmployment } from "./ConfirmExtraEmployment/ConfirmExtraEmployment";
-import { ConfirmLesson } from "./ConfirmLesson/ConfirmLesson";
+import { TimeManagementVM } from "../../view-models/pages/TimeManagementViewModel";
+import { LinkField } from "../fields/LinkField";
+import { Timeline } from "../Timeline";
+import { ConfirmExtraEmployment } from "../ConfirmExtraEmployment/ConfirmExtraEmployment";
+import { ConfirmLesson } from "../ConfirmLesson/ConfirmLesson";
+import { createCn } from "../../utils";
+import "./time-management.css";
+
+const cn = createCn("time-management");
 
 export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
   return (
-    <div>
+    <div className={cn()}>
       <select
         value={props.vm.selectedDay}
         onChange={(e) => props.vm.handleDayChange(Number(e.target.value))}
@@ -44,9 +48,9 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
       {props.vm.lessonTakerType === "group" && (
         <LinkField field={props.vm.groupField} />
       )}
-      <Timeline vm={props.vm.teacherTimeline} />
-      <Timeline vm={props.vm.commonTimeline} />
-      <Timeline vm={props.vm.takerTimeline} />
+      <Timeline vm={props.vm.teacherTimeline} className={cn("timeline")} />
+      <Timeline vm={props.vm.commonTimeline} className={cn("timeline")} />
+      <Timeline vm={props.vm.takerTimeline} className={cn("timeline")} />
       {props.vm.confirmExtraEmployment && (
         <ConfirmExtraEmployment vm={props.vm.confirmExtraEmployment} />
       )}

@@ -1,4 +1,5 @@
 import { computed, makeObservable, observable } from "mobx";
+import { configStore } from "../models/config-store/ConfigStore";
 
 type Span = {
   start: number;
@@ -34,6 +35,13 @@ export class TimelineVM {
 
   set drawingSpan(newDrawingSpan) {
     this._drawingSpan = newDrawingSpan;
+  }
+
+  get timeBorders() {
+    return {
+      dayStart: configStore.config?.startTime ?? 0,
+      dayEnd: configStore.config?.endTime ?? 0, // TODO: fix
+    };
   }
 
   private _spans: Span[];

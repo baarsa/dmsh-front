@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TimeManagement } from "../components/TimeManagement";
+import { TimeManagement } from "../components/time-management/TimeManagement";
 import { groupRepository } from "../models/group/GroupRepository";
 import { pupilEntityRepository } from "../models/pupil/PupilRepository";
 import { teacherEntityRepository } from "../models/teacher/TeacherRepository";

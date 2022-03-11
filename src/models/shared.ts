@@ -10,7 +10,7 @@ export interface INamedEntity {
 // maybe put somewhere else
 export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup
     ? { lessonTakerId: number }
-    : Record<string, never>);
+    : {});
 
 export interface IEntityRepository<T> {
   // класс сущности; данные для инстанцирования

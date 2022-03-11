@@ -1,7 +1,7 @@
 import { ILesson } from "../../entities/ILesson";
-import { IEntity, Stored } from "../shared";
+import { Stored } from "../shared";
 
-export class LessonEntity implements IEntity, ILesson {
+export class LessonEntity implements ILesson {
   id: number;
   schedule: number;
   weekDay: number;
