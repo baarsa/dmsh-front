@@ -20,7 +20,7 @@ const MainComponent = () => {
        }
     });
     if (mainVM.isLoading) {
-        return <div>'Loading...'</div>; // TODO: spinner
+        return <div>Loading...</div>; // TODO: spinner
     }
     if (mainVM.navigation === null) {
         throw new Error('No navigation');

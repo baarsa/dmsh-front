@@ -23,7 +23,7 @@ class AuthStore implements IAuthStore {
         return false;
     }
 
-    private _isLoading: boolean = true;
+    private _isLoading = true;
     private _user: IUser | null = null;
     private _authService: IAuthService;
 

@@ -1,5 +1,6 @@
 import {NavigationVM} from "../../view-models/NavigationVM";
-import {Link, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
+import {NavigationItem} from "./NavigationItem";
 
 export const Navigation = (props: { vm: NavigationVM }) => {
     const location = useLocation();
@@ -7,7 +8,8 @@ export const Navigation = (props: { vm: NavigationVM }) => {
         <nav>
             {
                 props.vm.items.map(item =>
-                    <Link key={item.url} className={location.pathname === item.url ? 'active' : 'passive'} to={item.url}>{item.text}</Link>
+                    <NavigationItem key={item.url} text={item.text} fullUrl={item.url} currentUrl={location.pathname}
+                                    childrenItems={item.children}/>
                 )
             }
         </nav>

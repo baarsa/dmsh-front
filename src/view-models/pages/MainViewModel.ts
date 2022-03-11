@@ -1,4 +1,4 @@
-import {navigationItems, NavigationVM} from "../NavigationVM";
+import {filterItemsForUser, navigationItems, NavigationVM} from "../NavigationVM";
 import {autorun, makeAutoObservable} from "mobx";
 import { IAuthStore } from "../../models/auth-store/IAuthStore";
 
@@ -24,7 +24,7 @@ export class MainViewModel {
             if (!this._authStore.isLoading) {
                 const currentUser = this._authStore.user;
                 if (currentUser !== null) {
-                    this._navigation = new NavigationVM(navigationItems.filter(item => currentUser.hasPermission(item.permission)));
+                    this._navigation = new NavigationVM(filterItemsForUser(navigationItems, currentUser));
                 }
                 this._isLoading = false;
             }
