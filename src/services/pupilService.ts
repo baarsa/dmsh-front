@@ -1,5 +1,5 @@
 import { IEntityService } from "./shared";
-import {IPupil} from "../entities/IPupil";
+import { IPupil } from "../entities/IPupil";
 
 // total fake
 let current = 50;
@@ -39,20 +39,22 @@ export const pupilService: IEntityService<IPupil> = {
     const newItem = {
       id: current++,
       lessonTakerId: currentLt++,
-      ...data
+      ...data,
     };
     items = [...items, newItem];
     return newItem;
   },
   async update(id: number, data: IPupil) {
-    items = items.map((teacher) => teacher.id === id ? { ...teacher, ...data } : teacher);
+    items = items.map((teacher) =>
+      teacher.id === id ? { ...teacher, ...data } : teacher
+    );
     return {
       id,
       lessonTakerId: currentLt++,
-      ...data
+      ...data,
     };
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);
-  }
+  },
 };

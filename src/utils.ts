@@ -1,3 +1,3 @@
-import {withNaming} from "@bem-react/classname";
+import { withNaming } from "@bem-react/classname";
 
-export const createCn =  withNaming({ e: '__', m: '_', v: '_' });
+export const createCn = withNaming({ e: "__", m: "_", v: "_" });

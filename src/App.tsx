@@ -9,4 +9,4 @@ export const App = () => {
       <Route path="/*" element={<Main />} />
     </Routes>
   );
-}
+};

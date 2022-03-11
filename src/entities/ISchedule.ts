@@ -1,3 +1,3 @@
 export interface ISchedule {
-    name: string;
+  name: string;
 }

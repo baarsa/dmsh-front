@@ -1,7 +1,7 @@
-import {Permission} from "../rolesAndPermissions";
+import { Permission } from "../rolesAndPermissions";
 
 export interface IUser {
-    name: string;
-    teacherId: number | null; // если есть роль Преподаватель, то у пользователя должна быть связь с конкретным преподавателем
-    hasPermission(permission: Permission | null): boolean;
+  name: string;
+  teacherId: number | null; // если есть роль Преподаватель, то у пользователя должна быть связь с конкретным преподавателем
+  hasPermission(permission: Permission | null): boolean;
 }

@@ -9,13 +9,13 @@ let items = [
     id: current++,
     lessonTakerId: currentLt++,
     name: "All the kins",
-    pupils: [50, 51, 52]
+    pupils: [50, 51, 52],
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
     name: "Second class",
-    pupils: [51, 52]
+    pupils: [51, 52],
   },
 ];
 
@@ -30,20 +30,20 @@ export const groupService: IEntityService<IGroup> = {
     const newItem = {
       id: current++,
       lessonTakerId: currentLt++,
-      ...data
+      ...data,
     };
     items = [...items, newItem];
     return newItem;
   },
   async update(id: number, data: IGroup) {
-    items = items.map((item) => item.id === id ? { ...item, ...data } : item);
+    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
     return {
       id,
       lessonTakerId: currentLt++,
-      ...data
+      ...data,
     };
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);
-  }
+  },
 };

@@ -1,6 +1,6 @@
-import {FieldConstructorProps, FieldVM} from "./Field";
+import { FieldConstructorProps, FieldVM } from "./Field";
 import { FieldType } from "./FieldType";
-import {computed, makeObservable, observable} from "mobx";
+import { computed, makeObservable, observable } from "mobx";
 
 // add constructors
 export class StringFieldVM extends FieldVM {
@@ -22,6 +22,6 @@ export class StringFieldVM extends FieldVM {
     makeObservable(this, {
       _value: observable,
       value: computed,
-    })
+    });
   }
 }

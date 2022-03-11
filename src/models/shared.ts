@@ -1,14 +1,16 @@
 import { IEntityService } from "../services/shared";
-import {IPupil} from "../entities/IPupil";
-import {IGroup} from "../entities/IGroup";
-import { computed, makeObservable, observable, runInAction} from "mobx";
+import { IPupil } from "../entities/IPupil";
+import { IGroup } from "../entities/IGroup";
+import { computed, makeObservable, observable, runInAction } from "mobx";
 
 export interface INamedEntity {
   name: string;
 }
 
 // maybe put somewhere else
-export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup ? { lessonTakerId: number } : Record<string, never>);
+export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup
+    ? { lessonTakerId: number }
+    : Record<string, never>);
 
 export interface IEntityRepository<T> {
   // класс сущности; данные для инстанцирования
@@ -18,17 +20,18 @@ export interface IEntityRepository<T> {
 }
 
 export abstract class GenericEntityRepository<T, K>
-  implements IEntityRepository<T> {
+  implements IEntityRepository<T>
+{
   private _entityService: IEntityService<K>;
   private createEntity: (props: Stored<K>) => Stored<T>;
   private _entities: Record<number, Stored<T>> = {};
   private _isSynchronized = false; // think if we need another cases (something was implicitly updated? added new child in relations?)
   private async getAllEntities() {
-      const items = await this._entityService.fetchAll(); // todo maybe exclude ids we already have?
-      items.forEach(item => {
-        this._entities[item.id] = this.createEntity(item); // todo maybe optimize by adding all at once?
-      })
-      this._isSynchronized = true;
+    const items = await this._entityService.fetchAll(); // todo maybe exclude ids we already have?
+    items.forEach((item) => {
+      this._entities[item.id] = this.createEntity(item); // todo maybe optimize by adding all at once?
+    });
+    this._isSynchronized = true;
   }
   get entities(): Record<number, Stored<T>> {
     if (!this._isSynchronized) {
@@ -55,8 +58,12 @@ export abstract class GenericEntityRepository<T, K>
     if (response === null) {
       return false;
     }
-    runInAction(() => { // todo investigate optimization possibilities
-      this._entities = { ...this.entities, [response.id]: this.createEntity(response) };
+    runInAction(() => {
+      // todo investigate optimization possibilities
+      this._entities = {
+        ...this.entities,
+        [response.id]: this.createEntity(response),
+      };
     });
     return true; // or maybe we need to return entity?
   }
@@ -67,7 +74,10 @@ export abstract class GenericEntityRepository<T, K>
   }) {
     this._entityService = props.entityService;
     this.createEntity = props.createEntity;
-    makeObservable<GenericEntityRepository<T, K>, '_entities' | '_isSynchronized'>(this, {
+    makeObservable<
+      GenericEntityRepository<T, K>,
+      "_entities" | "_isSynchronized"
+    >(this, {
       _entities: observable,
       entities: computed,
       _isSynchronized: observable,

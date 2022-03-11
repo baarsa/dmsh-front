@@ -11,7 +11,7 @@ class SubjectRepository extends GenericEntityRepository<
     //maybe: as we use only one service/creator per entity type
     super({
       entityService: subjectService,
-      createEntity: createSubjectEntity
+      createEntity: createSubjectEntity,
     });
   }
 }

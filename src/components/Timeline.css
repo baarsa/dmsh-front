@@ -1,13 +1,13 @@
 .timeline {
-    position: relative;
-    height: 40px;
-    width: 800px;
-    background: aquamarine;
+  position: relative;
+  height: 40px;
+  width: 800px;
+  background: aquamarine;
 
-    &__span {
-         position: absolute;
-         height: 100%;
-         background: indianred;
-         pointer-events: none; /* possibly remove and do the math in js */
-     }
+  &__span {
+    position: absolute;
+    height: 100%;
+    background: indianred;
+    pointer-events: none; /* possibly remove and do the math in js */
+  }
 }

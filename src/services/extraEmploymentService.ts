@@ -34,19 +34,19 @@ export const extraEmploymentService: IEntityService<IExtraEmployment> = {
   async saveToServer(data: IExtraEmployment) {
     const newItem = {
       id: current++,
-      ...data
+      ...data,
     };
     items = [...items, newItem];
     return newItem;
   },
   async update(id: number, data: IExtraEmployment) {
-    items = items.map((item) => item.id === id ? { ...item, ...data } : item);
+    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
     return {
       id,
-      ...data
+      ...data,
     };
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);
-  }
+  },
 };

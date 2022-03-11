@@ -29,7 +29,8 @@ export interface IFormModel {
 
 // experiments
 export class FormModel<T extends Record<string, unknown>>
-  implements IFormModel {
+  implements IFormModel
+{
   // parameter - shape of entity instantiation
   mode: FormMode;
   fields: RelevantFields<T>;

@@ -11,7 +11,7 @@ class PupilEntityRepository extends GenericEntityRepository<
     //maybe: as we use only one service/creator per entity type
     super({
       entityService: pupilService,
-      createEntity: createPupilEntity
+      createEntity: createPupilEntity,
     });
   }
 }

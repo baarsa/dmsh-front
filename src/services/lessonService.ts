@@ -46,19 +46,21 @@ export const lessonService: IEntityService<ILesson> = {
   async saveToServer(data: ILesson) {
     const newItem = {
       id: current++,
-      ...data
+      ...data,
     };
     items = [...items, newItem];
     return newItem;
   },
   async update(id: number, data: ILesson) {
-    items = items.map((teacher) => teacher.id === id ? { ...teacher, ...data } : teacher);
+    items = items.map((teacher) =>
+      teacher.id === id ? { ...teacher, ...data } : teacher
+    );
     return {
       id,
-      ...data
+      ...data,
     };
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);
-  }
+  },
 };

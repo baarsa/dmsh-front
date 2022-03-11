@@ -23,12 +23,12 @@ export class CreateSubjectViewModel {
         specialityGroup: new LinkFieldVM(
           { label: "speciality group", controllingField: isSpecialField },
           subjectRepository
-        )
+        ),
       },
       mapFieldsToProps: (fields) => ({
         name: fields.name.value,
         isSpecial: fields.isSpecial.value,
-        specialityGroup: fields.specialityGroup.getValueId()
+        specialityGroup: fields.specialityGroup.getValueId(),
       }),
       submitHandler: (data: Subject) => {
         subjectRepository.addEntity(data); // return id and
@@ -36,7 +36,7 @@ export class CreateSubjectViewModel {
       },
       cancelHandler: () => {
         // go to /subjects
-      }
+      },
     });
   }
 }

@@ -1,6 +1,6 @@
 import { FieldType } from "./FieldType";
 import { IBooleanField } from "./IBooleanField";
-import {computed, makeObservable, observable} from "mobx";
+import { computed, makeObservable, observable } from "mobx";
 
 export type FieldConstructorProps = {
   label: string;
@@ -15,8 +15,8 @@ export abstract class FieldVM {
 
   get isDisabled(): boolean {
     return (
-        this._isDisabled ||
-        (this.controllingField !== null && !this.controllingField.value)
+      this._isDisabled ||
+      (this.controllingField !== null && !this.controllingField.value)
     );
   }
   protected abstract fieldType: FieldType;
@@ -34,7 +34,7 @@ export abstract class FieldVM {
     this.label = props.label;
     this.controllingField = props.controllingField ?? null;
     this._isDisabled = props.isDisabled ?? false;
-    makeObservable<FieldVM, '_isDisabled'>(this, {
+    makeObservable<FieldVM, "_isDisabled">(this, {
       _isDisabled: observable,
       isDisabled: computed,
     });

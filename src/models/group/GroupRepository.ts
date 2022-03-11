@@ -8,12 +8,14 @@ class GroupRepository extends GenericEntityRepository<GroupEntity, IGroup> {
     //maybe: as we use only one service/creator per entity type
     super({
       entityService: groupService,
-      createEntity: createGroupEntity
+      createEntity: createGroupEntity,
     });
   }
 
   getByPupil(pupilId: number) {
-    return Object.values(this.entities).filter(group => group.pupils.includes(pupilId));
+    return Object.values(this.entities).filter((group) =>
+      group.pupils.includes(pupilId)
+    );
   }
 }
 

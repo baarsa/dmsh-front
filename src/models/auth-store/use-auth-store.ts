@@ -1,5 +1,5 @@
-import {createContext, useContext} from "react";
-import {authStore} from "./AuthStore";
+import { createContext, useContext } from "react";
+import { authStore } from "./AuthStore";
 
 const authStoreContext = createContext(authStore);
 
