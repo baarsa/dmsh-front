@@ -33,7 +33,11 @@ export const pupilService: IEntityService<IPupil> = {
     return items;
   },
   async fetchById(_id: number) {
-    return items.find(({ id }) => id === _id) ?? null;
+    const item = items.find(({ id }) => id === _id);
+    if (item === undefined) {
+      throw new Error();
+    }
+    return item;
   },
   async saveToServer(data: IPupil) {
     const newItem = {

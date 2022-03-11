@@ -2,6 +2,8 @@ import { IEntityService } from "../services/shared";
 import { IPupil } from "../entities/IPupil";
 import { IGroup } from "../entities/IGroup";
 import { computed, makeObservable, observable, runInAction } from "mobx";
+import { addError } from "../notifications";
+import { getErrorMessage } from "../utils";
 
 export interface INamedEntity {
   name: string;
@@ -27,11 +29,15 @@ export abstract class GenericEntityRepository<T, K>
   private _entities: Record<number, Stored<T>> = {};
   private _isSynchronized = false; // think if we need another cases (something was implicitly updated? added new child in relations?)
   private async getAllEntities() {
-    const items = await this._entityService.fetchAll(); // todo maybe exclude ids we already have?
-    items.forEach((item) => {
-      this._entities[item.id] = this.createEntity(item); // todo maybe optimize by adding all at once?
-    });
-    this._isSynchronized = true;
+    try {
+      const items = await this._entityService.fetchAll(); // todo maybe exclude ids we already have?
+      items.forEach((item) => {
+        this._entities[item.id] = this.createEntity(item); // todo maybe optimize by adding all at once?
+      });
+      this._isSynchronized = true;
+    } catch (e) {
+      addError(getErrorMessage(e));
+    }
   }
   get entities(): Record<number, Stored<T>> {
     if (!this._isSynchronized) {

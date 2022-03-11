@@ -19,6 +19,8 @@ import { ConfirmLessonVM } from "../modals/ConfirmLessonVM";
 import { SubjectEntity } from "../../models/subject/SubjectEntity";
 import { groupRepository } from "../../models/group/GroupRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
+import { addError } from "../../notifications";
+import { getErrorMessage } from "../../utils";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -255,20 +257,24 @@ export class TimeManagementVM {
         this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
           start,
           end,
-          onConfirm: ({ start, end, description }) => {
-            const currentTeacher = this._teacherField.value;
-            if (currentTeacher === null) {
-              throw new Error("No teacher found"); // TODO: handle errors
+          onConfirm: async ({ start, end, description }) => {
+            try {
+              const currentTeacher = this._teacherField.value;
+              if (currentTeacher === null) {
+                throw new Error("No teacher found"); // TODO: handle errors
+              }
+              await extraEmploymentRepository.addEntity({
+                schedule: this._schedule.id,
+                person: currentTeacher.id,
+                weekDay: this._selectedDay,
+                start,
+                end,
+                description,
+              });
+              this._confirmExtraEmployment = null;
+            } catch (e) {
+              addError(getErrorMessage(e));
             }
-            extraEmploymentRepository.addEntity({
-              schedule: this._schedule.id,
-              person: currentTeacher.id,
-              weekDay: this._selectedDay,
-              start,
-              end,
-              description,
-            });
-            this._confirmExtraEmployment = null;
           },
           onClose: () => {
             this._confirmExtraEmployment = null;
@@ -282,20 +288,24 @@ export class TimeManagementVM {
         this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
           start,
           end,
-          onConfirm: ({ start, end, description }) => {
-            const currentPupil = this._pupilField.value;
-            if (currentPupil === null) {
-              throw new Error("No pupil found"); // TODO: handle errors
+          onConfirm: async ({ start, end, description }) => {
+            try {
+              const currentPupil = this._pupilField.value;
+              if (currentPupil === null) {
+                throw new Error("No pupil found"); // TODO: handle errors
+              }
+              await extraEmploymentRepository.addEntity({
+                schedule: this._schedule.id,
+                person: currentPupil.id,
+                weekDay: this._selectedDay,
+                start,
+                end,
+                description,
+              });
+              this._confirmExtraEmployment = null;
+            } catch (e) {
+              addError(getErrorMessage(e));
             }
-            extraEmploymentRepository.addEntity({
-              schedule: this._schedule.id,
-              person: currentPupil.id,
-              weekDay: this._selectedDay,
-              start,
-              end,
-              description,
-            });
-            this._confirmExtraEmployment = null;
           },
           onClose: () => {
             this._confirmExtraEmployment = null;
@@ -311,25 +321,29 @@ export class TimeManagementVM {
           end,
           filterSubjects: (subject: SubjectEntity) =>
             this._getAvailableSubjectsForAssign().includes(subject.id),
-          onSubmit: ({ start, end, subject }) => {
-            const currentTaker =
-              this._lessonTakerType === "pupil"
-                ? this._pupilField.value
-                : this._groupField.value;
-            const currentTeacher = this._teacherField.value;
-            if (currentTaker === null || currentTeacher === null) {
-              throw new Error("No pupil or teacher found"); // TODO: handle errors
+          onSubmit: async ({ start, end, subject }) => {
+            try {
+              const currentTaker =
+                this._lessonTakerType === "pupil"
+                  ? this._pupilField.value
+                  : this._groupField.value;
+              const currentTeacher = this._teacherField.value;
+              if (currentTaker === null || currentTeacher === null) {
+                throw new Error("No pupil or teacher found"); // TODO: handle errors
+              }
+              await lessonRepository.addEntity({
+                schedule: this._schedule.id,
+                lessonTaker: currentTaker.lessonTakerId,
+                teacher: currentTeacher.id,
+                weekDay: this._selectedDay,
+                start,
+                end,
+                subject,
+              });
+              this._confirmLesson = null;
+            } catch (e) {
+              addError(getErrorMessage(e));
             }
-            lessonRepository.addEntity({
-              schedule: this._schedule.id,
-              lessonTaker: currentTaker.lessonTakerId,
-              teacher: currentTeacher.id,
-              weekDay: this._selectedDay,
-              start,
-              end,
-              subject,
-            });
-            this._confirmLesson = null;
           },
           onClose: () => {
             this._confirmLesson = null;
