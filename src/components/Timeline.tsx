@@ -3,7 +3,7 @@ import { MouseEventHandler, useRef } from "react";
 
 import "./Timeline.css";
 import { observer } from "mobx-react-lite";
-import { createCn } from "../utils";
+import { createCn, getTimeText } from "../utils";
 
 const getDrawingSpanStyle = ({
   initialX,
@@ -23,15 +23,6 @@ type TimeLabel = {
   time: number;
   isBig: boolean;
   text: string;
-};
-
-const getTimeText = (time: number) => {
-  const hours = Math.floor(time / 60);
-  let minutes = String(time % 60);
-  if (minutes.length === 1) {
-    minutes = "0" + minutes;
-  }
-  return `${hours}:${minutes}`;
 };
 
 const getTimeLabels = (start: number, end: number): TimeLabel[] => {
