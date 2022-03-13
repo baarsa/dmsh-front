@@ -2,15 +2,37 @@
   position: relative;
 
   &__ribbon {
-    height: 40px;
-    background: aquamarine;
+    height: 60px;
+    background: var(--bg-grey);
   }
 
   &__span {
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
     height: 100%;
-    background: indianred;
-    pointer-events: none; /* possibly remove and do the math in js */
+    opacity: 0.5;
+    color: white;
+
+    &:hover {
+      opacity: 1;
+      z-index: 10;
+    }
+
+    &_lesson {
+      background: var(--button-secondary);
+    }
+
+    &_extra {
+      background: var(--button-tertiary);
+    }
+
+    &_drawing {
+      background: var(--button-main);
+      opacity: 1;
+    }
   }
 
   &__labels {

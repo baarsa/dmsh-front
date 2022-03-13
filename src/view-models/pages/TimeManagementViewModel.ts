@@ -177,11 +177,13 @@ export class TimeManagementVM {
       ...relevantLessons.map((lesson) => ({
         start: lesson.start,
         end: lesson.end,
+        type: 'lesson' as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
         start: employment.start,
         end: employment.end,
+        type: 'extra' as const,
         text: employment.description,
       })),
     ];
@@ -232,18 +234,20 @@ export class TimeManagementVM {
       ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => ({
         start: lesson.start,
         end: lesson.end,
+        type: 'lesson' as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
         start: employment.start,
         end: employment.end,
+        type: 'extra' as const,
         text: employment.description,
       })),
     ];
   }
 
   async setCommonTimelineSpans() {
-    this._commonTimeline.spans = [
+    this._commonTimeline.spans = [ // TODO remove doubles of common lessons
       ...this._teacherTimeline.spans,
       ...this._takerTimeline.spans,
     ];

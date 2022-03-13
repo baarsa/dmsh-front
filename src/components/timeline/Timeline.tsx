@@ -1,9 +1,9 @@
-import { TimelineVM } from "../view-models/TimelineVM";
+import { TimelineVM } from "../../view-models/TimelineVM";
 import { MouseEventHandler, useRef } from "react";
 
 import "./Timeline.css";
 import { observer } from "mobx-react-lite";
-import { createCn, getTimeText } from "../utils";
+import { createCn, getTimeText } from "../../utils";
 
 const getDrawingSpanStyle = ({
   initialX,
@@ -52,7 +52,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
     return { left: `${left}%`, width: `${width}%` };
   };
   const handleMouseDown: MouseEventHandler = (e) => {
-    if (!vm.canDrawSpan) {
+    if (!vm.canDrawSpan || e.button !== 0) {
       return;
     }
     vm.drawingSpan = {
@@ -61,12 +61,12 @@ export const Timeline = observer(({ vm, className }: Props) => {
     };
   };
   const handleMouseMove: MouseEventHandler = (e) => {
-    if (vm.drawingSpan === null) {
+    if (vm.drawingSpan === null || ref.current === null) {
       return;
     }
     vm.drawingSpan = {
       initialX: vm.drawingSpan.initialX,
-      currentX: e.nativeEvent.offsetX, // wrong, sometimes it's counted within draweing span.
+      currentX: e.nativeEvent.pageX - ref.current.getBoundingClientRect().x,
     };
   };
   const handleMouseUp: MouseEventHandler = () => {
@@ -98,13 +98,13 @@ export const Timeline = observer(({ vm, className }: Props) => {
         onMouseMove={handleMouseMove}
       >
         {vm.spans.map((span, i) => (
-          <div className={cn("span")} key={i} style={getSpanStyle(span)}>
+          <div className={cn("span", { [span.type]: true })} key={i} style={getSpanStyle(span)}>
             {span.text}
           </div>
         ))}
         {vm.drawingSpan && (
           <div
-            className="timeline__span"
+            className={cn('span', { drawing: true })}
             style={getDrawingSpanStyle(vm.drawingSpan)}
           />
         )}

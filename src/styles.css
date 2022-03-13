@@ -1,7 +1,10 @@
 :root {
   --bg-main: #acd4e1;
   --bg-secondary: #fff;
+  --bg-grey: #dcdcdc;
   --button-main: #f9e45b;
+  --button-secondary: #6db784;
+  --button-tertiary: #1b4d89;
 
   --font-main: 14px "Tahoma", sans-serif;
 

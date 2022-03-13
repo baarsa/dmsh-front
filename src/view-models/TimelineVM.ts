@@ -4,6 +4,7 @@ import { configStore } from "../models/config-store/ConfigStore";
 type Span = {
   start: number;
   end: number;
+  type: 'lesson' | 'extra';
   text?: string;
 };
 

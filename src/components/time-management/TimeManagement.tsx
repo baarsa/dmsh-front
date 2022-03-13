@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { TimeManagementVM } from "../../view-models/pages/TimeManagementViewModel";
 import { LinkField } from "../fields/link-field/LinkField";
-import { Timeline } from "../Timeline";
+import { Timeline } from "../timeline/Timeline";
 import { ConfirmExtraEmployment } from "../ConfirmExtraEmployment/ConfirmExtraEmployment";
 import { ConfirmLesson } from "../ConfirmLesson/ConfirmLesson";
 import { createCn } from "../../utils";
