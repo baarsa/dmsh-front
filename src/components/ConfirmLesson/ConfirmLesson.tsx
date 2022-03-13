@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Modal } from "../Modal/Modal";
 import { ConfirmLessonVM } from "../../view-models/modals/ConfirmLessonVM";
-import { LinkField } from "../fields/LinkField";
+import { LinkField } from "../fields/link-field/LinkField";
 import { TimeInput } from "../time-input/TimeInput";
 
 export const ConfirmLesson = observer(({ vm }: { vm: ConfirmLessonVM }) => {

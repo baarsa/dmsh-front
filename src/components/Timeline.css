@@ -1,6 +1,5 @@
 .timeline {
   position: relative;
-  width: 800px;
 
   &__ribbon {
     height: 40px;

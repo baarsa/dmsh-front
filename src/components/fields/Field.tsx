@@ -4,7 +4,7 @@ import { ILinkField } from "../../view-models/fields/ILinkField";
 import { IStringField } from "../../view-models/fields/IStringField";
 import { StringField } from "./StringField";
 import { BooleanField } from "./BooleanField";
-import { LinkField } from "./LinkField";
+import { LinkField } from "./link-field/LinkField";
 
 export const Field = (props: {
   field: IBooleanField | IStringField | ILinkField;

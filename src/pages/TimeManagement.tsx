@@ -52,9 +52,5 @@ export const TimeManagementPage = () => {
   if (vm === null) {
     return null; //todo loader
   }
-  return (
-    <div>
-      <TimeManagement vm={vm} />
-    </div>
-  );
+  return <TimeManagement vm={vm} />;
 };

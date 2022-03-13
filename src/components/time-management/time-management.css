@@ -1,5 +1,16 @@
 .time-management {
   padding-left: 24px;
+
+  &__controls {
+    display: flex;
+    margin-bottom: 24px;
+  }
+
+  &__taker-radio {
+    margin-top: 10px;
+    margin-left: auto;
+  }
+
   &__timeline {
     margin-bottom: 24px;
   }

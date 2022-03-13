@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--gap-xs);
+  background: var(--bg-main);
+
+  &__logo {
+    width: 48px;
+    height: 48px;
+    background: url(./clef.svg) center center no-repeat;
+  }
+}

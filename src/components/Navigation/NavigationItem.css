@@ -1,0 +1,19 @@
+.navigation-item {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 4px;
+
+  &_active {
+    background: var(--button-main);
+    color: black;
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    &:visited {
+      color: inherit;
+    }
+  }
+}

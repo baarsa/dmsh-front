@@ -1,4 +1,23 @@
-.App {
-  font-family: sans-serif;
-  text-align: center;
+:root {
+  --bg-main: #acd4e1;
+  --bg-secondary: #fff;
+  --button-main: #f9e45b;
+
+  --font-main: 14px "Tahoma", sans-serif;
+
+  --gap-xs: 4px;
+  --gap-l: 24px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  background: var(--bg-main);
+  font: var(--font-main);
+}
+
+#root {
+  width: 1200px;
 }

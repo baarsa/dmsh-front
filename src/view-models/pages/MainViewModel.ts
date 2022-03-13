@@ -6,20 +6,21 @@ import {
 import { autorun, makeAutoObservable } from "mobx";
 import { IAuthStore } from "../../models/auth-store/IAuthStore";
 import { IConfigStore } from "../../models/config-store/IConfigStore";
+import { HeaderVM } from "../HeaderVM";
 
 export class MainViewModel {
   get isAuth(): boolean {
     return this._authStore.user !== null;
   }
 
-  get navigation(): NavigationVM | null {
-    return this._navigation;
+  get header(): HeaderVM | null {
+    return this._header;
   }
 
   get isLoading(): boolean {
     return this._isLoading;
   }
-  private _navigation: NavigationVM | null = null;
+  private _header: HeaderVM | null = null;
   private _isLoading = true;
   private _authStore: IAuthStore;
   private _configStore: IConfigStore;
@@ -31,8 +32,8 @@ export class MainViewModel {
       if (!this._authStore.isLoading) {
         const currentUser = this._authStore.user;
         if (currentUser !== null) {
-          this._navigation = new NavigationVM(
-            filterItemsForUser(navigationItems, currentUser)
+          this._header = new HeaderVM(
+            new NavigationVM(filterItemsForUser(navigationItems, currentUser))
           );
         }
       }

@@ -1,6 +1,10 @@
 import { NavigationItemDescription } from "../../view-models/NavigationVM";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import "./NavigationItem.css";
+import { createCn } from "../../utils";
+
+const cn = createCn("navigation-item");
 
 type LinkProps = {
   text: string;
@@ -9,10 +13,7 @@ type LinkProps = {
 };
 const NavigationItemLink = (props: LinkProps) => {
   return (
-    <Link
-      className={props.currentUrl === props.fullUrl ? "active" : "passive"}
-      to={props.fullUrl}
-    >
+    <Link className={cn("link")} to={props.fullUrl}>
       {props.text}
     </Link>
   );
@@ -51,9 +52,13 @@ type NavigationItemProps = {
 };
 
 export const NavigationItem = (props: NavigationItemProps) => {
-  if (props.childrenItems === undefined) {
-    return <NavigationItemLink {...props} />;
-  } else {
-    return <NavigationItemGroup {...props} items={props.childrenItems} />;
-  }
+  return (
+    <div className={cn({ active: props.fullUrl.startsWith(props.currentUrl) })}>
+      {props.childrenItems === undefined ? (
+        <NavigationItemLink {...props} />
+      ) : (
+        <NavigationItemGroup {...props} items={props.childrenItems} />
+      )}
+    </div>
+  );
 };

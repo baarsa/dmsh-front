@@ -36,6 +36,10 @@ export class TimeManagementVM {
   private _dayOptions = [
     { value: 0, text: "Понедельник" },
     { value: 1, text: "Вторник" },
+    { value: 2, text: "Среда" },
+    { value: 3, text: "Четверг" },
+    { value: 4, text: "Пятница" },
+    { value: 5, text: "Суббота" },
   ];
   private _canChangeTeacher: boolean;
   private _lessonTakerType: "pupil" | "group" = "pupil";
