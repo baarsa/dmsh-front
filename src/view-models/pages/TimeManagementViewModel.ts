@@ -177,13 +177,13 @@ export class TimeManagementVM {
       ...relevantLessons.map((lesson) => ({
         start: lesson.start,
         end: lesson.end,
-        type: 'lesson' as const,
+        type: "lesson" as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
         start: employment.start,
         end: employment.end,
-        type: 'extra' as const,
+        type: "extra" as const,
         text: employment.description,
       })),
     ];
@@ -206,10 +206,12 @@ export class TimeManagementVM {
     const groupLessonsForPupil =
       this._lessonTakerType === "pupil"
         ? // get all groups for pupil; get all lessons for every group
-          this._schedule.lessons.filter((lesson) =>
-            groupRepository
-              .getByPupil(currentTaker.id)
-              .some((group) => lesson.lessonTaker === group.lessonTakerId)
+          this._schedule.lessons.filter(
+            (lesson) =>
+              lesson.weekDay === this._selectedDay &&
+              groupRepository
+                .getByPupil(currentTaker.id)
+                .some((group) => lesson.lessonTaker === group.lessonTakerId)
           )
         : [];
     if (!lessonRepository.isSynchronized) {
@@ -234,20 +236,21 @@ export class TimeManagementVM {
       ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => ({
         start: lesson.start,
         end: lesson.end,
-        type: 'lesson' as const,
+        type: "lesson" as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
         start: employment.start,
         end: employment.end,
-        type: 'extra' as const,
+        type: "extra" as const,
         text: employment.description,
       })),
     ];
   }
 
   async setCommonTimelineSpans() {
-    this._commonTimeline.spans = [ // TODO remove doubles of common lessons
+    this._commonTimeline.spans = [
+      // TODO remove doubles of common lessons
       ...this._teacherTimeline.spans,
       ...this._takerTimeline.spans,
     ];

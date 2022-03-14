@@ -98,13 +98,17 @@ export const Timeline = observer(({ vm, className }: Props) => {
         onMouseMove={handleMouseMove}
       >
         {vm.spans.map((span, i) => (
-          <div className={cn("span", { [span.type]: true })} key={i} style={getSpanStyle(span)}>
+          <div
+            className={cn("span", { [span.type]: true })}
+            key={i}
+            style={getSpanStyle(span)}
+          >
             {span.text}
           </div>
         ))}
         {vm.drawingSpan && (
           <div
-            className={cn('span', { drawing: true })}
+            className={cn("span", { drawing: true })}
             style={getDrawingSpanStyle(vm.drawingSpan)}
           />
         )}

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { createCn } from "../../utils";
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./Modal.css";
 
@@ -19,9 +20,7 @@ export const Modal: FC<Props> = ({ children, onClose }) => (
     }}
   >
     <div className={cn("popup")}>
-      <div className={cn("cross")} onClick={() => onClose()}>
-        x
-      </div>
+      <CloseIcon className={cn("cross")} onClick={() => onClose()} />
       {children}
     </div>
   </div>

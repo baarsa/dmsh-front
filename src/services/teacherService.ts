@@ -6,13 +6,13 @@ let current = 1;
 let items = [
   {
     id: current++,
-    name: "Obi-Wan Kenobi",
+    name: "Пифагор",
     canAssist: true,
     subjects: [1, 2, 3],
   },
   {
     id: current++,
-    name: "Qui-Gonn Jinn",
+    name: "Аристотель",
     canAssist: false,
     subjects: [2],
   },

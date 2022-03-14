@@ -10,7 +10,7 @@ export const Field = (props: {
   field: IBooleanField | IStringField | ILinkField;
 }) => (
   <div>
-    {props.field.getLabel()}
+    {props.field.label}
     {props.field.fieldType === FieldType.BOOLEAN && (
       <BooleanField field={props.field} />
     )}

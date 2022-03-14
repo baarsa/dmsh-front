@@ -5,19 +5,19 @@ let current = 1;
 let items = [
   {
     id: current++,
-    name: "Violin",
+    name: "Скрипка",
     isSpecial: true,
     specialityGroup: 1,
   },
   {
     id: current++,
-    name: "Flute",
+    name: "Флейта",
     isSpecial: true,
     specialityGroup: 2,
   },
   {
     id: current++,
-    name: "Solfeggio",
+    name: "Сольфеджио",
     isSpecial: false,
     specialityGroup: null,
   },

@@ -22,16 +22,16 @@ export abstract class FieldVM {
   protected abstract fieldType: FieldType;
   abstract isValid(): boolean;
   protected controllingField: IBooleanField | null = null;
-  private readonly label: string;
+  private readonly _label: string;
   private _isDisabled: boolean;
   getFieldType() {
     return this.fieldType;
   }
-  getLabel() {
-    return this.label;
+  get label() {
+    return this._label;
   }
   constructor(props: FieldConstructorProps) {
-    this.label = props.label;
+    this._label = props.label;
     this.controllingField = props.controllingField ?? null;
     this._isDisabled = props.isDisabled ?? false;
     makeObservable<FieldVM, "_isDisabled">(this, {

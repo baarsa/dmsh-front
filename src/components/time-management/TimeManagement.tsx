@@ -6,11 +6,7 @@ import { ConfirmExtraEmployment } from "../ConfirmExtraEmployment/ConfirmExtraEm
 import { ConfirmLesson } from "../ConfirmLesson/ConfirmLesson";
 import { createCn } from "../../utils";
 import "./time-management.css";
-import {
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { Select } from "../select/Select";
 
 const cn = createCn("time-management");

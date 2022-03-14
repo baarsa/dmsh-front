@@ -8,21 +8,21 @@ let items = [
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: "Luke Skywalker",
+    name: "Вольфганг",
     specialSubject: 1, //violin
     program: 1,
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: "Han Solo",
+    name: "Людвиг",
     specialSubject: 2, //flute
     program: 3,
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: "Leia Organ",
+    name: "Феликс",
     specialSubject: 1, //violin
     program: 2,
   },

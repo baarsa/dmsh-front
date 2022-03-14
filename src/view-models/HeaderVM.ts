@@ -6,7 +6,7 @@ export class HeaderVM {
   }
 
   get userName() {
-    return "Ковалев Николай Сергеевич"; // TODO get from auth store
+    return "пользователь"; // TODO get from auth store
   }
 
   private readonly _navigation: NavigationVM;

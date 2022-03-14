@@ -8,13 +8,13 @@ let items = [
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: "All the kins",
+    name: "Первый класс",
     pupils: [50, 51, 52],
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: "Second class",
+    name: "Второй класс",
     pupils: [51, 52],
   },
 ];

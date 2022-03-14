@@ -11,21 +11,21 @@
 
   &__popup {
     position: relative;
-    background: lightpink;
-    padding: 24px;
+    background: #fff;
+    padding: 28px;
     border-radius: 4px;
     border: 1px solid;
   }
 
   &__cross {
+    color: var(--light-grey);
     position: absolute;
     cursor: pointer;
-    width: 8px;
-    height: 8px;
-    line-height: 8px;
     top: 4px;
     right: 4px;
-    border: 1px solid black;
-    padding: 2px;
+
+    &:hover {
+      color: var(--dark-grey);
+    }
   }
 }

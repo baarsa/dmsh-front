@@ -1,0 +1,23 @@
+.confirm-extra-employment {
+  &__title {
+    margin-bottom: 16px !important;
+  }
+
+  &__content {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__time-input {
+    margin: 0 12px;
+    width: 48px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+  }
+}

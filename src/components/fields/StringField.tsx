@@ -1,10 +1,16 @@
 import { IStringField } from "../../view-models/fields/IStringField";
 import { observer } from "mobx-react-lite";
+import { TextField } from "@mui/material";
 
-export const StringField = observer((props: { field: IStringField }) => (
-  <input
+type Props = {
+  field: IStringField;
+};
+
+export const StringField = observer(({ field }: Props) => (
+  <TextField
     type="text"
-    value={props.field.value}
-    onChange={(e) => (props.field.value = e.target.value)}
+    label={field.label}
+    value={field.value}
+    onChange={(e) => (field.value = e.target.value)}
   />
 ));
