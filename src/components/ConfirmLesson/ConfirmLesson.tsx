@@ -3,14 +3,45 @@ import { Modal } from "../Modal/Modal";
 import { ConfirmLessonVM } from "../../view-models/modals/ConfirmLessonVM";
 import { LinkField } from "../fields/link-field/LinkField";
 import { TimeInput } from "../time-input/TimeInput";
+import "./ConfirmLesson.css";
+import { createCn } from "../../utils";
+import { Button, Typography } from "@mui/material";
+
+const cn = createCn("confirm-lesson");
 
 export const ConfirmLesson = observer(({ vm }: { vm: ConfirmLessonVM }) => {
   return (
     <Modal onClose={() => vm.handleClose()}>
-      <TimeInput value={vm.start} onChange={(value) => (vm.start = value)} />
-      <TimeInput value={vm.end} onChange={(value) => (vm.end = value)} />
-      <LinkField field={vm.subject} />
-      <button onClick={() => vm.handleConfirm()}>OK</button>
+      <div className={cn()}>
+        <Typography className={cn("title")} variant="h5" component="div">
+          Добавить урок
+        </Typography>
+        <div className={cn("content")}>
+          <div className={cn("time-inputs")}>
+            С
+            <TimeInput
+              className={cn("time-input")}
+              value={vm.start}
+              onChange={(value) => (vm.start = value)}
+            />
+            до
+            <TimeInput
+              className={cn("time-input")}
+              value={vm.end}
+              onChange={(value) => (vm.end = value)}
+            />
+          </div>
+          <LinkField field={vm.subject} />
+          <div className={cn("buttons")}>
+            <Button variant={"contained"} onClick={() => vm.handleConfirm()}>
+              OK
+            </Button>
+            <Button variant={"contained"} onClick={() => vm.handleClose()}>
+              Отмена
+            </Button>
+          </div>
+        </div>
+      </div>
     </Modal>
   );
 });
