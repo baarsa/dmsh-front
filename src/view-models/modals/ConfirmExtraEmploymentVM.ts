@@ -9,6 +9,13 @@ type SubmitParameters = {
 };
 
 export class ConfirmExtraEmploymentVM extends ModalVM {
+  get person(): string {
+    return this._person;
+  }
+
+  get weekDay(): string {
+    return this._weekDay;
+  }
   get description(): StringFieldVM {
     return this._description;
   }
@@ -32,6 +39,8 @@ export class ConfirmExtraEmploymentVM extends ModalVM {
   private _description: StringFieldVM = new StringFieldVM({
     label: "Описание",
   });
+  private readonly _person: string;
+  private readonly _weekDay: string;
 
   handleConfirm() {
     this._onConfirm({
@@ -45,11 +54,15 @@ export class ConfirmExtraEmploymentVM extends ModalVM {
   constructor({
     start,
     end,
+    person,
+    weekDay,
     onConfirm,
     onClose,
   }: {
     start: number;
     end: number;
+    person: string;
+    weekDay: string;
     onConfirm: (parameters: SubmitParameters) => void;
     onClose: () => void;
   }) {
@@ -57,6 +70,8 @@ export class ConfirmExtraEmploymentVM extends ModalVM {
     this._start = start;
     this._end = end;
     this._onConfirm = onConfirm;
+    this._person = person;
+    this._weekDay = weekDay;
     makeObservable<ConfirmExtraEmploymentVM, "_start" | "_end">(this, {
       _start: observable,
       _end: observable,

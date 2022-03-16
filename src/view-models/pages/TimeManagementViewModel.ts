@@ -20,7 +20,7 @@ import { SubjectEntity } from "../../models/subject/SubjectEntity";
 import { groupRepository } from "../../models/group/GroupRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { addError } from "../../notifications";
-import { getErrorMessage } from "../../utils";
+import { getErrorMessage, WEEK_DAY_NAMES } from "../../utils";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -268,6 +268,8 @@ export class TimeManagementVM {
         this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
           start,
           end,
+          person: this._teacherField.value?.name ?? "", // TODO: обработать случай с undefined
+          weekDay: WEEK_DAY_NAMES[this._selectedDay],
           onConfirm: async ({ start, end, description }) => {
             try {
               const currentTeacher = this._teacherField.value;
@@ -299,6 +301,8 @@ export class TimeManagementVM {
         this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
           start,
           end,
+          person: this._pupilField.value?.name ?? "", // TODO: обработать случай с undefined
+          weekDay: WEEK_DAY_NAMES[this._selectedDay],
           onConfirm: async ({ start, end, description }) => {
             try {
               const currentPupil = this._pupilField.value;
@@ -330,6 +334,12 @@ export class TimeManagementVM {
         this._confirmLesson = new ConfirmLessonVM({
           start,
           end,
+          teacher: this._teacherField.value?.name ?? "",
+          taker:
+            this._lessonTakerType === "pupil"
+              ? this._pupilField.value?.name ?? ""
+              : this._groupField.value?.name ?? "",
+          weekDay: WEEK_DAY_NAMES[this._selectedDay],
           filterSubjects: (subject: SubjectEntity) =>
             this._getAvailableSubjectsForAssign().includes(subject.id),
           onSubmit: async ({ start, end, subject }) => {

@@ -16,9 +16,23 @@ type ConfirmLessonParameters = {
   onSubmit: (parameters: SubmitParameters) => void;
   onClose: () => void;
   filterSubjects: (subject: SubjectEntity) => boolean;
+  teacher: string;
+  taker: string;
+  weekDay: string;
 };
 
 export class ConfirmLessonVM extends ModalVM {
+  get teacher(): string {
+    return this._teacher;
+  }
+
+  get taker(): string {
+    return this._taker;
+  }
+
+  get weekDay(): string {
+    return this._weekDay;
+  }
   get subject(): LinkFieldVM<SubjectEntity> {
     return this._subject;
   }
@@ -40,6 +54,9 @@ export class ConfirmLessonVM extends ModalVM {
   private _start: number;
   private _end: number;
   private readonly _subject: LinkFieldVM<SubjectEntity>;
+  private readonly _teacher: string;
+  private readonly _taker: string;
+  private readonly _weekDay: string;
 
   handleConfirm() {
     const selectedSubject = this._subject.value;
@@ -60,6 +77,9 @@ export class ConfirmLessonVM extends ModalVM {
     onClose,
     onSubmit,
     filterSubjects,
+    teacher,
+    taker,
+    weekDay,
   }: ConfirmLessonParameters) {
     super(onClose);
     this._start = start;
@@ -70,6 +90,9 @@ export class ConfirmLessonVM extends ModalVM {
       filterSubjects
     );
     this._onSubmit = onSubmit;
+    this._teacher = teacher;
+    this._taker = taker;
+    this._weekDay = weekDay;
     makeObservable<ConfirmLessonVM, "_start" | "_end">(this, {
       _start: observable,
       _end: observable,
