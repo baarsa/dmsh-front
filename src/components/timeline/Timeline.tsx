@@ -1,5 +1,6 @@
 import { TimelineVM } from "../../view-models/TimelineVM";
 import { MouseEventHandler, useRef } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 
 import "./Timeline.css";
 import { observer } from "mobx-react-lite";
@@ -45,6 +46,12 @@ type Props = {
 export const Timeline = observer(({ vm, className }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const { dayStart, dayEnd } = vm.timeBorders;
+
+  const getMinutesFromXCoord = (element: HTMLDivElement, x: number) => {
+    const scale = (dayEnd - dayStart) / element.offsetWidth;
+    const xWithinRibbon = x - element.getBoundingClientRect().x;
+    return dayStart + xWithinRibbon * scale;
+  };
   const getSpanStyle = ({ start, end }: { start: number; end: number }) => {
     const left = (100 * (start - dayStart)) / (dayEnd - dayStart);
     const right = (100 * (end - dayStart)) / (dayEnd - dayStart);
@@ -52,7 +59,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
     return { left: `${left}%`, width: `${width}%` };
   };
   const handleMouseDown: MouseEventHandler = (e) => {
-    if (!vm.canDrawSpan || e.button !== 0) {
+    if (!vm.canDrawSpan || e.button !== 0 || e.target !== e.currentTarget) {
       return;
     }
     vm.drawingSpan = {
@@ -61,7 +68,31 @@ export const Timeline = observer(({ vm, className }: Props) => {
     };
   };
   const handleMouseMove: MouseEventHandler = (e) => {
-    if (vm.drawingSpan === null || ref.current === null) {
+    if (ref.current === null) {
+      return;
+    }
+    if (vm.draggingSpan !== null) {
+      const draggingSpan = vm.spans.find(
+        (span) => span.id === vm.draggingSpan?.id
+      );
+      if (draggingSpan === undefined) {
+        throw new Error();
+      }
+      const newStart = getMinutesFromXCoord(
+        ref.current,
+        e.nativeEvent.pageX - vm.draggingSpan.dragOffsetX
+      );
+      const newEnd = newStart + (draggingSpan.end - draggingSpan.start);
+      if (newStart < dayStart || newEnd > dayEnd) {
+        return;
+      }
+      vm.spans = [
+        ...vm.spans.filter((span) => span.id !== draggingSpan.id),
+        { ...draggingSpan, start: newStart, end: newEnd },
+      ];
+      return;
+    }
+    if (vm.drawingSpan === null) {
       return;
     }
     vm.drawingSpan = {
@@ -102,7 +133,25 @@ export const Timeline = observer(({ vm, className }: Props) => {
             className={cn("span", { [span.type]: true })}
             key={i}
             style={getSpanStyle(span)}
+            onMouseDown={(e) => {
+              vm.draggingSpan = {
+                id: span.id,
+                dragOffsetX: e.nativeEvent.offsetX,
+                initialStart: span.start,
+                initialEnd: span.end,
+              };
+            }}
+            onMouseUp={(e) => {
+              if (vm.draggingSpan === null || ref.current === null) {
+                return;
+              }
+              vm.handleSpanDrag(span.id, span.start);
+            }}
           >
+            <CloseIcon
+              className={cn("span-cross")}
+              onClick={() => vm.handleSpanCrossClick(span.id, span.type)}
+            />
             {span.text}
           </div>
         ))}

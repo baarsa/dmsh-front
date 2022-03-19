@@ -1,0 +1,11 @@
+.confirm-action {
+  &__title {
+    margin-bottom: 16px !important;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+  }
+}

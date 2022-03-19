@@ -17,6 +17,13 @@ let items = [
     teacher: 1,
     subject: 2,
   },
+  {
+    id: current++,
+    schedule: 1,
+    pupil: 50,
+    teacher: 2,
+    subject: 3,
+  },
 ];
 
 // total fake

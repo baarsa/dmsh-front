@@ -1,10 +1,13 @@
 import { computed, makeObservable, observable } from "mobx";
 import { configStore } from "../models/config-store/ConfigStore";
 
+export type SpanType = "lesson" | "extra"; // TODO: move;
+
 type Span = {
+  id: number;
   start: number;
   end: number;
-  type: "lesson" | "extra";
+  type: SpanType;
   text?: string;
 };
 
@@ -13,7 +16,21 @@ type DrawingSpan = {
   currentX: number;
 };
 
+type DraggingSpan = {
+  id: number;
+  dragOffsetX: number;
+  initialStart: number;
+  initialEnd: number;
+};
+
 export class TimelineVM {
+  get draggingSpan(): DraggingSpan | null {
+    return this._draggingSpan;
+  }
+
+  set draggingSpan(value: DraggingSpan | null) {
+    this._draggingSpan = value;
+  }
   get canDrawSpan(): boolean {
     return this._canDrawSpan;
   }
@@ -51,21 +68,62 @@ export class TimelineVM {
     start: number;
     end: number;
   }) => void;
+  private readonly _onSpanCrossClick: (id: number, type: SpanType) => void =
+    () => {};
+  private readonly _onSpanChange: (
+    id: number,
+    type: SpanType,
+    start: number,
+    end: number
+  ) => Promise<boolean>;
   private _canDrawSpan = true;
-  // + on span dragging end
-  // + on span right click (delete)
+  private _draggingSpan: DraggingSpan | null = null;
 
   handleSpanDrawingEnd(params: { start: number; end: number }) {
     this._onSpanDrawingEnd(params);
     this._drawingSpan = null; // TODO: make async, add preloader animation?
   }
 
+  handleSpanCrossClick(id: number, type: SpanType) {
+    this._onSpanCrossClick(id, type);
+  }
+
+  async handleSpanDrag(id: number, newStart: number) {
+    const span = this._spans.find((span) => span.id === id);
+    if (span === undefined || this.draggingSpan === null) {
+      throw new Error(); // TODO: handle
+    }
+    const { initialStart, initialEnd } = this.draggingSpan;
+    this.draggingSpan = null;
+    const wasUpdated = await this._onSpanChange(
+      id,
+      span.type,
+      newStart,
+      span.end + (newStart - span.start)
+    );
+    if (!wasUpdated) {
+      this._spans = [
+        ...this._spans.filter(({ id }) => id !== span.id),
+        { ...span, start: initialStart, end: initialEnd },
+      ];
+    }
+  }
+
   constructor(params: {
     spans: Span[];
     onSpanDrawingEnd: (params: { start: number; end: number }) => void;
+    onSpanCrossClick?: (id: number, type: SpanType) => void;
+    onSpanChange?: (
+      id: number,
+      type: SpanType,
+      newStart: number,
+      newEnd: number
+    ) => Promise<boolean>;
   }) {
     this._spans = params.spans;
     this._onSpanDrawingEnd = params.onSpanDrawingEnd;
+    this._onSpanCrossClick = params.onSpanCrossClick ?? (() => {});
+    this._onSpanChange = params.onSpanChange ?? (() => Promise.resolve(true));
     makeObservable<TimelineVM, "_spans">(this, {
       _spans: observable,
       spans: computed,

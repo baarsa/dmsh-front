@@ -39,12 +39,13 @@ export const extraEmploymentService: IEntityService<IExtraEmployment> = {
     items = [...items, newItem];
     return newItem;
   },
-  async update(id: number, data: IExtraEmployment) {
+  async update(id: number, data: Partial<IExtraEmployment>) {
     items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
-    return {
-      id,
-      ...data,
-    };
+    const newItem = items.find((item) => item.id === id);
+    if (newItem === undefined) {
+      throw new Error();
+    }
+    return newItem;
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);

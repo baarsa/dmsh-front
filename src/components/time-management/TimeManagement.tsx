@@ -8,6 +8,8 @@ import { createCn } from "../../utils";
 import "./time-management.css";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { Select } from "../select/Select";
+import { ConfirmAction } from "../confirm-action/ConfirmAction";
+import { ConfirmSpanChange } from "../confirm-span-change/ConfirmSpanChange";
 
 const cn = createCn("time-management");
 
@@ -46,6 +48,10 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
         <ConfirmExtraEmployment vm={props.vm.confirmExtraEmployment} />
       )}
       {props.vm.confirmLesson && <ConfirmLesson vm={props.vm.confirmLesson} />}
+      {props.vm.confirmAction && <ConfirmAction vm={props.vm.confirmAction} />}
+      {props.vm.confirmSpanChange && (
+        <ConfirmSpanChange vm={props.vm.confirmSpanChange} />
+      )}
     </div>
   );
 });

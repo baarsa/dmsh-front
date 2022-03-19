@@ -11,7 +11,7 @@ import { lessonRepository } from "../../models/lesson/LessonRepository";
 import { PupilEntity } from "../../models/pupil/PupilEntity";
 import { TeacherEntity } from "../../models/teacher/TeacherEntity";
 import { LinkFieldVM } from "../fields/LinkField";
-import { TimelineVM } from "../TimelineVM";
+import { SpanType, TimelineVM } from "../TimelineVM";
 import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { ConfirmExtraEmploymentVM } from "../modals/ConfirmExtraEmploymentVM";
 import { extraEmploymentRepository } from "../../models/extra-employment/ExtraEmploymentRepository";
@@ -21,6 +21,8 @@ import { groupRepository } from "../../models/group/GroupRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { addError } from "../../notifications";
 import { getErrorMessage, WEEK_DAY_NAMES } from "../../utils";
+import { ConfirmActionVM } from "../modals/ConfirmActionVM";
+import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -53,6 +55,8 @@ export class TimeManagementVM {
   //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
   private _confirmLesson: ConfirmLessonVM | null = null;
+  private _confirmAction: ConfirmActionVM | null = null;
+  private _confirmSpanChange: ConfirmSpanChangeVM | null = null;
 
   private _getAvailableSubjectsForAssign() {
     const currentTeacher = this._teacherField.value;
@@ -145,8 +149,14 @@ export class TimeManagementVM {
     return this._confirmLesson;
   }
 
-  //effects
-  // set teacher timeline spans
+  get confirmAction() {
+    return this._confirmAction;
+  }
+
+  get confirmSpanChange() {
+    return this._confirmSpanChange;
+  }
+
   async setTeacherTimelineSpans() {
     const currentTeacher = this._teacherField.value;
     if (currentTeacher === null) {
@@ -175,12 +185,14 @@ export class TimeManagementVM {
     const subjects = subjectRepository.entities;
     this._teacherTimeline.spans = [
       ...relevantLessons.map((lesson) => ({
+        id: lesson.id,
         start: lesson.start,
         end: lesson.end,
         type: "lesson" as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
+        id: employment.id,
         start: employment.start,
         end: employment.end,
         type: "extra" as const,
@@ -234,12 +246,14 @@ export class TimeManagementVM {
     const subjects = subjectRepository.entities;
     this._takerTimeline.spans = [
       ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => ({
+        id: lesson.id,
         start: lesson.start,
         end: lesson.end,
         type: "lesson" as const,
         text: subjects[lesson.subject]?.name,
       })),
       ...relevantExtraEmployments.map((employment) => ({
+        id: employment.id,
         start: employment.start,
         end: employment.end,
         type: "extra" as const,
@@ -254,6 +268,61 @@ export class TimeManagementVM {
       ...this._teacherTimeline.spans,
       ...this._takerTimeline.spans,
     ];
+  }
+
+  private _onTimelineSpanChange(
+    id: number,
+    type: SpanType,
+    start: number,
+    end: number
+  ) {
+    return new Promise<boolean>((res) => {
+      this._confirmSpanChange = new ConfirmSpanChangeVM({
+        text: `Изменение параметров ${
+          type === "lesson" ? "урока" : "занятости"
+        }`, // TODO: добавить подробности
+        start,
+        end,
+        onSubmit: async ({ start, end }) => {
+          if (type === "lesson") {
+            await lessonRepository.updateEntity(id, { start, end });
+          } else {
+            await extraEmploymentRepository.updateEntity(id, { start, end });
+          }
+          this._confirmSpanChange = null;
+          res(true);
+        },
+        onClose: () => {
+          this._confirmSpanChange = null;
+          res(false);
+        },
+      });
+    });
+  }
+
+  private async _onTimelineCrossClick(id: number, type: SpanType) {
+    let spanDesc = "";
+    if (type === "lesson") {
+      spanDesc = "урок"; // TODO: добавить название предмета и принимателя урока
+    } else {
+      const employment = await extraEmploymentRepository.getEntityById(id);
+      spanDesc = `занятость "${employment?.description}"`;
+    }
+    const teacherName = this._teacherField.value?.name ?? "";
+    this._confirmAction = new ConfirmActionVM({
+      text: `Вы действительно хотите удалить ${spanDesc} преподавателя ${teacherName}?`,
+      onClose: () => {
+        this._confirmAction = null;
+      },
+      onConfirm: async () => {
+        if (type === "lesson") {
+          await lessonRepository.removeEntity(id);
+        } else {
+          await extraEmploymentRepository.removeEntity(id);
+        }
+        this._confirmAction = null;
+      },
+    });
   }
 
   constructor(params: Params) {
@@ -294,9 +363,11 @@ export class TimeManagementVM {
           },
         });
       },
+      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args),
     });
     this._takerTimeline = new TimelineVM({
-      spans: [], // only allow drawing if taker is pupil not group!
+      spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
         this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
           start,
@@ -327,9 +398,11 @@ export class TimeManagementVM {
           },
         });
       },
+      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), //fix text
     });
     this._commonTimeline = new TimelineVM({
-      spans: [], // only allow drawing if taker is pupil not group!
+      spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
         this._confirmLesson = new ConfirmLessonVM({
           start,
@@ -371,6 +444,8 @@ export class TimeManagementVM {
           },
         });
       },
+      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
     });
     makeAutoObservable(this);
     autorun(() => this.setTeacherTimelineSpans());

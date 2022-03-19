@@ -3,17 +3,43 @@
   text-transform: uppercase;
   color: #fff;
   padding: 4px;
-
-  &_active {
-    background: var(--button-main);
-    color: black;
-  }
+  cursor: pointer;
 
   &__link {
     text-decoration: none;
-    color: inherit;
+    color: #fff;
     &:visited {
-      color: inherit;
+      color: #fff;
     }
+    &_active {
+      background: var(--button-main);
+      color: black;
+    }
+    &_active:visited {
+      background: var(--button-main);
+      color: black;
+    }
+  }
+
+  &__item-group-popup {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    padding-top: 8px;
+    transform: translateY(100%);
+    flex-direction: column;
+  }
+
+  &__item-group {
+    position: relative;
+    &_active {
+      background: var(--button-main);
+      color: black;
+    }
+  }
+
+  &__item-group:hover &__item-group-popup {
+    display: flex;
   }
 }

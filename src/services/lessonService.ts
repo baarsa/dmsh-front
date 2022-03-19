@@ -51,14 +51,13 @@ export const lessonService: IEntityService<ILesson> = {
     items = [...items, newItem];
     return newItem;
   },
-  async update(id: number, data: ILesson) {
-    items = items.map((teacher) =>
-      teacher.id === id ? { ...teacher, ...data } : teacher
-    );
-    return {
-      id,
-      ...data,
-    };
+  async update(id: number, data: Partial<ILesson>) {
+    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
+    const newItem = items.find((item) => item.id === id);
+    if (newItem === undefined) {
+      throw new Error();
+    }
+    return newItem;
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);

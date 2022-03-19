@@ -1,6 +1,5 @@
 import { NavigationItemDescription } from "../../view-models/NavigationVM";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import "./NavigationItem.css";
 import { createCn } from "../../utils";
 
@@ -13,7 +12,10 @@ type LinkProps = {
 };
 const NavigationItemLink = (props: LinkProps) => {
   return (
-    <Link className={cn("link")} to={props.fullUrl}>
+    <Link
+      className={cn("link", { active: props.currentUrl === props.fullUrl })}
+      to={props.fullUrl}
+    >
       {props.text}
     </Link>
   );
@@ -26,13 +28,16 @@ type GroupProps = {
   items: NavigationItemDescription[];
 };
 const NavigationItemGroup = (props: GroupProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
-      <div onClick={() => setIsOpen(!isOpen)}>{props.text}</div>
-      <div style={{ display: isOpen ? "block" : "none" }}>
+    <div
+      className={cn("item-group", {
+        active: props.currentUrl.startsWith(props.fullUrl),
+      })}
+    >
+      <div>{props.text}</div>
+      <div className={cn("item-group-popup")}>
         {props.items.map((item) => (
-          <NavigationItem
+          <NavigationItemLink
             key={item.text}
             text={item.text}
             currentUrl={props.currentUrl}
@@ -53,7 +58,7 @@ type NavigationItemProps = {
 
 export const NavigationItem = (props: NavigationItemProps) => {
   return (
-    <div className={cn({ active: props.fullUrl.startsWith(props.currentUrl) })}>
+    <div className={cn({ active: props.currentUrl.startsWith(props.fullUrl) })}>
       {props.childrenItems === undefined ? (
         <NavigationItemLink {...props} />
       ) : (

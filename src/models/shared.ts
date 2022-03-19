@@ -14,15 +14,17 @@ export type Stored<T> = T & { id: number } & (T extends IPupil | IGroup
     ? { lessonTakerId: number }
     : {});
 
-export interface IEntityRepository<T> {
+export interface IEntityRepository<T, K> {
   // класс сущности; данные для инстанцирования
   readonly entities: Record<number, Stored<T>>;
   getEntityById(id: number): Promise<Stored<T> | null>;
-  // addEntity(entityData: K): Promise<boolean>; // whether is has been successfully persisted
+  addEntity(entityData: K): Promise<boolean>;
+  removeEntity(id: number): Promise<void>;
+  updateEntity(id: number, entityData: Partial<K>): Promise<void>;
 }
 
 export abstract class GenericEntityRepository<T, K>
-  implements IEntityRepository<T>
+  implements IEntityRepository<T, K>
 {
   private _entityService: IEntityService<K>;
   private createEntity: (props: Stored<K>) => Stored<T>;
@@ -72,6 +74,20 @@ export abstract class GenericEntityRepository<T, K>
       };
     });
     return true; // or maybe we need to return entity?
+  }
+  async removeEntity(id: number): Promise<void> {
+    await this._entityService.remove(id);
+    runInAction(() => {
+      // todo investigate optimization possibilities
+      delete this._entities[id];
+    });
+  }
+  async updateEntity(id: number, newData: Partial<K>) {
+    const response = await this._entityService.update(id, newData);
+    runInAction(() => {
+      // todo investigate optimization possibilities
+      this._entities[id] = this.createEntity(response);
+    });
   }
 
   constructor(props: {
