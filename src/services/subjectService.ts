@@ -21,6 +21,30 @@ let items = [
     isSpecial: false,
     specialityGroup: null,
   },
+  {
+    id: current++,
+    name: "Хор",
+    isSpecial: false,
+    specialityGroup: null,
+  },
+  {
+    id: current++,
+    name: "Общее фортепиано",
+    isSpecial: false,
+    specialityGroup: null,
+  },
+  {
+    id: current++,
+    name: "Ансамбль",
+    isSpecial: false,
+    specialityGroup: null,
+  },
+  {
+    id: current++,
+    name: "Музыкальная литература",
+    isSpecial: false,
+    specialityGroup: null,
+  },
 ];
 
 // total fake
@@ -29,7 +53,11 @@ export const subjectService: IEntityService<ISubject> = {
     return items;
   },
   async fetchById(_id: number) {
-    return items.find(({ id }) => id === _id) ?? null;
+    const item = items.find(({ id }) => id === _id);
+    if (item === undefined) {
+      throw new Error();
+    }
+    return item;
   },
   async saveToServer(data: ISubject) {
     const newItem = {
@@ -39,14 +67,15 @@ export const subjectService: IEntityService<ISubject> = {
     items = [...items, newItem];
     return newItem;
   },
-  async update(id: number, data: ISubject) {
-    items = items.map((teacher) =>
-      teacher.id === id ? { ...teacher, ...data } : teacher
+  async update(id: number, data: Partial<ISubject>) {
+    items = items.map((item) =>
+        item.id === id ? { ...item, ...data } : item
     );
-    return {
-      id,
-      ...data,
-    };
+    const newItem = items.find((item) => item.id === id);
+    if (newItem === undefined) {
+      throw new Error();
+    }
+    return newItem;
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);

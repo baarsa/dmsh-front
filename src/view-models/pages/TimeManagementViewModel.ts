@@ -20,9 +20,11 @@ import { SubjectEntity } from "../../models/subject/SubjectEntity";
 import { groupRepository } from "../../models/group/GroupRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { addError } from "../../notifications";
-import { getErrorMessage, WEEK_DAY_NAMES } from "../../utils";
+import { getErrorMessage } from "../../utils";
 import { ConfirmActionVM } from "../modals/ConfirmActionVM";
 import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
+import {WEEK_DAY_NAMES} from "../../const";
+import {LoadsInfoVM} from "../LoadsInfoVM";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -51,6 +53,8 @@ export class TimeManagementVM {
   private readonly _teacherTimeline: TimelineVM;
   private readonly _takerTimeline: TimelineVM;
   private readonly _commonTimeline: TimelineVM;
+
+  private readonly _loadsInfo: LoadsInfoVM;
 
   //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
@@ -155,6 +159,10 @@ export class TimeManagementVM {
 
   get confirmSpanChange() {
     return this._confirmSpanChange;
+  }
+
+  get loadsInfo() {
+    return this._loadsInfo;
   }
 
   async setTeacherTimelineSpans() {
@@ -447,12 +455,34 @@ export class TimeManagementVM {
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
     });
+    const currentTeacher = this.teacherField.value;
+    if (currentTeacher === null) {
+      throw new Error();
+    }
+    this._loadsInfo = new LoadsInfoVM(this._schedule, currentTeacher.id);
     makeAutoObservable(this);
     autorun(() => this.setTeacherTimelineSpans());
     autorun(() => this.setTakerTimelineSpans());
     autorun(() => this.setCommonTimelineSpans());
     autorun(() => {
       this._takerTimeline.canDrawSpan = this._lessonTakerType === "pupil";
+    });
+    autorun(() => {
+      const currentTeacher = this._teacherField.value;
+      if (currentTeacher !== null) {
+        this._loadsInfo.teacherId = currentTeacher.id;
+      }
+    });
+    autorun(() => {
+      if (this._canChangeTeacher) {
+        const currentTeacher = this._teacherField.value;
+        if (currentTeacher === null) {
+          return;
+        }
+        this._loadsInfo.title = `Нагрузка преподавателя ${currentTeacher.name}`;
+      } else {
+        this._loadsInfo.title = 'Ваша нагрузка';
+      }
     });
   }
 }

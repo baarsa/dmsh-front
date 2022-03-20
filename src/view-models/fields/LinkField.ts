@@ -10,7 +10,7 @@ export class LinkFieldVM<T extends INamedEntity>
 {
   fieldType: FieldType.LINK = FieldType.LINK;
   value: Stored<T> | null = null;
-  entityModel: IEntityRepository<T>;
+  entityModel: IEntityRepository<T, unknown>;
   private entitiesFilter: (entity: T) => boolean = () => true; //need method to update? or function using observable will update itself?
   // фильтрация вариантов в зависимости от значения другого поля.
   _entities: () => Stored<T>[] = () => {
@@ -53,7 +53,7 @@ export class LinkFieldVM<T extends INamedEntity>
 
   constructor(
     props: FieldConstructorProps,
-    entityModel: IEntityRepository<T>,
+    entityModel: IEntityRepository<T, unknown>,
     entitiesFilter?: (entity: T) => boolean
   ) {
     super(props);

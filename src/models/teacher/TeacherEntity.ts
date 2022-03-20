@@ -1,7 +1,7 @@
-import { IEntity, Stored } from "../shared";
+import { Stored } from "../shared";
 import { ITeacher } from "../../entities/ITeacher";
 
-export class TeacherEntity implements IEntity, ITeacher {
+export class TeacherEntity implements ITeacher {
   id: number;
   name: string;
   canAssist: boolean;
