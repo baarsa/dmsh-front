@@ -1,7 +1,7 @@
 // total fake
 import { IEntityService } from "./shared";
 import { ISchedule } from "../entities/ISchedule";
-import {Stored} from "../models/shared";
+import { Stored } from "../models/shared";
 
 let current = 1;
 let items = [
@@ -12,7 +12,7 @@ let items = [
       50: 0,
       51: 0,
       52: 1,
-    }
+    },
   },
   {
     id: current++,
@@ -21,7 +21,7 @@ let items = [
       50: 1,
       51: 1,
       52: 2,
-    }
+    },
   },
 ] as Array<Stored<ISchedule>>;
 

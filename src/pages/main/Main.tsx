@@ -11,6 +11,7 @@ import { configStore } from "../../models/config-store/ConfigStore";
 import { Header } from "../../components/header/Header";
 import { createCn } from "../../utils";
 import "./Main.css";
+import { LoadsDistributionPage } from "../LoadsDistribution";
 
 const WrTimeManagement = withPermission(
   Permission.TimeManagementPage,
@@ -40,6 +41,7 @@ const MainComponent = () => {
         <Routes>
           <Route path="subjects/*" element={<Subjects />} />
           <Route path="time-management" element={<WrTimeManagement />} />
+          <Route path="loads" element={<LoadsDistributionPage />} />
         </Routes>
       </div>
     </div>

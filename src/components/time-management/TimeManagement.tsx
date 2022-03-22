@@ -10,14 +10,14 @@ import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { Select } from "../select/Select";
 import { ConfirmAction } from "../confirm-action/ConfirmAction";
 import { ConfirmSpanChange } from "../confirm-span-change/ConfirmSpanChange";
-import {LoadsInfo} from "../loads-info/LoadsInfo";
+import { LoadsInfo } from "../loads-info/LoadsInfo";
 
 const cn = createCn("time-management");
 
 export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
   return (
     <div className={cn()}>
-        <LoadsInfo vm={props.vm.loadsInfo} />
+      <LoadsInfo vm={props.vm.loadsInfo} />
       <div className={cn("controls")}>
         <Select
           label="День недели"

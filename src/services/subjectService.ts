@@ -68,9 +68,7 @@ export const subjectService: IEntityService<ISubject> = {
     return newItem;
   },
   async update(id: number, data: Partial<ISubject>) {
-    items = items.map((item) =>
-        item.id === id ? { ...item, ...data } : item
-    );
+    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
     const newItem = items.find((item) => item.id === id);
     if (newItem === undefined) {
       throw new Error();

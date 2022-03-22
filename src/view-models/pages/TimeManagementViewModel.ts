@@ -23,8 +23,8 @@ import { addError } from "../../notifications";
 import { getErrorMessage } from "../../utils";
 import { ConfirmActionVM } from "../modals/ConfirmActionVM";
 import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
-import {WEEK_DAY_NAMES} from "../../const";
-import {LoadsInfoVM} from "../LoadsInfoVM";
+import { WEEK_DAY_NAMES } from "../../const";
+import { LoadsInfoVM } from "../LoadsInfoVM";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -481,7 +481,7 @@ export class TimeManagementVM {
         }
         this._loadsInfo.title = `Нагрузка преподавателя ${currentTeacher.name}`;
       } else {
-        this._loadsInfo.title = 'Ваша нагрузка';
+        this._loadsInfo.title = "Ваша нагрузка";
       }
     });
   }

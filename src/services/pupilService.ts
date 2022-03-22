@@ -17,14 +17,14 @@ let items = [
     lessonTakerId: currentLt++,
     name: "Людвиг",
     specialSubject: 2, //flute
-    program: 3,
+    program: 2,
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
     name: "Феликс",
     specialSubject: 1, //violin
-    program: 2,
+    program: 1,
   },
 ];
 

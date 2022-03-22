@@ -6,9 +6,9 @@ import { teacherEntityRepository } from "../models/teacher/TeacherRepository";
 import { LinkFieldVM } from "../view-models/fields/LinkField";
 import { TimeManagementVM } from "../view-models/pages/TimeManagementViewModel";
 import { scheduleRepository } from "../models/schedule/ScheduleRepository";
-import {TeacherEntity} from "../models/teacher/TeacherEntity";
-import {PupilEntity} from "../models/pupil/PupilEntity";
-import {GroupEntity} from "../models/group/GroupEntity";
+import { TeacherEntity } from "../models/teacher/TeacherEntity";
+import { PupilEntity } from "../models/pupil/PupilEntity";
+import { GroupEntity } from "../models/group/GroupEntity";
 
 export const TimeManagementPage = () => {
   // create VM
@@ -25,17 +25,17 @@ export const TimeManagementPage = () => {
       const canChangeTeacher = true; // TODO set from context
       const teacherField = new LinkFieldVM<TeacherEntity>(
         { label: "Преподаватель", isDisabled: !canChangeTeacher },
-        teacherEntityRepository
-      ); // todo initial value?
+        { entityModel: teacherEntityRepository }
+      );
       const pupilField = new LinkFieldVM<PupilEntity>(
         { label: "Учащийся" },
-        pupilEntityRepository, // standardize repositories names (remove "entity")
-        (pupil) => true // TODO length of loads for (schedule, selectedTeacher, pupil) > 0
+        { entityModel: pupilEntityRepository, entitiesFilter: (pupil) => true }
+        // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0
       );
       const groupField = new LinkFieldVM<GroupEntity>(
         { label: "Группа" },
-        groupRepository,
-        (group) => true // TODO length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
+        { entityModel: groupRepository, entitiesFilter: (group) => true }
+        // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
       );
       const schedule = await scheduleRepository.getEntityById(1);
       if (schedule === null) {

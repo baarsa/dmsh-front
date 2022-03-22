@@ -165,7 +165,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
       <div className={cn("labels")}>
         {getTimeLabels(dayStart, dayEnd).map((item, i) => (
           <div
-              key={i}
+            key={i}
             className={cn("label", { big: item.isBig })}
             style={{
               left: `${(100 * (item.time - dayStart)) / (dayEnd - dayStart)}%`,
