@@ -6,7 +6,7 @@ let current = 1;
 let items = [
   {
     id: current++,
-    name: "Струнные 2 года",
+    name: "Струнные 8 лет",
     specialityGroup: 1,
     yearPlans: [
       {
@@ -18,36 +18,192 @@ let items = [
         },
       },
       {
-        specialityHalfHours: 5,
+        specialityHalfHours: 4,
         commonSubjectsHalfHours: {
           4: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          5: 2,
+          4: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
           5: 2,
           3: 3,
           7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
+          3: 3,
+          7: 3,
         },
       },
     ],
   },
   {
     id: current++,
-    name: "Духовые 2 года",
+    name: "Духовые и ударные 5 лет",
     specialityGroup: 2,
     yearPlans: [
       {
-        specialityHalfHours: 3,
+        specialityHalfHours: 4,
         commonSubjectsHalfHours: {
-          4: 3,
+          4: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
           3: 3,
           7: 3,
+        },
+      },
+    ],
+  },
+  {
+    id: current++,
+    name: "Духовые и ударные 8 лет",
+    specialityGroup: 2,
+    yearPlans: [
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          4: 2,
+          3: 2,
+          7: 2,
         },
       },
       {
         specialityHalfHours: 4,
         commonSubjectsHalfHours: {
           4: 2,
-          5: 2,
           3: 3,
           7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          4: 2,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 4,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 1,
+          3: 3,
+          7: 2,
+        },
+      },
+      {
+        specialityHalfHours: 5,
+        commonSubjectsHalfHours: {
+          6: 2,
+          5: 2,
+          3: 3,
+          7: 3,
         },
       },
     ],

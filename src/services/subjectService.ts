@@ -16,7 +16,7 @@ let items = [
     specialityGroup: 2,
   },
   {
-    id: current++,
+    id: current++,//3
     name: "Сольфеджио",
     isSpecial: false,
     specialityGroup: null,
@@ -28,7 +28,7 @@ let items = [
     specialityGroup: null,
   },
   {
-    id: current++,
+    id: current++,//5
     name: "Общее фортепиано",
     isSpecial: false,
     specialityGroup: null,
@@ -40,10 +40,22 @@ let items = [
     specialityGroup: null,
   },
   {
-    id: current++,
+    id: current++,//7
     name: "Музыкальная литература",
     isSpecial: false,
     specialityGroup: null,
+  },
+  {
+    id: current++,
+    name: "Виолончель",
+    isSpecial: true,
+    specialityGroup: 1,
+  },
+  {
+    id: current++,//9
+    name: "Кларнет",
+    isSpecial: true,
+    specialityGroup: 2,
   },
 ];
 

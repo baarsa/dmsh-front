@@ -1,32 +1,31 @@
 import { IEntityService } from "./shared";
 import { IPupil } from "../entities/IPupil";
+import {names} from "./__names";
+import {Stored} from "../models/shared";
+
+export const INITIAL_PUPIL_ID = 50;
 
 // total fake
-let current = 50;
+let current = INITIAL_PUPIL_ID;
 let currentLt = 1;
-let items = [
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Вольфганг",
-    specialSubject: 1, //violin
-    program: 1,
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Людвиг",
-    specialSubject: 2, //flute
-    program: 2,
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Феликс",
-    specialSubject: 1, //violin
-    program: 1,
-  },
+let items: Array<Stored<IPupil>> = [
+
 ];
+
+export const PUPILS_NUMBER = 100;
+
+for (let i = 0; i < PUPILS_NUMBER; i++) {
+  const program = Math.ceil(Math.random() * 3);
+  const subjIndex = Math.floor(Math.random() * 2);
+  const specialSubject = program === 1 ? [1, 8][subjIndex] : [2, 9][subjIndex];
+  items.push({
+    id: current++,
+    lessonTakerId: currentLt++,
+    name: names[i],
+    program,
+    specialSubject,
+  });
+};
 
 export const pupilService: IEntityService<IPupil> = {
   async fetchAll() {

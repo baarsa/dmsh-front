@@ -6,15 +6,45 @@ let current = 1;
 let items = [
   {
     id: current++,
-    name: "Пифагор",
+    name: "Паганини",
     canAssist: true,
-    subjects: [1, 2, 3],
+    subjects: [1, 8, 3],
   },
   {
     id: current++,
-    name: "Аристотель",
+    name: "Виотти",
+    canAssist: false,
+    subjects: [1],
+  },
+  {
+    id: current++,
+    name: "Ростропович",
+    canAssist: false,
+    subjects: [8],
+  },
+  {
+    id: current++,
+    name: "Джеймс Голуэй",
     canAssist: false,
     subjects: [2],
+  },
+  {
+    id: current++,
+    name: "Бенни Гудмен",
+    canAssist: false,
+    subjects: [9],
+  },
+  {
+    id: current++,
+    name: "Мясковский",
+    canAssist: false,
+    subjects: [4],
+  },
+  {
+    id: current++,
+    name: "Юрий Николаевич Холопов",
+    canAssist: false,
+    subjects: [3, 7],
   },
 ];
 

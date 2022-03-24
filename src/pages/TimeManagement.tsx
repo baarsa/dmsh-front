@@ -25,16 +25,24 @@ export const TimeManagementPage = () => {
       const canChangeTeacher = true; // TODO set from context
       const teacherField = new LinkFieldVM<TeacherEntity>(
         { label: "Преподаватель", isDisabled: !canChangeTeacher },
-        { entityModel: teacherEntityRepository }
+        { entityModel: teacherEntityRepository, shouldSetInitialValue: true }
       );
       const pupilField = new LinkFieldVM<PupilEntity>(
         { label: "Учащийся" },
-        { entityModel: pupilEntityRepository, entitiesFilter: (pupil) => true }
+        {
+          entityModel: pupilEntityRepository,
+          entitiesFilter: (pupil) => true,
+          shouldSetInitialValue: true
+        }
         // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0
       );
       const groupField = new LinkFieldVM<GroupEntity>(
         { label: "Группа" },
-        { entityModel: groupRepository, entitiesFilter: (group) => true }
+        {
+          entityModel: groupRepository,
+          entitiesFilter: (group) => true,
+          shouldSetInitialValue: true
+        }
         // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
       );
       const schedule = await scheduleRepository.getEntityById(1);

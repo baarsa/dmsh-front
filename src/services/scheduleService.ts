@@ -2,17 +2,20 @@
 import { IEntityService } from "./shared";
 import { ISchedule } from "../entities/ISchedule";
 import { Stored } from "../models/shared";
+import {INITIAL_PUPIL_ID, PUPILS_NUMBER} from "./pupilService";
 
 let current = 1;
 let items = [
   {
     id: current++,
     name: "2022",
-    pupilsYears: {
-      50: 0,
-      51: 0,
-      52: 1,
-    },
+    pupilsYears: (() => {
+      let years: Record<number, number> = {};
+      for (let i = INITIAL_PUPIL_ID; i < INITIAL_PUPIL_ID + PUPILS_NUMBER; i++) {
+        years[i] = Math.floor(Math.random() * 5);
+      }
+      return years;
+    })(),
   },
   {
     id: current++,
