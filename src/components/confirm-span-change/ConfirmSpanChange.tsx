@@ -4,6 +4,7 @@ import { Modal } from "../Modal/Modal";
 import { Button, Typography } from "@mui/material";
 import { TimeInput } from "../time-input/TimeInput";
 import { ConfirmSpanChangeVM } from "../../view-models/modals/ConfirmSpanChangeVM";
+import './ConfirmSpanChange.css';
 
 const cn = createCn("confirm-span-change");
 
