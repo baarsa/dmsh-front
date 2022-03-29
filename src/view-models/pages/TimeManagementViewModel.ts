@@ -1,11 +1,8 @@
 import {
   autorun,
-  getObserverTree,
   makeAutoObservable,
-  observable,
-  reaction,
-  trace,
 } from "mobx";
+import { uniqBy, prop } from 'ramda';
 import { GroupEntity } from "../../models/group/GroupEntity";
 import { lessonRepository } from "../../models/lesson/LessonRepository";
 import { PupilEntity } from "../../models/pupil/PupilEntity";
@@ -45,7 +42,7 @@ export class TimeManagementVM {
     { value: 4, text: "Пятница" },
     { value: 5, text: "Суббота" },
   ];
-  private _canChangeTeacher: boolean;
+  private readonly _canChangeTeacher: boolean;
   private _lessonTakerType: "pupil" | "group" = "pupil";
   private readonly _teacherField: LinkFieldVM<TeacherEntity>;
   private readonly _pupilField: LinkFieldVM<PupilEntity>;
@@ -271,11 +268,10 @@ export class TimeManagementVM {
   }
 
   async setCommonTimelineSpans() {
-    this._commonTimeline.spans = [
-      // TODO remove doubles of common lessons
+    this._commonTimeline.spans = uniqBy(prop('id'), [
       ...this._teacherTimeline.spans,
       ...this._takerTimeline.spans,
-    ];
+    ]);
   }
 
   private _onTimelineSpanChange(
