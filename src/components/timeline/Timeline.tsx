@@ -5,6 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./Timeline.css";
 import { observer } from "mobx-react-lite";
 import { createCn, getTimeText } from "../../utils";
+import {Tooltip} from "@mui/material";
 
 /**
  * Шаг, до которого округляются операции на шкале (в минутах)
@@ -178,9 +179,18 @@ export const Timeline = observer(({ vm, className }: Props) => {
           >
             <CloseIcon
               className={cn("span-cross")}
-              onClick={() => vm.handleSpanCrossClick(span.id, span.type)}
+              onClick={() => {
+                vm.handleSpanCrossClick(span.id, span.type);
+              }}
+              onMouseDown={(e) => {
+                e.stopPropagation();
+              }}
             />
-            {span.text}
+            <Tooltip title={ span.text ?? '' }>
+              <div className={cn('span-text')}>
+                {span.text}
+              </div>
+            </Tooltip>
           </div>
         ))}
         {vm.drawingSpan && (
