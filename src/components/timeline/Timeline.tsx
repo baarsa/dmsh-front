@@ -6,6 +6,19 @@ import "./Timeline.css";
 import { observer } from "mobx-react-lite";
 import { createCn, getTimeText } from "../../utils";
 
+/**
+ * Шаг, до которого округляются операции на шкале (в минутах)
+ */
+const SNAP_UNIT = 5;
+
+/**
+ * Округляет количество минут до SNAP_UNIT
+ */
+const getRoundedMinutes = (x: number) => {
+  const remainder = x % SNAP_UNIT;
+  return Math.round(x - remainder + (remainder > SNAP_UNIT / 2 ? SNAP_UNIT : 0));
+}
+
 const getDrawingSpanStyle = ({
   initialX,
   currentX,
@@ -47,10 +60,21 @@ export const Timeline = observer(({ vm, className }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   const { dayStart, dayEnd } = vm.timeBorders;
 
-  const getMinutesFromXCoord = (element: HTMLDivElement, x: number) => {
-    const scale = (dayEnd - dayStart) / element.offsetWidth;
-    const xWithinRibbon = x - element.getBoundingClientRect().x;
-    return dayStart + xWithinRibbon * scale;
+  /**
+   * Масштаб шкалы (пиксель/минута)
+   */
+  const getScale = (element: HTMLDivElement) => element.offsetWidth / (dayEnd - dayStart);
+  const getRibbonLeftOffset = (element: HTMLDivElement) => element.getBoundingClientRect().x
+
+  const getMinutesFromXCoordWithinPage = (element: HTMLDivElement, x: number) => {
+    const xWithinRibbon = x - getRibbonLeftOffset(element);
+    return getMinutesFromXCoordWithinRibbon(element, xWithinRibbon);
+  };
+  const getMinutesFromXCoordWithinRibbon = (element: HTMLDivElement, x: number) => {
+    return dayStart + Math.round(x / getScale(element));
+  };
+  const getXCoordWithinRibbonFromMinutes = (element: HTMLDivElement, x: number) => {
+    return (x - dayStart) * getScale(element);
   };
   const getSpanStyle = ({ start, end }: { start: number; end: number }) => {
     const left = (100 * (start - dayStart)) / (dayEnd - dayStart);
@@ -59,12 +83,15 @@ export const Timeline = observer(({ vm, className }: Props) => {
     return { left: `${left}%`, width: `${width}%` };
   };
   const handleMouseDown: MouseEventHandler = (e) => {
-    if (!vm.canDrawSpan || e.button !== 0 || e.target !== e.currentTarget) {
+    if (!vm.canDrawSpan || ref.current === null || e.button !== 0 || e.target !== e.currentTarget) {
       return;
     }
+    const xMinutes = getMinutesFromXCoordWithinRibbon(ref.current, e.nativeEvent.offsetX);
+    const xMinutesRounded = getRoundedMinutes(xMinutes);
+    const xPixelsRounded = getXCoordWithinRibbonFromMinutes(ref.current, xMinutesRounded);
     vm.drawingSpan = {
-      initialX: e.nativeEvent.offsetX,
-      currentX: e.nativeEvent.offsetX,
+      initialX: xPixelsRounded,
+      currentX: xPixelsRounded,
     };
   };
   const handleMouseMove: MouseEventHandler = (e) => {
@@ -78,7 +105,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
       if (draggingSpan === undefined) {
         throw new Error();
       }
-      const newStart = getMinutesFromXCoord(
+      const newStart = getMinutesFromXCoordWithinPage(
         ref.current,
         e.nativeEvent.pageX - vm.draggingSpan.dragOffsetX
       );
@@ -97,12 +124,11 @@ export const Timeline = observer(({ vm, className }: Props) => {
     }
     vm.drawingSpan = {
       initialX: vm.drawingSpan.initialX,
-      currentX: e.nativeEvent.pageX - ref.current.getBoundingClientRect().x,
+      currentX: e.nativeEvent.pageX - getRibbonLeftOffset(ref.current),
     };
   };
   const handleMouseUp: MouseEventHandler = () => {
     if (ref.current === null || vm.drawingSpan === null) {
-      //error
       return;
     }
     const startX =
@@ -113,10 +139,11 @@ export const Timeline = observer(({ vm, className }: Props) => {
       vm.drawingSpan.currentX < vm.drawingSpan.initialX
         ? vm.drawingSpan.initialX
         : vm.drawingSpan.currentX;
-    const width = ref.current.offsetWidth;
+    const startMinutes = Math.round(dayStart + startX / getScale(ref.current));
+    const endMinutes = Math.round(dayStart + endX / getScale(ref.current));
     vm.handleSpanDrawingEnd({
-      start: Math.round(dayStart + (startX / width) * (dayEnd - dayStart)),
-      end: Math.round(dayStart + (endX / width) * (dayEnd - dayStart)),
+      start: getRoundedMinutes(startMinutes),
+      end: getRoundedMinutes(endMinutes),
     });
   };
   return (
@@ -145,6 +172,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
               if (vm.draggingSpan === null || ref.current === null) {
                 return;
               }
+              span.start = getRoundedMinutes(span.start);
               vm.handleSpanDrag(span.id, span.start);
             }}
           >

@@ -3,6 +3,8 @@ import { configStore } from "../models/config-store/ConfigStore";
 
 export type SpanType = "lesson" | "extra"; // TODO: move;
 
+const MINIMAL_SPAN_LENGTH = 5; // в минутах
+
 type Span = {
   id: number;
   start: number;
@@ -67,7 +69,7 @@ export class TimelineVM {
   private readonly _onSpanDrawingEnd: (params: {
     start: number;
     end: number;
-  }) => void;
+  }) => Promise<void>;
   private readonly _onSpanCrossClick: (id: number, type: SpanType) => void =
     () => {};
   private readonly _onSpanChange: (
@@ -79,9 +81,13 @@ export class TimelineVM {
   private _canDrawSpan = true;
   private _draggingSpan: DraggingSpan | null = null;
 
-  handleSpanDrawingEnd(params: { start: number; end: number }) {
-    this._onSpanDrawingEnd(params);
-    this._drawingSpan = null; // TODO: make async, add preloader animation?
+  async handleSpanDrawingEnd(params: { start: number; end: number }) {
+    if (params.end - params.start < MINIMAL_SPAN_LENGTH) {
+      this._drawingSpan = null;
+      return; // todo maybe show some notification
+    }
+    await this._onSpanDrawingEnd(params);
+    this._drawingSpan = null; // TODO: add preloader animation?
   }
 
   handleSpanCrossClick(id: number, type: SpanType) {
@@ -111,7 +117,7 @@ export class TimelineVM {
 
   constructor(params: {
     spans: Span[];
-    onSpanDrawingEnd: (params: { start: number; end: number }) => void;
+    onSpanDrawingEnd: (params: { start: number; end: number }) => Promise<void>;
     onSpanCrossClick?: (id: number, type: SpanType) => void;
     onSpanChange?: (
       id: number,
