@@ -5,7 +5,7 @@ export type SpanType = "lesson" | "extra"; // TODO: move;
 
 const MINIMAL_SPAN_LENGTH = 5; // в минутах
 
-type Span = {
+export type Span = {
   id: number;
   start: number;
   end: number;
