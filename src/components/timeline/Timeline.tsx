@@ -22,6 +22,10 @@ const getRoundedMinutes = (x: number) => {
   );
 };
 
+const hasCommon = (a: number[], b: number[]) => {
+  return a.some((x) => b.includes(x));
+};
+
 const getDrawingSpanStyle = ({
   initialX,
   currentX,
@@ -181,6 +185,9 @@ export const Timeline = observer(({ vm, className }: Props) => {
       for (let j = 0; j < i; j++) {
         const firstSpan = spans[i];
         const secondSpan = spans[j];
+        if (!hasCommon(firstSpan.persons, secondSpan.persons)) {
+          continue;
+        }
         if (
           (firstSpan.start > secondSpan.start &&
             firstSpan.start < secondSpan.end) ||

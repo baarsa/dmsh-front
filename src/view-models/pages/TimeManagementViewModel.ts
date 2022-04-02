@@ -20,6 +20,8 @@ import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
 import { WEEK_DAY_NAMES } from "../../const";
 import { LoadsInfoVM } from "../LoadsInfoVM";
 import { ConflictsInfoVM } from "../ConflictsInfoVM";
+import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
+import { LessonEntity } from "../../models/lesson/LessonEntity";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -165,6 +167,24 @@ export class TimeManagementVM {
     return this._conflictsInfo;
   }
 
+  private _getPersonsInLesson(lesson: LessonEntity) {
+    const pupils = pupilEntityRepository.entities;
+    const groups = groupRepository.entities;
+    const isPupil = Object.values(pupils).some(
+      (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+    );
+    const lessonTakersIds = isPupil
+      ? [
+          Object.values(pupils).find(
+            (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+          )?.id ?? 0,
+        ]
+      : Object.values(groups).find(
+          (group) => group.lessonTakerId === lesson.lessonTaker
+        )?.pupils ?? [];
+    return [lesson.teacher, ...lessonTakersIds];
+  }
+
   async setTeacherTimelineSpans() {
     const currentTeacher = this._teacherField.value;
     if (currentTeacher === null) {
@@ -191,20 +211,25 @@ export class TimeManagementVM {
       return;
     }
     const subjects = subjectRepository.entities;
+
     this._teacherTimeline.spans = [
-      ...relevantLessons.map((lesson) => ({
-        id: lesson.id,
-        start: lesson.start,
-        end: lesson.end,
-        type: "lesson" as const,
-        text: subjects[lesson.subject]?.name,
-      })),
+      ...relevantLessons.map((lesson) => {
+        return {
+          id: lesson.id,
+          start: lesson.start,
+          end: lesson.end,
+          type: "lesson" as const,
+          text: subjects[lesson.subject]?.name,
+          persons: this._getPersonsInLesson(lesson),
+        };
+      }),
       ...relevantExtraEmployments.map((employment) => ({
         id: employment.id,
         start: employment.start,
         end: employment.end,
         type: "extra" as const,
         text: employment.description,
+        persons: [employment.person],
       })),
     ];
   }
@@ -259,6 +284,7 @@ export class TimeManagementVM {
         end: lesson.end,
         type: "lesson" as const,
         text: subjects[lesson.subject]?.name,
+        persons: this._getPersonsInLesson(lesson),
       })),
       ...relevantExtraEmployments.map((employment) => ({
         id: employment.id,
@@ -266,6 +292,7 @@ export class TimeManagementVM {
         end: employment.end,
         type: "extra" as const,
         text: employment.description,
+        persons: [employment.person],
       })),
     ];
   }
