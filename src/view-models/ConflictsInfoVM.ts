@@ -117,5 +117,10 @@ export class ConflictsInfoVM {
     this._onWeekDayClick = onWeekDayClick;
     makeAutoObservable(this);
     autorun(() => this._calculateItems());
+    autorun(() => {
+      if (this._items.length === 0) {
+        this._isOpen = false;
+      }
+    });
   }
 }
