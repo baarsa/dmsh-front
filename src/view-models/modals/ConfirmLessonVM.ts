@@ -3,6 +3,7 @@ import { LinkFieldVM } from "../fields/LinkField";
 import { SubjectEntity } from "../../models/subject/SubjectEntity";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { makeObservable, observable } from "mobx";
+import { configStore } from "../../models/config-store/ConfigStore";
 
 type SubmitParameters = {
   start: number;
@@ -51,6 +52,28 @@ export class ConfirmLessonVM extends ModalVM {
   set end(value: number) {
     this._end = value;
   }
+
+  isStartValid() {
+    return (
+      configStore.config !== null && this._start >= configStore.config.startTime
+    );
+  }
+
+  isEndValid() {
+    return (
+      configStore.config !== null && this._end <= configStore.config.endTime
+    );
+  }
+
+  isFormValid() {
+    return (
+      this.isStartValid() &&
+      this.isEndValid() &&
+      this._subject.isValid() &&
+      this._start < this._end
+    );
+  }
+
   private _start: number;
   private _end: number;
   private readonly _subject: LinkFieldVM<SubjectEntity>;

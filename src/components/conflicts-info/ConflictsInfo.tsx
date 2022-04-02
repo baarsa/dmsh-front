@@ -17,14 +17,16 @@ export const ConflictsInfo = observer(({ vm }: Props) => {
       <div
         className={cn("top")}
         onClick={() => {
-            if (vm.items.length === 0) {
-                return;
-            }
+          if (vm.items.length === 0) {
+            return;
+          }
           vm.isOpen = !vm.isOpen;
         }}
       >
-          { vm.items.length > 0 ? `Список конфликтов (${vm.items.length})` : 'Конфликты отсутствуют'}
-          { vm.items.length > 0 && <Icon className={cn("icon")} /> }
+        {vm.items.length > 0
+          ? `Список конфликтов (${vm.items.length})`
+          : "Конфликты отсутствуют"}
+        {vm.items.length > 0 && <Icon className={cn("icon")} />}
       </div>
       <Collapse in={vm.isOpen}>
         <div className={cn("content")}>

@@ -22,7 +22,7 @@ import { LoadsInfoVM } from "../LoadsInfoVM";
 import { ConflictsInfoVM } from "../ConflictsInfoVM";
 import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
-import {teacherEntityRepository} from "../../models/teacher/TeacherRepository";
+import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -348,9 +348,15 @@ export class TimeManagementVM {
       spanDesc = `урок преподавателя ${teacher} по предмету ${subject}`; // TODO добавить принимателя урока
     } else {
       const employment = await extraEmploymentRepository.getEntityById(id);
-      const owner = pupils[employment?.person ?? 0] === undefined ? 'teacher' : 'pupil';
-      const ownerName = owner === 'teacher' ? teachers[employment?.person ?? 0].name : pupils[employment?.person ?? 0].name;
-      spanDesc = `занятость "${employment?.description}" ${ owner === 'teacher' ? 'преподавателя' : 'учащегося' } ${ ownerName }`;
+      const owner =
+        pupils[employment?.person ?? 0] === undefined ? "teacher" : "pupil";
+      const ownerName =
+        owner === "teacher"
+          ? teachers[employment?.person ?? 0].name
+          : pupils[employment?.person ?? 0].name;
+      spanDesc = `занятость "${employment?.description}" ${
+        owner === "teacher" ? "преподавателя" : "учащегося"
+      } ${ownerName}`;
     }
     this._confirmAction = new ConfirmActionVM({
       text: `Вы действительно хотите удалить ${spanDesc}?`,

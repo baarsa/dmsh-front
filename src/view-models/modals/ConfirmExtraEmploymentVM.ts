@@ -1,6 +1,7 @@
 import { StringFieldVM } from "../fields/StringField";
 import { makeObservable, observable } from "mobx";
 import { ModalVM } from "./ModalVM";
+import { configStore } from "../../models/config-store/ConfigStore";
 
 type SubmitParameters = {
   start: number;
@@ -34,6 +35,32 @@ export class ConfirmExtraEmploymentVM extends ModalVM {
   set end(value: number) {
     this._end = value;
   }
+
+  isStartValid() {
+    return (
+      configStore.config !== null && this._start >= configStore.config.startTime
+    );
+  }
+
+  isEndValid() {
+    return (
+      configStore.config !== null && this._end <= configStore.config.endTime
+    );
+  }
+
+  isDescriptionValid() {
+    return this._description.isValid();
+  }
+
+  isFormValid() {
+    return (
+      this.isStartValid() &&
+      this.isEndValid() &&
+      this.isDescriptionValid() &&
+      this._start < this._end
+    );
+  }
+
   private _start: number;
   private _end: number;
   private _description: StringFieldVM = new StringFieldVM({

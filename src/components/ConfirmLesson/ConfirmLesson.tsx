@@ -23,17 +23,23 @@ export const ConfirmLesson = observer(({ vm }: { vm: ConfirmLessonVM }) => {
               className={cn("time-input")}
               value={vm.start}
               onChange={(value) => (vm.start = value)}
+              error={!vm.isStartValid()}
             />
             до
             <TimeInput
               className={cn("time-input")}
               value={vm.end}
               onChange={(value) => (vm.end = value)}
+              error={!vm.isEndValid()}
             />
           </div>
           <LinkField field={vm.subject} />
           <div className={cn("buttons")}>
-            <Button variant={"contained"} onClick={() => vm.handleConfirm()}>
+            <Button
+              variant={"contained"}
+              onClick={() => vm.handleConfirm()}
+              disabled={!vm.isFormValid()}
+            >
               OK
             </Button>
             <Button variant={"contained"} onClick={() => vm.handleClose()}>

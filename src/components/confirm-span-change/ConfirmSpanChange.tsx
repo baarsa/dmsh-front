@@ -23,16 +23,22 @@ export const ConfirmSpanChange = observer(
                 className={cn("time-input")}
                 value={vm.start}
                 onChange={(value) => (vm.start = value)}
+                error={!vm.isStartValid()}
               />
               до
               <TimeInput
                 className={cn("time-input")}
                 value={vm.end}
                 onChange={(value) => (vm.end = value)}
+                error={!vm.isEndValid()}
               />
             </div>
             <div className={cn("buttons")}>
-              <Button variant={"contained"} onClick={() => vm.handleSubmit()}>
+              <Button
+                disabled={!vm.isFormValid()}
+                variant={"contained"}
+                onClick={() => vm.handleSubmit()}
+              >
                 OK
               </Button>
               <Button variant={"contained"} onClick={() => vm.handleClose()}>

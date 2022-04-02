@@ -11,6 +11,7 @@ type Props = {
   value?: number;
   onChange: (value: number) => void;
   options: Array<{ text: string; value: number }>;
+  error?: boolean;
 };
 
 export const Select = ({
@@ -19,11 +20,13 @@ export const Select = ({
   onChange,
   options,
   disabled = false,
+  error = false,
 }: Props) => (
   <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
     <InputLabel shrink={true}>{label}</InputLabel>
     <MaterialSelect
       disabled={disabled}
+      error={error}
       notched={true}
       label={label}
       value={value}

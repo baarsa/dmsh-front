@@ -1,4 +1,6 @@
 import { ModalVM } from "./ModalVM";
+import { configStore } from "../../models/config-store/ConfigStore";
+import { makeObservable, observable } from "mobx";
 
 type Parameters = {
   text: string;
@@ -32,6 +34,23 @@ export class ConfirmSpanChangeVM extends ModalVM {
   get text(): string {
     return this._text;
   }
+
+  isStartValid() {
+    return (
+      configStore.config !== null && this._start >= configStore.config.startTime
+    );
+  }
+
+  isEndValid() {
+    return (
+      configStore.config !== null && this._end <= configStore.config.endTime
+    );
+  }
+
+  isFormValid() {
+    return this.isStartValid() && this.isEndValid() && this._start < this._end;
+  }
+
   private readonly _text: string;
   private _start: number;
   private _end: number;
@@ -50,5 +69,9 @@ export class ConfirmSpanChangeVM extends ModalVM {
     this._start = start;
     this._end = end;
     this._onSubmit = onSubmit;
+    makeObservable<ConfirmSpanChangeVM, "_start" | "_end">(this, {
+      _start: observable,
+      _end: observable,
+    });
   }
 }

@@ -173,12 +173,15 @@ export const Timeline = observer(({ vm, className }: Props) => {
     };
   };
   const handleMouseUp: MouseEventHandler = () => {
-    if (ref.current === null || (vm.drawingSpan === null && vm.draggingSpan === null)) {
+    if (
+      ref.current === null ||
+      (vm.drawingSpan === null && vm.draggingSpan === null)
+    ) {
       return;
     }
     const { draggingSpan } = vm;
     if (draggingSpan !== null) {
-      const span = vm.spans.find(span => span.id === draggingSpan.id);
+      const span = vm.spans.find((span) => span.id === draggingSpan.id);
       if (span === undefined) {
         throw new Error();
       }
