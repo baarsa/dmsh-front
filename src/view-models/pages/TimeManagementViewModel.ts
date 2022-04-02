@@ -22,6 +22,7 @@ import { LoadsInfoVM } from "../LoadsInfoVM";
 import { ConflictsInfoVM } from "../ConflictsInfoVM";
 import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
+import {teacherEntityRepository} from "../../models/teacher/TeacherRepository";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -336,15 +337,23 @@ export class TimeManagementVM {
 
   private async _onTimelineCrossClick(id: number, type: SpanType) {
     let spanDesc = "";
+    const lessons = lessonRepository.entities;
+    const teachers = teacherEntityRepository.entities;
+    const pupils = pupilEntityRepository.entities;
+    const subjects = subjectRepository.entities;
     if (type === "lesson") {
-      spanDesc = "урок"; // TODO: добавить название предмета и принимателя урока
+      const lesson = lessons[id];
+      const teacher = teachers[lesson.teacher].name;
+      const subject = subjects[lesson.subject].name;
+      spanDesc = `урок преподавателя ${teacher} по предмету ${subject}`; // TODO добавить принимателя урока
     } else {
       const employment = await extraEmploymentRepository.getEntityById(id);
-      spanDesc = `занятость "${employment?.description}"`;
+      const owner = pupils[employment?.person ?? 0] === undefined ? 'teacher' : 'pupil';
+      const ownerName = owner === 'teacher' ? teachers[employment?.person ?? 0].name : pupils[employment?.person ?? 0].name;
+      spanDesc = `занятость "${employment?.description}" ${ owner === 'teacher' ? 'преподавателя' : 'учащегося' } ${ ownerName }`;
     }
-    const teacherName = this._teacherField.value?.name ?? "";
     this._confirmAction = new ConfirmActionVM({
-      text: `Вы действительно хотите удалить ${spanDesc} преподавателя ${teacherName}?`,
+      text: `Вы действительно хотите удалить ${spanDesc}?`,
       onClose: () => {
         this._confirmAction = null;
       },
