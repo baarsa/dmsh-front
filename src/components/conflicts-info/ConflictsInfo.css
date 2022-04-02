@@ -20,7 +20,7 @@
   }
 
   &_open {
-    .loads-info__icon {
+    .conflicts-info__icon {
       transform: rotate3d(1, 0, 0, 180deg);
     }
   }

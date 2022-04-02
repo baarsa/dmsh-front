@@ -4,6 +4,7 @@ import { ACADEMIC_HOUR } from "../const";
 import { autorun, makeAutoObservable } from "mobx";
 import { subjectRepository } from "../models/subject/SubjectRepository";
 import { ScheduleEntity } from "../models/schedule/ScheduleEntity";
+import { groupRepository } from "../models/group/GroupRepository";
 
 type LoadItem = {
   text: string;
@@ -41,6 +42,7 @@ export class LoadsInfoVM {
       (lesson) => lesson.teacher === this._teacherId
     );
     const pupils = pupilEntityRepository.entities;
+    const groups = Object.values(groupRepository.entities);
     const subjects = subjectRepository.entities;
     const allPrograms = programRepository.entities;
     if (!programRepository.isSynchronized) {
@@ -48,13 +50,20 @@ export class LoadsInfoVM {
     }
 
     this._items = loads.map((load) => {
+      const loadPupil = load.pupil;
+      const pupil = pupils[load.pupil];
+      const lessonTakersWithPupil = [
+        pupil.lessonTakerId,
+        ...groups
+          .filter((group) => group.pupils.includes(loadPupil))
+          .map((group) => group.lessonTakerId),
+      ]; // сам ученик и все группы, в которые он входит
       const lessonsForLoad = lessons.filter(
         (lesson) =>
-          lesson.lessonTaker === pupils[load.pupil].lessonTakerId &&
+          lessonTakersWithPupil.includes(lesson.lessonTaker) &&
           lesson.subject === load.subject
       );
 
-      const pupil = pupils[load.pupil];
       const year = this._schedule.pupilsYears[load.pupil];
       const pupilProgram = allPrograms[pupil.program];
       if (pupilProgram === undefined) {
