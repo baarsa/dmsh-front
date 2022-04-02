@@ -173,8 +173,17 @@ export const Timeline = observer(({ vm, className }: Props) => {
     };
   };
   const handleMouseUp: MouseEventHandler = () => {
-    if (ref.current === null || vm.drawingSpan === null) {
+    if (ref.current === null || (vm.drawingSpan === null && vm.draggingSpan === null)) {
       return;
+    }
+    const { draggingSpan } = vm;
+    if (draggingSpan !== null) {
+      const span = vm.spans.find(span => span.id === draggingSpan.id);
+      if (span === undefined) {
+        throw new Error();
+      }
+      span.start = getRoundedMinutes(span.start);
+      vm.handleSpanDrag(span.id, span.start);
     }
     const { start, end } = getDrawingSpanInMinutes(ref.current, vm.drawingSpan);
     vm.handleSpanDrawingEnd({
@@ -253,13 +262,6 @@ export const Timeline = observer(({ vm, className }: Props) => {
                   initialStart: span.start,
                   initialEnd: span.end,
                 };
-              }}
-              onMouseUp={(e) => {
-                if (vm.draggingSpan === null || ref.current === null) {
-                  return;
-                }
-                span.start = getRoundedMinutes(span.start);
-                vm.handleSpanDrag(span.id, span.start);
               }}
             >
               <CloseIcon
