@@ -14,7 +14,7 @@ export type Span = {
   persons: number[];
 };
 
-type DrawingSpan = {
+export type DrawingSpan = {
   initialX: number;
   currentX: number;
 };

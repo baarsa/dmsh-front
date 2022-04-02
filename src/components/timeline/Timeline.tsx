@@ -1,4 +1,4 @@
-import { Span, TimelineVM } from "../../view-models/TimelineVM";
+import { DrawingSpan, TimelineVM } from "../../view-models/TimelineVM";
 import { MouseEventHandler, useMemo, useRef } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -100,6 +100,22 @@ export const Timeline = observer(({ vm, className }: Props) => {
     const width = right - left;
     return { left: `${left}%`, width: `${width}%` };
   };
+  const getDrawingSpanInMinutes = (
+    ribbonElement: HTMLDivElement,
+    span: DrawingSpan
+  ) => {
+    const startX =
+      span.currentX < span.initialX ? span.currentX : span.initialX;
+    const endX = span.currentX < span.initialX ? span.initialX : span.currentX;
+    const startMinutes = Math.round(
+      dayStart + startX / getScale(ribbonElement)
+    );
+    const endMinutes = Math.round(dayStart + endX / getScale(ribbonElement));
+    return {
+      start: startMinutes,
+      end: endMinutes,
+    };
+  };
   const handleMouseDown: MouseEventHandler = (e) => {
     if (
       !vm.canDrawSpan ||
@@ -160,23 +176,16 @@ export const Timeline = observer(({ vm, className }: Props) => {
     if (ref.current === null || vm.drawingSpan === null) {
       return;
     }
-    const startX =
-      vm.drawingSpan.currentX < vm.drawingSpan.initialX
-        ? vm.drawingSpan.currentX
-        : vm.drawingSpan.initialX;
-    const endX =
-      vm.drawingSpan.currentX < vm.drawingSpan.initialX
-        ? vm.drawingSpan.initialX
-        : vm.drawingSpan.currentX;
-    const startMinutes = Math.round(dayStart + startX / getScale(ref.current));
-    const endMinutes = Math.round(dayStart + endX / getScale(ref.current));
+    const { start, end } = getDrawingSpanInMinutes(ref.current, vm.drawingSpan);
     vm.handleSpanDrawingEnd({
-      start: getRoundedMinutes(startMinutes),
-      end: getRoundedMinutes(endMinutes),
+      start: getRoundedMinutes(start),
+      end: getRoundedMinutes(end),
     });
   };
 
-  const getIntersectionsStyles = (spans: Span[]) => {
+  const getIntersectionsStyles = (
+    spans: Array<{ start: number; end: number; persons?: number[] }>
+  ) => {
     let intersections: { left: string | number; right: string }[] = [];
     if (ref.current === null) {
       return [];
@@ -185,7 +194,11 @@ export const Timeline = observer(({ vm, className }: Props) => {
       for (let j = 0; j < i; j++) {
         const firstSpan = spans[i];
         const secondSpan = spans[j];
-        if (!hasCommon(firstSpan.persons, secondSpan.persons)) {
+        if (
+          firstSpan.persons !== undefined &&
+          secondSpan.persons !== undefined &&
+          !hasCommon(firstSpan.persons, secondSpan.persons)
+        ) {
           continue;
         }
         if (
@@ -212,7 +225,12 @@ export const Timeline = observer(({ vm, className }: Props) => {
     }
     return intersections;
   };
-  const intersectionsStyles = getIntersectionsStyles(vm.spans);
+  const intersectionsStyles = getIntersectionsStyles([
+    ...vm.spans,
+    ...(vm.drawingSpan === null || ref.current === null
+      ? []
+      : [getDrawingSpanInMinutes(ref.current, vm.drawingSpan)]),
+  ]);
   return (
     <div className={`${cn()} ${className}`}>
       <div
