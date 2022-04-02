@@ -19,7 +19,16 @@
     &-intersection {
       position: absolute;
       height: 100%;
-      background-image: linear-gradient(139deg, #EE617D 27.27%, #f0edee 27.27%, #f0edee 50%, #EE617D 50%, #EE617D 77.27%, #f0edee 77.27%, #f0edee 100%);
+      background-image: linear-gradient(
+        139deg,
+        #ee617d 27.27%,
+        #f0edee 27.27%,
+        #f0edee 50%,
+        #ee617d 50%,
+        #ee617d 77.27%,
+        #f0edee 77.27%,
+        #f0edee 100%
+      );
       background-size: 3px 2px;
       z-index: 15;
     }

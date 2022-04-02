@@ -1,7 +1,7 @@
 import { IGroup } from "../../entities/IGroup";
-import { IEntity, Stored } from "../shared";
+import { Stored } from "../shared";
 
-export class GroupEntity implements IEntity, IGroup {
+export class GroupEntity implements IGroup {
   id: number;
   lessonTakerId: number;
   name: string;

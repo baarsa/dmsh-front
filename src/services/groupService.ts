@@ -1,10 +1,11 @@
 import { IGroup } from "../entities/IGroup";
 import { IEntityService } from "./shared";
+import { items as pupils } from "./pupilService";
 
 // total fake
 let current = 1;
-let currentLt = 50;
-let items = [
+let currentLt = 1000;
+export let items = [
   {
     id: current++,
     lessonTakerId: currentLt++,
@@ -16,6 +17,14 @@ let items = [
     lessonTakerId: currentLt++,
     name: "Второй класс",
     pupils: [51, 52],
+  },
+  {
+    id: current++,
+    lessonTakerId: currentLt++,
+    name: "Струнные, первый класс",
+    pupils: pupils
+      .filter((pupil) => pupil.program === 1)
+      .map((pupil) => pupil.id),
   },
 ];
 

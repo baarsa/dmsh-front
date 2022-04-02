@@ -41,7 +41,7 @@ let items = [
     subjects: [4],
   },
   {
-    id: current++,
+    id: current++, //7
     name: "Юрий Николаевич Холопов",
     canAssist: false,
     subjects: [3, 7],

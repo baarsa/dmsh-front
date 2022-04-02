@@ -1,5 +1,6 @@
 import { IEntityService } from "./shared";
 import { ILoad } from "../entities/ILoad";
+import { items as groups } from "./groupService";
 
 let current = 1;
 let items = [
@@ -39,6 +40,16 @@ let items = [
     subject: 3,
   },
 ];
+
+for (let pupil of groups[2].pupils) {
+  items.push({
+    id: current++,
+    schedule: 1,
+    pupil,
+    teacher: 7,
+    subject: 3,
+  });
+}
 
 // total fake
 export const loadService: IEntityService<ILoad> = {

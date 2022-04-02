@@ -11,6 +11,7 @@ import { Select } from "../select/Select";
 import { ConfirmAction } from "../confirm-action/ConfirmAction";
 import { ConfirmSpanChange } from "../confirm-span-change/ConfirmSpanChange";
 import { LoadsInfo } from "../loads-info/LoadsInfo";
+import { ConflictsInfo } from "../conflicts-info/ConflictsInfo";
 
 const cn = createCn("time-management");
 
@@ -18,6 +19,7 @@ export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
   return (
     <div className={cn()}>
       <LoadsInfo vm={props.vm.loadsInfo} />
+      <ConflictsInfo vm={props.vm.conflictsInfo} />
       <div className={cn("controls")}>
         <Select
           label="День недели"

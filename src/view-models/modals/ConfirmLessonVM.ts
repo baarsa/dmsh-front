@@ -86,10 +86,10 @@ export class ConfirmLessonVM extends ModalVM {
     this._end = end;
     this._subject = new LinkFieldVM<SubjectEntity>(
       { label: "Предмет" },
-        {
-          entityModel: subjectRepository,
-          entitiesFilter: filterSubjects
-        },
+      {
+        entityModel: subjectRepository,
+        entitiesFilter: filterSubjects,
+      }
     );
     this._onSubmit = onSubmit;
     this._teacher = teacher;

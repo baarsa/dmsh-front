@@ -1,8 +1,5 @@
-import {
-  autorun,
-  makeAutoObservable,
-} from "mobx";
-import { uniqBy, prop } from 'ramda';
+import { autorun, makeAutoObservable } from "mobx";
+import { uniqBy, prop } from "ramda";
 import { GroupEntity } from "../../models/group/GroupEntity";
 import { lessonRepository } from "../../models/lesson/LessonRepository";
 import { PupilEntity } from "../../models/pupil/PupilEntity";
@@ -22,6 +19,7 @@ import { ConfirmActionVM } from "../modals/ConfirmActionVM";
 import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
 import { WEEK_DAY_NAMES } from "../../const";
 import { LoadsInfoVM } from "../LoadsInfoVM";
+import { ConflictsInfoVM } from "../ConflictsInfoVM";
 
 type Params = {
   schedule: ScheduleEntity;
@@ -52,6 +50,7 @@ export class TimeManagementVM {
   private readonly _commonTimeline: TimelineVM;
 
   private readonly _loadsInfo: LoadsInfoVM;
+  private readonly _conflictsInfo: ConflictsInfoVM;
 
   //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
@@ -162,6 +161,10 @@ export class TimeManagementVM {
     return this._loadsInfo;
   }
 
+  get conflictsInfo() {
+    return this._conflictsInfo;
+  }
+
   async setTeacherTimelineSpans() {
     const currentTeacher = this._teacherField.value;
     if (currentTeacher === null) {
@@ -268,7 +271,7 @@ export class TimeManagementVM {
   }
 
   async setCommonTimelineSpans() {
-    this._commonTimeline.spans = uniqBy(prop('id'), [
+    this._commonTimeline.spans = uniqBy(prop("id"), [
       ...this._teacherTimeline.spans,
       ...this._takerTimeline.spans,
     ]);
@@ -344,7 +347,7 @@ export class TimeManagementVM {
             end,
             person: this._teacherField.value?.name ?? "", // TODO: обработать случай с undefined
             weekDay: WEEK_DAY_NAMES[this._selectedDay],
-            onConfirm: async ({start, end, description}) => {
+            onConfirm: async ({ start, end, description }) => {
               try {
                 const currentTeacher = this._teacherField.value;
                 if (currentTeacher === null) {
@@ -383,7 +386,7 @@ export class TimeManagementVM {
             end,
             person: this._pupilField.value?.name ?? "", // TODO: обработать случай с undefined
             weekDay: WEEK_DAY_NAMES[this._selectedDay],
-            onConfirm: async ({start, end, description}) => {
+            onConfirm: async ({ start, end, description }) => {
               try {
                 const currentPupil = this._pupilField.value;
                 if (currentPupil === null) {
@@ -422,18 +425,18 @@ export class TimeManagementVM {
             end,
             teacher: this._teacherField.value?.name ?? "",
             taker:
-                this._lessonTakerType === "pupil"
-                    ? this._pupilField.value?.name ?? ""
-                    : this._groupField.value?.name ?? "",
+              this._lessonTakerType === "pupil"
+                ? this._pupilField.value?.name ?? ""
+                : this._groupField.value?.name ?? "",
             weekDay: WEEK_DAY_NAMES[this._selectedDay],
             filterSubjects: (subject: SubjectEntity) =>
-                this._getAvailableSubjectsForAssign().includes(subject.id),
-            onSubmit: async ({start, end, subject}) => {
+              this._getAvailableSubjectsForAssign().includes(subject.id),
+            onSubmit: async ({ start, end, subject }) => {
               try {
                 const currentTaker =
-                    this._lessonTakerType === "pupil"
-                        ? this._pupilField.value
-                        : this._groupField.value;
+                  this._lessonTakerType === "pupil"
+                    ? this._pupilField.value
+                    : this._groupField.value;
                 const currentTeacher = this._teacherField.value;
                 if (currentTaker === null || currentTeacher === null) {
                   throw new Error("No pupil or teacher found"); // TODO: handle errors
@@ -468,6 +471,13 @@ export class TimeManagementVM {
       throw new Error();
     }
     this._loadsInfo = new LoadsInfoVM(this._schedule, currentTeacher.id);
+    this._conflictsInfo = new ConflictsInfoVM(
+      this._schedule,
+      currentTeacher.id,
+      (weekDay) => {
+        this._selectedDay = weekDay;
+      }
+    );
     makeAutoObservable(this);
     autorun(() => this.setTeacherTimelineSpans());
     autorun(() => this.setTakerTimelineSpans());
@@ -490,6 +500,12 @@ export class TimeManagementVM {
         this._loadsInfo.title = `Нагрузка преподавателя ${currentTeacher.name}`;
       } else {
         this._loadsInfo.title = "Ваша нагрузка";
+      }
+    });
+    autorun(() => {
+      const currentTeacher = this._teacherField.value;
+      if (currentTeacher !== null) {
+        this._conflictsInfo.teacherId = currentTeacher.id;
       }
     });
   }

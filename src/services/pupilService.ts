@@ -1,16 +1,14 @@
 import { IEntityService } from "./shared";
 import { IPupil } from "../entities/IPupil";
-import {names} from "./__names";
-import {Stored} from "../models/shared";
+import { names } from "./__names";
+import { Stored } from "../models/shared";
 
 export const INITIAL_PUPIL_ID = 50;
 
 // total fake
 let current = INITIAL_PUPIL_ID;
 let currentLt = 1;
-let items: Array<Stored<IPupil>> = [
-
-];
+export let items: Array<Stored<IPupil>> = [];
 
 export const PUPILS_NUMBER = 100;
 
@@ -25,7 +23,7 @@ for (let i = 0; i < PUPILS_NUMBER; i++) {
     program,
     specialSubject,
   });
-};
+}
 
 export const pupilService: IEntityService<IPupil> = {
   async fetchAll() {

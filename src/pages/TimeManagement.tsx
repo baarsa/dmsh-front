@@ -32,7 +32,7 @@ export const TimeManagementPage = () => {
         {
           entityModel: pupilEntityRepository,
           entitiesFilter: (pupil) => true,
-          shouldSetInitialValue: true
+          shouldSetInitialValue: true,
         }
         // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0
       );
@@ -41,7 +41,7 @@ export const TimeManagementPage = () => {
         {
           entityModel: groupRepository,
           entitiesFilter: (group) => true,
-          shouldSetInitialValue: true
+          shouldSetInitialValue: true,
         }
         // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
       );
