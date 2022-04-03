@@ -6,45 +6,51 @@ let current = 1;
 let items = [
   {
     id: current++,
-    name: "Паганини",
+    name: "Агафонов Николай Алексеевич",
     canAssist: true,
-    subjects: [1, 8, 3],
+    subjects: [1, 8, 3, 6],// скрипка, виолончель, сольфеджио
   },
   {
     id: current++,
-    name: "Виотти",
+    name: "Баранов Константин Викторович",
     canAssist: false,
-    subjects: [1],
+    subjects: [1, 6],// скрипка
   },
   {
     id: current++,
-    name: "Ростропович",
+    name: "Круглова Софья Андреевна",
     canAssist: false,
-    subjects: [8],
+    subjects: [8, 6],// виолончель
   },
   {
     id: current++,
-    name: "Джеймс Голуэй",
+    name: "Соколов Максим Максимович",
     canAssist: false,
-    subjects: [2],
+    subjects: [2, 6],// флейта
   },
   {
     id: current++,
-    name: "Бенни Гудмен",
+    name: "Ильина Елена Викторовна",
     canAssist: false,
-    subjects: [9],
+    subjects: [9, 6],// кларнет
   },
   {
     id: current++,
-    name: "Мясковский",
+    name: "Чесноков Андрей Тихонович",
     canAssist: false,
-    subjects: [4],
+    subjects: [4],// хор
   },
   {
     id: current++, //7
-    name: "Юрий Николаевич Холопов",
+    name: "Холопов Юрий Николаевич",
     canAssist: false,
-    subjects: [3, 7],
+    subjects: [3, 7],// сольфеджио, муз. литература
+  },
+  {
+    id: current++, //8
+    name: "Драгунов Петр Афанасьевич",
+    canAssist: false,
+    subjects: [5],// общ. фортепиано
   },
 ];
 

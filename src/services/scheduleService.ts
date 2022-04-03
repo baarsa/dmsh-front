@@ -5,14 +5,18 @@ import { Stored } from "../models/shared";
 import { INITIAL_PUPIL_ID, PUPILS_NUMBER } from "./pupilService";
 
 let current = 1;
-let items = [
+export let items = [
   {
     id: current++,
     name: "2022",
     pupilsYears: (() => {
-      let years: Record<number, number> = {};
+      let i = INITIAL_PUPIL_ID;
+      let years: Record<number, number> = {
+        [i++]: 0,
+        [i++]: 1,
+      };
       for (
-        let i = INITIAL_PUPIL_ID;
+        i;
         i < INITIAL_PUPIL_ID + PUPILS_NUMBER;
         i++
       ) {

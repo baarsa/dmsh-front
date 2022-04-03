@@ -8,7 +8,22 @@ export const INITIAL_PUPIL_ID = 50;
 // total fake
 let current = INITIAL_PUPIL_ID;
 let currentLt = 1;
-export let items: Array<Stored<IPupil>> = [];
+export let items: Array<Stored<IPupil>> = [
+  {
+    id: current++,
+    lessonTakerId: currentLt++,
+    name: 'Андреев Владимир Николаевич',
+    program: 1,
+    specialSubject: 1,
+  },
+  {
+    id: current++,
+    lessonTakerId: currentLt++,
+    name: 'Светличная Анна Тимофеевна',
+    program: 2,
+    specialSubject: 2,
+  },
+];
 
 export const PUPILS_NUMBER = 100;
 

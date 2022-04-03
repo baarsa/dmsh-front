@@ -1,53 +1,75 @@
 import { IEntityService } from "./shared";
 import { ILoad } from "../entities/ILoad";
 import { items as groups } from "./groupService";
+import {INITIAL_PUPIL_ID} from "./pupilService";
 
 let current = 1;
 let items = [
   {
     id: current++,
     schedule: 1,
-    pupil: 50,
+    pupil: INITIAL_PUPIL_ID,
     teacher: 1,
     subject: 1,
   },
   {
     id: current++,
     schedule: 1,
-    pupil: 50,
+    pupil: INITIAL_PUPIL_ID,
     teacher: 1,
     subject: 3,
   },
   {
     id: current++,
     schedule: 1,
-    pupil: 52,
-    teacher: 1,
-    subject: 1,
+    pupil: INITIAL_PUPIL_ID,
+    teacher: 7,
+    subject: 7,
+  },////
+  {
+    id: current++,
+    schedule: 1,
+    pupil: INITIAL_PUPIL_ID + 1,
+    teacher: 4,
+    subject: 2,
   },
   {
     id: current++,
     schedule: 1,
-    pupil: 52,
-    teacher: 1,
-    subject: 4,
+    pupil: INITIAL_PUPIL_ID + 1,
+    teacher: 4,
+    subject: 6,
   },
   {
     id: current++,
     schedule: 1,
-    pupil: 50,
-    teacher: 2,
+    pupil: INITIAL_PUPIL_ID + 1,
+    teacher: 8,
+    subject: 5,
+  },
+  {
+    id: current++,
+    schedule: 1,
+    pupil: INITIAL_PUPIL_ID + 1,
+    teacher: 7,
     subject: 3,
+  },
+  {
+    id: current++,
+    schedule: 1,
+    pupil: INITIAL_PUPIL_ID + 1,
+    teacher: 7,
+    subject: 7,
   },
 ];
 
-for (let pupil of groups[2].pupils) {
+for (let pupil of groups[3].pupils) {
   items.push({
     id: current++,
     schedule: 1,
     pupil,
-    teacher: 7,
-    subject: 3,
+    teacher: 6,
+    subject: 4,
   });
 }
 
