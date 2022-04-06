@@ -1,6 +1,6 @@
 import { IGroup } from "../entities/IGroup";
 import { IEntityService } from "./shared";
-import {INITIAL_PUPIL_ID, items as pupils} from "./pupilService";
+import { INITIAL_PUPIL_ID, items as pupils } from "./pupilService";
 import { items as schedules } from "./scheduleService";
 
 // total fake
@@ -32,8 +32,12 @@ export let items = [
     lessonTakerId: currentLt++,
     name: "Хор, первая группа",
     pupils: pupils
-        .filter((pupil) => pupil.program === 1 && [0, 1, 2].includes(schedules[0].pupilsYears[pupil.id]))
-        .map((pupil) => pupil.id),
+      .filter(
+        (pupil) =>
+          pupil.program === 1 &&
+          [0, 1, 2].includes(schedules[0].pupilsYears[pupil.id])
+      )
+      .map((pupil) => pupil.id),
   },
   {
     id: current++,

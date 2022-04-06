@@ -46,7 +46,7 @@ let items = [
   {
     id: current++,
     schedule: 1,
-    lessonTaker: 1003,// хор
+    lessonTaker: 1003, // хор
     teacher: 6,
     subject: 4,
     weekDay: 1,
@@ -56,7 +56,7 @@ let items = [
   {
     id: current++,
     schedule: 1,
-    lessonTaker: 1004,// холопов, муз. литература
+    lessonTaker: 1004, // холопов, муз. литература
     teacher: 7,
     subject: 7,
     weekDay: 4,

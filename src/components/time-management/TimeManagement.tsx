@@ -15,47 +15,65 @@ import { ConflictsInfo } from "../conflicts-info/ConflictsInfo";
 
 const cn = createCn("time-management");
 
-export const TimeManagement = observer((props: { vm: TimeManagementVM }) => {
+type Props = {
+  vm: TimeManagementVM;
+};
+
+export const TimeManagement = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
-      <LoadsInfo vm={props.vm.loadsInfo} />
-      <ConflictsInfo vm={props.vm.conflictsInfo} />
+      <LoadsInfo vm={vm.loadsInfo} />
+      <ConflictsInfo vm={vm.conflictsInfo} />
       <div className={cn("controls")}>
         <Select
           label="День недели"
-          value={props.vm.selectedDay}
-          onChange={(value) => props.vm.handleDayChange(value)}
-          options={props.vm.dayOptions}
+          value={vm.selectedDay}
+          onChange={(value) => vm.handleDayChange(value)}
+          options={vm.dayOptions}
         />
-        <LinkField field={props.vm.teacherField} />
+        <LinkField field={vm.teacherField} />
         <RadioGroup
           className={cn("taker-radio")}
-          value={props.vm.lessonTakerType}
+          value={vm.lessonTakerType}
           onChange={(e) => {
-            props.vm.lessonTakerType = e.target.value as "pupil" | "group";
+            vm.lessonTakerType = e.target.value as "pupil" | "group";
           }}
         >
           <FormControlLabel value="pupil" control={<Radio />} label="Ученик" />
           <FormControlLabel value="group" control={<Radio />} label="Группа" />
         </RadioGroup>
-        {props.vm.lessonTakerType === "pupil" && (
-          <LinkField field={props.vm.pupilField} />
-        )}
-        {props.vm.lessonTakerType === "group" && (
-          <LinkField field={props.vm.groupField} />
-        )}
+        {vm.lessonTakerType === "pupil" && <LinkField field={vm.pupilField} />}
+        {vm.lessonTakerType === "group" && <LinkField field={vm.groupField} />}
       </div>
-      <Timeline vm={props.vm.teacherTimeline} className={cn("timeline")} />
-      <Timeline vm={props.vm.commonTimeline} className={cn("timeline")} />
-      <Timeline vm={props.vm.takerTimeline} className={cn("timeline")} />
-      {props.vm.confirmExtraEmployment && (
-        <ConfirmExtraEmployment vm={props.vm.confirmExtraEmployment} />
+      <div className={cn("timeline-container")}>
+        <div className={cn("timeline-label")}>
+          {vm.teacherField.value?.name}
+        </div>
+        <Timeline vm={vm.teacherTimeline} />
+      </div>
+      <div className={cn("timeline-container")}>
+        <div className={cn("timeline-label")}>
+          {vm.teacherField.value?.name} и{" "}
+          {vm.lessonTakerType === "pupil"
+            ? vm.pupilField.value?.name
+            : vm.groupField.value?.name}
+        </div>
+        <Timeline vm={vm.commonTimeline} />
+      </div>
+      <div className={cn("timeline-container")}>
+        <div className={cn("timeline-label")}>
+          {vm.lessonTakerType === "pupil"
+            ? vm.pupilField.value?.name
+            : vm.groupField.value?.name}
+        </div>
+        <Timeline vm={vm.takerTimeline} />
+      </div>
+      {vm.confirmExtraEmployment && (
+        <ConfirmExtraEmployment vm={vm.confirmExtraEmployment} />
       )}
-      {props.vm.confirmLesson && <ConfirmLesson vm={props.vm.confirmLesson} />}
-      {props.vm.confirmAction && <ConfirmAction vm={props.vm.confirmAction} />}
-      {props.vm.confirmSpanChange && (
-        <ConfirmSpanChange vm={props.vm.confirmSpanChange} />
-      )}
+      {vm.confirmLesson && <ConfirmLesson vm={vm.confirmLesson} />}
+      {vm.confirmAction && <ConfirmAction vm={vm.confirmAction} />}
+      {vm.confirmSpanChange && <ConfirmSpanChange vm={vm.confirmSpanChange} />}
     </div>
   );
 });

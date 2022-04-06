@@ -15,11 +15,7 @@ export let items = [
         [i++]: 0,
         [i++]: 1,
       };
-      for (
-        i;
-        i < INITIAL_PUPIL_ID + PUPILS_NUMBER;
-        i++
-      ) {
+      for (i; i < INITIAL_PUPIL_ID + PUPILS_NUMBER; i++) {
         years[i] = Math.floor(Math.random() * 5);
       }
       return years;

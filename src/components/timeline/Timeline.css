@@ -1,5 +1,6 @@
 .timeline {
   position: relative;
+  user-select: none;
 
   &__ribbon {
     height: 60px;
@@ -12,6 +13,8 @@
     display: flex;
     align-items: center;
     border-radius: 4px;
+    padding: 0 4px;
+    box-sizing: border-box;
     height: 100%;
     opacity: 0.5;
     color: white;

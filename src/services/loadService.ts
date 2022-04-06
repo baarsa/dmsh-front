@@ -1,7 +1,7 @@
 import { IEntityService } from "./shared";
 import { ILoad } from "../entities/ILoad";
 import { items as groups } from "./groupService";
-import {INITIAL_PUPIL_ID} from "./pupilService";
+import { INITIAL_PUPIL_ID } from "./pupilService";
 
 let current = 1;
 let items = [
@@ -25,7 +25,7 @@ let items = [
     pupil: INITIAL_PUPIL_ID,
     teacher: 7,
     subject: 7,
-  },////
+  }, ////
   {
     id: current++,
     schedule: 1,

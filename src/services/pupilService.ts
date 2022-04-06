@@ -12,14 +12,14 @@ export let items: Array<Stored<IPupil>> = [
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: 'Андреев Владимир Николаевич',
+    name: "Андреев Владимир Николаевич",
     program: 1,
     specialSubject: 1,
   },
   {
     id: current++,
     lessonTakerId: currentLt++,
-    name: 'Светличная Анна Тимофеевна',
+    name: "Светличная Анна Тимофеевна",
     program: 2,
     specialSubject: 2,
   },
