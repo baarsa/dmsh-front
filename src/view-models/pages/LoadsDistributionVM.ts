@@ -26,7 +26,42 @@ type LoadUpdateParameters = {
   subjectId: number;
 };
 
+const ITEMS_ON_PAGE_VALUES = [5, 10, 25];
+
+const MAX_YEAR = 8;
+
+const YEAR_OPTIONS = (() => {
+  const options = [];
+  for (let i = 0; i < MAX_YEAR; i++) {
+    options.push({
+      value: i,
+      text: String(i + 1),
+    });
+  }
+  return options;
+})();
+
 export class LoadsDistributionVM {
+  get selectedYear(): number {
+    return this._selectedYear;
+  }
+
+  set selectedYear(value: number) {
+    this._selectedYear = value;
+  }
+
+  get yearOptions() {
+    return YEAR_OPTIONS;
+  }
+
+  get pupilItemsOnPage(): PupilItem[] {
+    const firstItemIndex = this._currentPage * this._itemsOnPage;
+    return this.filteredPupilItems.slice(
+      firstItemIndex,
+      firstItemIndex + this._itemsOnPage
+    );
+  }
+
   get filteredPupilItems(): PupilItem[] {
     return this.pupilItems.filter((item) => item.year === this._selectedYear);
   }
@@ -35,10 +70,25 @@ export class LoadsDistributionVM {
     return this._items;
   }
 
+  get pageCount() {
+    return Math.ceil(this.filteredPupilItems.length / this._itemsOnPage);
+  }
+
+  set currentPage(value: number) {
+    this._currentPage = value;
+  }
+
+  get currentPageNumber() {
+    return this._currentPage;
+  }
+
   private _schedule: ScheduleEntity;
   private _items: PupilItem[] = [];
 
   private _selectedYear: number = 0;
+
+  private _itemsOnPage = ITEMS_ON_PAGE_VALUES[0];
+  private _currentPage = 0;
 
   private _onTeacherUpdate({
     pupilId,

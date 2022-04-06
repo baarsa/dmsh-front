@@ -1,0 +1,21 @@
+.paginate {
+  background: var(--bg-dark);
+  display: inline-flex;
+  padding: 4px 8px;
+  gap: 12px;
+  list-style-type: none;
+
+  &__page-item {
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  &__active {
+    background: var(--button-main);
+    color: black;
+    border: 1px solid grey;
+    border-radius: 4px;
+  }
+}

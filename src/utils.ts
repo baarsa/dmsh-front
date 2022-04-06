@@ -16,6 +16,8 @@ export const parseTimeText = (text: string) => {
   return Number(parts[0]) * 60 + Number(parts[1]); // TODO: handle errors
 };
 
+export const formatHalfHours = (value: number) => `${value / 2} часа`;
+
 export const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message;
   return String(error);

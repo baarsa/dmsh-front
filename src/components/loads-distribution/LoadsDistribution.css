@@ -1,2 +1,24 @@
 .loads-distribution {
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__pupil-item {
+    border: 1px solid grey;
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__pupil-title {
+    font-weight: bold;
+  }
+
+  &__subject-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
