@@ -1,8 +1,9 @@
-import { subjectRepository } from "../../models/subject/SubjectRepository";
-import { BooleanFieldVM } from "../fields/BooleanField";
-import { LinkFieldVM } from "../fields/LinkField";
-import { StringFieldVM } from "../fields/StringField";
-import { FormModel, IFormModel } from "../forms/FormModel";
+import { subjectRepository } from "../../../models/subject/SubjectRepository";
+import { BooleanFieldVM } from "../../fields/BooleanField";
+import { LinkFieldVM } from "../../fields/LinkField";
+import { StringFieldVM } from "../../fields/StringField";
+import { FormModel, IFormModel } from "../../forms/FormModel";
+import { specialityGroupRepository } from "../../../models/speciality-group/SpecialityGroupRepository";
 
 type Subject = {
   name: string;
@@ -22,7 +23,7 @@ export class CreateSubjectViewModel {
         isSpecial: isSpecialField,
         specialityGroup: new LinkFieldVM(
           { label: "speciality group", controllingField: isSpecialField },
-          subjectRepository
+          { entityModel: specialityGroupRepository }
         ),
       },
       mapFieldsToProps: (fields) => ({
@@ -30,9 +31,8 @@ export class CreateSubjectViewModel {
         isSpecial: fields.isSpecial.value,
         specialityGroup: fields.specialityGroup.getValueId(),
       }),
-      submitHandler: (data: Subject) => {
-        subjectRepository.addEntity(data); // return id and
-        // go to view: /subjects/view/{id}
+      submitHandler: async (data: Subject) => {
+        return subjectRepository.addEntity(data);
       },
       cancelHandler: () => {
         // go to /subjects

@@ -2,6 +2,7 @@ import { ILinkField } from "../fields/ILinkField";
 import { FieldUnion } from "../fields/FieldUnion";
 import { IStringField } from "../fields/IStringField";
 import { IBooleanField } from "../fields/IBooleanField";
+import { makeAutoObservable } from "mobx";
 
 type FormMode = "view" | "edit";
 
@@ -13,7 +14,6 @@ type PossibleField<T> = T extends string
   ? ILinkField
   : never;
 
-// type that maps props type to dictionary of possible fields
 type RelevantFields<T extends Record<string, unknown>> = {
   [K in keyof T]: PossibleField<T[K]>;
 };
@@ -23,11 +23,10 @@ export interface IFormModel {
   title: string;
   getFields(): FieldUnion[];
   isValid(): boolean;
-  handleSubmit(): void;
+  handleSubmit(): Promise<number>;
   handleCancel(): void;
 }
 
-// experiments
 export class FormModel<T extends Record<string, unknown>>
   implements IFormModel
 {
@@ -41,15 +40,15 @@ export class FormModel<T extends Record<string, unknown>>
   private mapFieldsToProps: (fields: RelevantFields<T>) => T;
   isValid(): boolean {
     return Object.values(this.fields).reduce<boolean>(
-      (acc, field) => acc && field.isValid(),
+      (acc, field) => acc && (field.isDisabled || field.isValid()),
       true
     );
     // add to field prop isNecessary
   }
-  private submitHandler: (data: T) => void;
-  private cancelHandler: () => void;
-  handleSubmit() {
-    this.submitHandler(this.mapFieldsToProps(this.fields));
+  private readonly submitHandler: (data: T) => Promise<number>;
+  private readonly cancelHandler: () => void;
+  async handleSubmit() {
+    return this.submitHandler(this.mapFieldsToProps(this.fields));
   }
   handleCancel() {
     this.cancelHandler();
@@ -59,7 +58,7 @@ export class FormModel<T extends Record<string, unknown>>
     mode: FormMode;
     fields: RelevantFields<T>;
     mapFieldsToProps: (fields: RelevantFields<T>) => T;
-    submitHandler: (data: T) => void;
+    submitHandler: (data: T) => Promise<number>;
     cancelHandler: () => void;
   }) {
     this.title = props.title;
@@ -68,5 +67,6 @@ export class FormModel<T extends Record<string, unknown>>
     this.mapFieldsToProps = props.mapFieldsToProps;
     this.submitHandler = props.submitHandler;
     this.cancelHandler = props.cancelHandler;
+    makeAutoObservable(this);
   }
 }

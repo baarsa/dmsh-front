@@ -18,7 +18,7 @@ export interface IEntityRepository<T, K> {
   // класс сущности; данные для инстанцирования
   readonly entities: Record<number, Stored<T>>;
   getEntityById(id: number): Promise<Stored<T> | null>;
-  addEntity(entityData: K): Promise<boolean>;
+  addEntity(entityData: K): Promise<number>;
   removeEntity(id: number): Promise<void>;
   updateEntity(id: number, entityData: Partial<K>): Promise<void>;
 }
@@ -61,11 +61,8 @@ export abstract class GenericEntityRepository<T, K>
     this._entities[id] = this.createEntity(serviceResponse);
     return this._entities[id];
   }
-  async addEntity(entityData: K): Promise<boolean> {
+  async addEntity(entityData: K): Promise<number> {
     const response = await this._entityService.saveToServer(entityData);
-    if (response === null) {
-      return false;
-    }
     runInAction(() => {
       // todo investigate optimization possibilities
       this._entities = {
@@ -73,7 +70,7 @@ export abstract class GenericEntityRepository<T, K>
         [response.id]: this.createEntity(response),
       };
     });
-    return true; // or maybe we need to return entity?
+    return response.id;
   }
   async removeEntity(id: number): Promise<void> {
     await this._entityService.remove(id);

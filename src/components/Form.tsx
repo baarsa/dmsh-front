@@ -1,19 +1,44 @@
 import { IFormModel } from "../view-models/forms/FormModel"; // todo separate file
 import { Field } from "./fields/Field";
+import { observer } from "mobx-react-lite";
+import { Button } from "@mui/material";
 
-export const Form = (props: { form: IFormModel }) => (
+type Props = {
+  form: IFormModel;
+  onSubmit?: (newId: number) => void;
+  onCancel?: () => void;
+};
+
+export const Form = observer(({ form, onSubmit, onCancel }: Props) => (
   <div>
-    This is a form {props.form.title}
-    {props.form.getFields().map((field, i) => (
+    This is a form {form.title}
+    {form.getFields().map((field, i) => (
       <Field key={i} field={field} />
     ))}
-    {props.form.mode === "edit" && (
-      <button
-        disabled={!props.form.isValid()}
-        onClick={props.form.handleSubmit}
-      >
-        submit
-      </button>
+    {form.mode === "edit" && (
+      <div>
+        <Button
+          disabled={!form.isValid()}
+          onClick={async () => {
+            const newId = await form.handleSubmit();
+            if (onSubmit !== undefined) {
+              onSubmit(newId);
+            }
+          }}
+        >
+          Сохранить
+        </Button>
+        <Button
+          onClick={() => {
+            form.handleCancel();
+            if (onCancel !== undefined) {
+              onCancel();
+            }
+          }}
+        >
+          Отмена
+        </Button>
+      </div>
     )}
   </div>
-);
+));

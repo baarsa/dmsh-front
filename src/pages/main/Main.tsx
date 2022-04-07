@@ -1,5 +1,4 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { Subjects } from "../Subjects";
 import { TimeManagementPage } from "../TimeManagement";
 import { useEffect, useState } from "react";
 import { authStore } from "../../models/auth-store/AuthStore";
@@ -12,6 +11,7 @@ import { Header } from "../../components/header/Header";
 import { createCn } from "../../utils";
 import "./Main.css";
 import { LoadsDistributionPage } from "../LoadsDistribution";
+import { Catalogs } from "../Catalogs";
 
 const WrTimeManagement = withPermission(
   Permission.TimeManagementPage,
@@ -39,7 +39,7 @@ const MainComponent = () => {
       <Header vm={mainVM.header} />
       <div className={cn("content")}>
         <Routes>
-          <Route path="subjects/*" element={<Subjects />} />
+          <Route path="catalogs/*" element={<Catalogs />} />
           <Route path="time-management" element={<WrTimeManagement />} />
           <Route path="loads" element={<LoadsDistributionPage />} />
         </Routes>

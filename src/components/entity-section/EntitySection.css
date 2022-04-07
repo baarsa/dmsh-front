@@ -1,0 +1,15 @@
+.entity-section {
+  &__content {
+    display: flex;
+  }
+
+  &__item {
+    color: white;
+    display: block;
+
+    &_active {
+      background: var(--button-main);
+      color: black;
+    }
+  }
+}

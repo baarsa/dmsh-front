@@ -1,7 +1,7 @@
 import { ISubject } from "../../entities/ISubject";
-import { Entity, Stored } from "../shared";
+import { Stored } from "../shared";
 
-export class SubjectEntity implements Entity {
+export class SubjectEntity {
   id: number;
   name: string;
   isSpecial: boolean;
