@@ -16,8 +16,11 @@ export class BooleanFieldVM extends FieldVM implements IBooleanField {
     return true;
   }
 
-  constructor(props: FieldConstructorProps) {
+  constructor(props: FieldConstructorProps, initValue?: boolean) {
     super(props);
+    if (initValue !== undefined) {
+      this._value = initValue;
+    }
     makeObservable(this, {
       _value: observable,
       value: computed,

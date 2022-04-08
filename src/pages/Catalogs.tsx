@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Subjects } from "./Subjects";
+import { Subjects } from "./catalogs/subjects/Subjects";
 
 export const Catalogs = () => {
   return (

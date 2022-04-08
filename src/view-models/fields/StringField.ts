@@ -17,8 +17,11 @@ export class StringFieldVM extends FieldVM {
     return this._value.length > 0;
   }
 
-  constructor(props: FieldConstructorProps) {
+  constructor(props: FieldConstructorProps, initValue?: string) {
     super(props);
+    if (initValue !== undefined) {
+      this._value = initValue;
+    }
     makeObservable(this, {
       _value: observable,
       value: computed,

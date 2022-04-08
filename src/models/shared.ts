@@ -20,7 +20,7 @@ export interface IEntityRepository<T, K> {
   getEntityById(id: number): Promise<Stored<T> | null>;
   addEntity(entityData: K): Promise<number>;
   removeEntity(id: number): Promise<void>;
-  updateEntity(id: number, entityData: Partial<K>): Promise<void>;
+  updateEntity(id: number, entityData: Partial<K>): Promise<number>;
 }
 
 export abstract class GenericEntityRepository<T, K>
@@ -85,6 +85,7 @@ export abstract class GenericEntityRepository<T, K>
       // todo investigate optimization possibilities
       this._entities[id] = this.createEntity(response);
     });
+    return response.id;
   }
 
   constructor(props: {

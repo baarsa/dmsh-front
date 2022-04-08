@@ -8,6 +8,7 @@ type Props = {
 
 export const StringField = observer(({ field }: Props) => (
   <TextField
+    disabled={field.isDisabled}
     error={!field.isValid()}
     type="text"
     label={field.label}

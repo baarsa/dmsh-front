@@ -4,7 +4,7 @@ import { IStringField } from "../fields/IStringField";
 import { IBooleanField } from "../fields/IBooleanField";
 import { makeAutoObservable } from "mobx";
 
-type FormMode = "view" | "edit";
+export type FormMode = "view" | "edit";
 
 type PossibleField<T> = T extends string
   ? IStringField
@@ -30,8 +30,8 @@ export interface IFormModel {
 export class FormModel<T extends Record<string, unknown>>
   implements IFormModel
 {
-  // parameter - shape of entity instantiation
   mode: FormMode;
+  // parameter - shape of entity instantiation
   fields: RelevantFields<T>;
   getFields() {
     return Object.values(this.fields);
@@ -45,24 +45,30 @@ export class FormModel<T extends Record<string, unknown>>
     );
     // add to field prop isNecessary
   }
-  private readonly submitHandler: (data: T) => Promise<number>;
-  private readonly cancelHandler: () => void;
+  private readonly submitHandler?: (data: T) => Promise<number>;
+  private readonly cancelHandler?: () => void;
   async handleSubmit() {
+    if (this.submitHandler === undefined) {
+      throw new Error("Обработчик формы не определен");
+    }
     return this.submitHandler(this.mapFieldsToProps(this.fields));
   }
   handleCancel() {
-    this.cancelHandler();
+    if (this.cancelHandler !== undefined) {
+      this.cancelHandler();
+    }
   }
   constructor(props: {
     title: string;
     mode: FormMode;
     fields: RelevantFields<T>;
     mapFieldsToProps: (fields: RelevantFields<T>) => T;
-    submitHandler: (data: T) => Promise<number>;
-    cancelHandler: () => void;
+    submitHandler?: (data: T) => Promise<number>;
+    cancelHandler?: () => void;
   }) {
     this.title = props.title;
     this.mode = props.mode;
+    Object.values(props.fields).forEach((field) => (field.parentForm = this));
     this.fields = props.fields;
     this.mapFieldsToProps = props.mapFieldsToProps;
     this.submitHandler = props.submitHandler;
