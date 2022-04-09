@@ -10,7 +10,7 @@ type PossibleField<T> = T extends string
   ? IStringField
   : T extends boolean
   ? IBooleanField
-  : T extends number
+  : T extends number | number[]
   ? ILinkField
   : never;
 

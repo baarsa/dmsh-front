@@ -1,5 +1,5 @@
-export interface ITeacher {
+export type ITeacher = {
   name: string;
   canAssist: boolean;
   subjects: number[];
-}
+};

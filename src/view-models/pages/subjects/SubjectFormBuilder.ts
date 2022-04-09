@@ -46,7 +46,8 @@ export class SubjectFormBuilder {
           { label: "Группа специальностей", controllingField: isSpecialField },
           {
             entityModel: specialityGroupRepository,
-            initialValues: specialityGroup === null ? undefined : [specialityGroup],
+            initialValues:
+              specialityGroup === null ? undefined : [specialityGroup],
           }
         ),
       },
