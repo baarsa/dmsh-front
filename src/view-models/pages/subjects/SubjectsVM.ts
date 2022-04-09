@@ -1,19 +1,17 @@
 import { subjectRepository } from "../../../models/subject/SubjectRepository";
 import { autorun, makeAutoObservable } from "mobx";
 
-type Item = {
-  id: number;
-  text: string;
-};
-
 export class SubjectsVM {
   get isLoading(): boolean {
     return this._isLoading;
   }
-  get items(): Item[] {
+  get items() {
     return this._items;
   }
-  private _items: Item[] = [];
+  private _items: {
+    id: number;
+    text: string;
+  }[] = [];
   private _isLoading: boolean = true;
 
   constructor() {

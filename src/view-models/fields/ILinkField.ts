@@ -3,8 +3,9 @@ import { IField } from "./IField";
 import { Option } from "./Option";
 
 export interface ILinkField extends IField {
-  setValue(id: number): void;
+  isMultiple: boolean;
+  setValues(ids: number[]): void;
   options: Option[];
-  getValueId(): number;
+  getValuesIds(): number[];
   fieldType: FieldType.LINK;
 }

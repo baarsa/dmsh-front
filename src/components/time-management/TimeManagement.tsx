@@ -27,8 +27,8 @@ export const TimeManagement = observer(({ vm }: Props) => {
       <div className={cn("controls")}>
         <Select
           label="День недели"
-          value={vm.selectedDay}
-          onChange={(value) => vm.handleDayChange(value)}
+          values={[vm.selectedDay]}
+          onChange={(values) => vm.handleDayChange(values[0])}
           options={vm.dayOptions}
         />
         <LinkField field={vm.teacherField} />

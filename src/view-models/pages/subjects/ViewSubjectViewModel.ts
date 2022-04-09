@@ -1,6 +1,6 @@
 import { IFormModel } from "../../forms/FormModel";
 import { makeAutoObservable } from "mobx";
-import { SubjectFormBuilder } from "../../../pages/catalogs/subjects/SubjectFormBuilder";
+import { SubjectFormBuilder } from "./SubjectFormBuilder";
 
 export class ViewSubjectViewModel {
   get form(): IFormModel | null {

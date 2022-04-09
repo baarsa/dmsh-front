@@ -1,10 +1,10 @@
-import { FormMode, FormModel } from "../../../view-models/forms/FormModel";
+import { FormMode, FormModel } from "../../forms/FormModel";
 import { subjectRepository } from "../../../models/subject/SubjectRepository";
 import { specialityGroupRepository } from "../../../models/speciality-group/SpecialityGroupRepository";
-import { BooleanFieldVM } from "../../../view-models/fields/BooleanField";
+import { BooleanFieldVM } from "../../fields/BooleanField";
 import { ISubject } from "../../../entities/ISubject";
-import { StringFieldVM } from "../../../view-models/fields/StringField";
-import { LinkFieldVM } from "../../../view-models/fields/LinkField";
+import { StringFieldVM } from "../../fields/StringField";
+import { LinkFieldVM } from "../../fields/LinkField";
 import { SubjectEntity } from "../../../models/subject/SubjectEntity";
 import { SpecialityGroupEntity } from "../../../models/speciality-group/SpecialityGroupEntity";
 
@@ -46,14 +46,14 @@ export class SubjectFormBuilder {
           { label: "Группа специальностей", controllingField: isSpecialField },
           {
             entityModel: specialityGroupRepository,
-            initialValue: specialityGroup ?? undefined,
+            initialValues: specialityGroup === null ? undefined : [specialityGroup],
           }
         ),
       },
       mapFieldsToProps: (fields) => ({
         name: fields.name.value,
         isSpecial: fields.isSpecial.value,
-        specialityGroup: fields.specialityGroup.getValueId(),
+        specialityGroup: fields.specialityGroup.getValuesIds()[0],
       }),
       submitHandler:
         mode === "view"
