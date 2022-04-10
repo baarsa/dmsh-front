@@ -24,6 +24,11 @@ export const navigationItems = [
         url: "/subjects",
         permission: null,
       },
+      {
+        text: "Программы",
+        url: "/programs",
+        permission: null,
+      },
     ],
   },
   {

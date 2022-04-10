@@ -36,8 +36,11 @@ export class FormModel<T extends Record<string, unknown>>
   getFields() {
     return Object.values(this.fields);
   }
+  get mappedFields() {
+    return this.mapFieldsToProps(this.fields);
+  }
   title: string;
-  private mapFieldsToProps: (fields: RelevantFields<T>) => T;
+  private readonly mapFieldsToProps: (fields: RelevantFields<T>) => T;
   isValid(): boolean {
     return Object.values(this.fields).reduce<boolean>(
       (acc, field) => acc && (field.isDisabled || field.isValid()),

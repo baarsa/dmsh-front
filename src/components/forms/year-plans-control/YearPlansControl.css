@@ -1,0 +1,5 @@
+.year-plans-control {
+  &__year-plan {
+    border: 1px solid black;
+  }
+}
