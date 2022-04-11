@@ -2,8 +2,100 @@ import { IProgram } from "../../entities/IProgram";
 import { LinkFieldVM } from "../fields/LinkField";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { SubjectEntity } from "../../models/subject/SubjectEntity";
-import { makeAutoObservable, makeObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { IFormModel } from "./FormModel";
+
+class YearPlanItemVM {
+  get subjectField(): LinkFieldVM<SubjectEntity> {
+    return this._subjectField;
+  }
+
+  get commonSubjects(): Array<{
+    subject: number;
+    subjectName: string;
+    halfHours: number;
+  }> {
+    return this._commonSubjects;
+  }
+  get canAddSubject() {
+    return this._subjectField.isValid() && this._newSubjectHalfHours > 0;
+  }
+  get specialityHalfHours(): number {
+    return this._specialityHalfHours;
+  }
+
+  set specialityHalfHours(value: number) {
+    this._specialityHalfHours = value;
+  }
+
+  get newSubjectHalfHours(): number {
+    return this._newSubjectHalfHours;
+  }
+
+  set newSubjectHalfHours(value: number) {
+    this._newSubjectHalfHours = value;
+  }
+
+  addCommonSubject() {
+    const subjectId = this._subjectField.getValuesIds()[0];
+    this._commonSubjects.push({
+      subject: subjectId,
+      subjectName: this._subjects[subjectId].name,
+      halfHours: this.newSubjectHalfHours,
+    });
+    this._subjectField.setValues([]);
+    this.newSubjectHalfHours = 0;
+  }
+
+  removeCommonSubject(commonSubjectIndex: number) {
+    this._commonSubjects.splice(commonSubjectIndex, 1);
+    // maybe add confirm modal
+  }
+
+  private _specialityHalfHours: number;
+  private readonly _subjectField: LinkFieldVM<SubjectEntity>;
+  private _newSubjectHalfHours: number;
+  private readonly _commonSubjects: Array<{
+    subject: number;
+    subjectName: string;
+    halfHours: number;
+  }>;
+  private _subjects: Record<number, SubjectEntity>;
+
+  constructor(
+    subjects: Record<number, SubjectEntity>,
+    yearPlan?: IProgram["yearPlans"][number]
+  ) {
+    this._subjects = subjects;
+    this._specialityHalfHours =
+      yearPlan === undefined ? 0 : yearPlan.specialityHalfHours;
+    this._subjectField = new LinkFieldVM(
+      {
+        label: "Предмет",
+      },
+      {
+        entityModel: subjectRepository,
+        entitiesFilter: (currentSubject) =>
+          !currentSubject.isSpecial &&
+          this._commonSubjects.every(
+            ({ subject }) => subject !== currentSubject.id
+          ),
+      }
+    );
+    this._newSubjectHalfHours = 0;
+    this._commonSubjects =
+      yearPlan === undefined
+        ? []
+        : Object.entries(yearPlan.commonSubjectsHalfHours).map(
+            ([subject, halfHours]) => ({
+              subject: Number(subject),
+              subjectName: this._subjects[Number(subject)].name,
+              halfHours,
+            })
+          );
+    makeAutoObservable(this);
+  }
+}
 
 export class YearPlansControlVM {
   get yearPlans() {
@@ -31,40 +123,7 @@ export class YearPlansControlVM {
   }
 
   addYearPlan(yearPlan?: IProgram["yearPlans"][number]) {
-    const thisYearPlanSubjects: Array<{
-      subject: number;
-      subjectName: string;
-      halfHours: number;
-    }> = observable(
-      yearPlan === undefined
-        ? []
-        : Object.entries(yearPlan.commonSubjectsHalfHours).map(
-            ([subject, halfHours]) => ({
-              subject: Number(subject),
-              subjectName: this._subjects[Number(subject)].name,
-              halfHours,
-            })
-          )
-    );
-    this._yearPlans.push({
-      specialityHalfHours:
-        yearPlan === undefined ? 0 : yearPlan.specialityHalfHours,
-      subjectField: new LinkFieldVM(
-        {
-          label: "Предмет",
-        },
-        {
-          entityModel: subjectRepository,
-          entitiesFilter: (currentSubject) =>
-            !currentSubject.isSpecial &&
-            thisYearPlanSubjects.every(
-              ({ subject }) => subject !== currentSubject.id
-            ),
-        }
-      ),
-      newSubjectHalfHours: 0,
-      commonSubjects: thisYearPlanSubjects,
-    });
+    this._yearPlans.push(new YearPlanItemVM(this._subjects, yearPlan));
   }
 
   removeYearPlan(index: number) {
@@ -74,42 +133,7 @@ export class YearPlansControlVM {
     ];
   }
 
-  addCommonSubject(yearPlanIndex: number) {
-    const yearPlan = this._yearPlans[yearPlanIndex];
-    const subjectId = yearPlan.subjectField.getValuesIds()[0];
-    yearPlan.commonSubjects.push({
-      subject: subjectId,
-      subjectName: this._subjects[subjectId].name,
-      halfHours: yearPlan.newSubjectHalfHours,
-    });
-    yearPlan.subjectField.setValues([]);
-    yearPlan.newSubjectHalfHours = 0;
-  }
-
-  removeCommonSubject(yearPlanIndex: number, commonSubjectIndex: number) {
-    const yearPlan = this._yearPlans[yearPlanIndex];
-    yearPlan.commonSubjects.splice(commonSubjectIndex, 1);
-    // maybe add confirm modal
-  }
-
-  setSpecialityHalfHours(yearPlanIndex: number, value: number) {
-    this._yearPlans[yearPlanIndex].specialityHalfHours = value;
-  }
-
-  setNewSubjectHalfHours(yearPlanIndex: number, value: number) {
-    this._yearPlans[yearPlanIndex].newSubjectHalfHours = value;
-  }
-
-  private _yearPlans: Array<{
-    specialityHalfHours: number;
-    subjectField: LinkFieldVM<SubjectEntity>;
-    newSubjectHalfHours: number;
-    commonSubjects: Array<{
-      subject: number;
-      subjectName: string;
-      halfHours: number;
-    }>;
-  }> = [];
+  private _yearPlans: Array<YearPlanItemVM> = [];
 
   private _parentForm: IFormModel;
   private _subjects: Record<number, SubjectEntity> = {};

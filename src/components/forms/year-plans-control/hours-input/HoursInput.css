@@ -1,3 +1,9 @@
 .hours-input {
   display: flex;
+
+  &__input {
+    &_error {
+      border-bottom: 1px solid red !important;
+    }
+  }
 }

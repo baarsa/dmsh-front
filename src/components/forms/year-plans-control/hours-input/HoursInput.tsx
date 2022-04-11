@@ -21,6 +21,7 @@ export const HoursInput = ({
     <div className={cn()}>
       <div className={cn("label")}>{label}</div>
       <NumericInput
+        className={cn("input", { error: value === 0 })}
         disabled={isDisabled}
         value={value / 2}
         onChange={(value) => {

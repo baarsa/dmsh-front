@@ -29,7 +29,9 @@ export const YearPlansControl = observer(({ vm }: Props) => {
             isDisabled={vm.mode === "view"}
             label={"Часы специальности"}
             value={yearPlan.specialityHalfHours}
-            onChange={(value) => vm.setSpecialityHalfHours(i, value)}
+            onChange={(value) => {
+              yearPlan.specialityHalfHours = value;
+            }}
           />
           {vm.mode === "edit" && (
             <>
@@ -37,9 +39,14 @@ export const YearPlansControl = observer(({ vm }: Props) => {
               <HoursInput
                 label={"Часы по предмету"}
                 value={yearPlan.newSubjectHalfHours}
-                onChange={(value) => vm.setNewSubjectHalfHours(i, value)}
+                onChange={(value) => {
+                  yearPlan.newSubjectHalfHours = value;
+                }}
               />
-              <Button onClick={() => vm.addCommonSubject(i)}>
+              <Button
+                disabled={!yearPlan.canAddSubject}
+                onClick={() => yearPlan.addCommonSubject()}
+              >
                 Добавить предмет
               </Button>
             </>
@@ -49,7 +56,7 @@ export const YearPlansControl = observer(({ vm }: Props) => {
               {vm.mode === "edit" && (
                 <CloseIcon
                   className={cn("cross")}
-                  onClick={() => vm.removeCommonSubject(i, j)}
+                  onClick={() => yearPlan.removeCommonSubject(j)}
                 />
               )}
               {subject.subjectName}
