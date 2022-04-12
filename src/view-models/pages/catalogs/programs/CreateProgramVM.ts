@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ProgramFormModel } from "../../forms/ProgramFormModel";
+import { ProgramFormModel } from "../../../forms/ProgramFormModel";
 import { ProgramFormBuilder } from "./ProgramFormBuilder";
 
 export class CreateProgramVM {

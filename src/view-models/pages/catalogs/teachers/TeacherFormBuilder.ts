@@ -1,12 +1,12 @@
-import { FormMode, FormModel } from "../../forms/FormModel";
-import { SubjectEntity } from "../../../models/subject/SubjectEntity";
-import { subjectRepository } from "../../../models/subject/SubjectRepository";
-import { BooleanFieldVM } from "../../fields/BooleanField";
-import { StringFieldVM } from "../../fields/StringField";
-import { LinkFieldVM } from "../../fields/LinkField";
-import { TeacherEntity } from "../../../models/teacher/TeacherEntity";
-import { teacherEntityRepository } from "../../../models/teacher/TeacherRepository";
-import { ITeacher } from "../../../entities/ITeacher";
+import { FormMode, FormModel } from "../../../forms/FormModel";
+import { SubjectEntity } from "../../../../models/subject/SubjectEntity";
+import { subjectRepository } from "../../../../models/subject/SubjectRepository";
+import { BooleanFieldVM } from "../../../fields/BooleanField";
+import { StringFieldVM } from "../../../fields/StringField";
+import { LinkFieldVM } from "../../../fields/LinkField";
+import { TeacherEntity } from "../../../../models/teacher/TeacherEntity";
+import { teacherEntityRepository } from "../../../../models/teacher/TeacherRepository";
+import { ITeacher } from "../../../../entities/ITeacher";
 
 type TeacherFormParameters = {
   mode: FormMode;

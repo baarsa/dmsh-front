@@ -1,12 +1,12 @@
-import { FormMode, FormModel } from "../../forms/FormModel";
-import { subjectRepository } from "../../../models/subject/SubjectRepository";
-import { specialityGroupRepository } from "../../../models/speciality-group/SpecialityGroupRepository";
-import { BooleanFieldVM } from "../../fields/BooleanField";
-import { ISubject } from "../../../entities/ISubject";
-import { StringFieldVM } from "../../fields/StringField";
-import { LinkFieldVM } from "../../fields/LinkField";
-import { SubjectEntity } from "../../../models/subject/SubjectEntity";
-import { SpecialityGroupEntity } from "../../../models/speciality-group/SpecialityGroupEntity";
+import { FormMode, FormModel } from "../../../forms/FormModel";
+import { subjectRepository } from "../../../../models/subject/SubjectRepository";
+import { specialityGroupRepository } from "../../../../models/speciality-group/SpecialityGroupRepository";
+import { BooleanFieldVM } from "../../../fields/BooleanField";
+import { ISubject } from "../../../../entities/ISubject";
+import { StringFieldVM } from "../../../fields/StringField";
+import { LinkFieldVM } from "../../../fields/LinkField";
+import { SubjectEntity } from "../../../../models/subject/SubjectEntity";
+import { SpecialityGroupEntity } from "../../../../models/speciality-group/SpecialityGroupEntity";
 
 type SubjectFormParameters = {
   mode: FormMode;

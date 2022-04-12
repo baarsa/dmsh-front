@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Form } from "../../../components/Form";
-import { ViewTeacherVM } from "../../../view-models/pages/teachers/ViewTeacherVM";
+import { ViewTeacherVM } from "../../../view-models/pages/catalogs/teachers/ViewTeacherVM";
 
 export const ViewTeacher = observer(() => {
   const params = useParams<{ id: string }>();

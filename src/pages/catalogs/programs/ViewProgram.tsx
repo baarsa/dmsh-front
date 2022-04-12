@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ViewProgramVM } from "../../../view-models/pages/programs/ViewProgramVM";
+import { ViewProgramVM } from "../../../view-models/pages/catalogs/programs/ViewProgramVM";
 import { ProgramForm } from "../../../components/forms/ProgramForm";
 
 export const ViewProgram = observer(() => {

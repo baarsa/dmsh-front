@@ -1,7 +1,7 @@
+import { subjectRepository } from "../../../../models/subject/SubjectRepository";
 import { autorun, makeAutoObservable } from "mobx";
-import { programRepository } from "../../../models/program/ProgramRepository";
 
-export class ProgramsVM {
+export class SubjectsVM {
   get isLoading(): boolean {
     return this._isLoading;
   }
@@ -17,13 +17,13 @@ export class ProgramsVM {
   constructor() {
     makeAutoObservable(this);
     autorun(() => {
-      this._items = Object.values(programRepository.entities).map((entity) => ({
+      this._items = Object.values(subjectRepository.entities).map((entity) => ({
         id: entity.id,
         text: entity.name,
       }));
     });
     autorun(() => {
-      this._isLoading = !programRepository.isSynchronized;
+      this._isLoading = !subjectRepository.isSynchronized;
     });
   }
 }

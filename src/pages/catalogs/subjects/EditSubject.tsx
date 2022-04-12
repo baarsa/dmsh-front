@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form } from "../../../components/Form";
 import { useNavigate, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { EditSubjectViewModel } from "../../../view-models/pages/subjects/EditSubjectViewModel";
+import { EditSubjectViewModel } from "../../../view-models/pages/catalogs/subjects/EditSubjectViewModel";
 
 export const EditSubject = observer(() => {
   const params = useParams<{ id: string }>();

@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { EntitySection } from "../../../components/entity-section/EntitySection";
 import { Route, Routes } from "react-router-dom";
-import { ProgramsVM } from "../../../view-models/pages/programs/ProgramsVM";
+import { ProgramsVM } from "../../../view-models/pages/catalogs/programs/ProgramsVM";
 import { CreateProgram } from "./CreateProgram";
 import { EditProgram } from "./EditProgram";
 import { ViewProgram } from "./ViewProgram";

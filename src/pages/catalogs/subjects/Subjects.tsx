@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { CreateSubject } from "./CreateSubject";
 import { EntitySection } from "../../../components/entity-section/EntitySection";
 import { useState } from "react";
-import { SubjectsVM } from "../../../view-models/pages/subjects/SubjectsVM";
+import { SubjectsVM } from "../../../view-models/pages/catalogs/subjects/SubjectsVM";
 import { observer } from "mobx-react-lite";
 import { ViewSubject } from "./ViewSubject";
 import { EditSubject } from "./EditSubject";

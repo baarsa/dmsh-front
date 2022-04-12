@@ -1,8 +1,8 @@
-import { IFormModel } from "../../forms/FormModel";
+import { IFormModel } from "../../../forms/FormModel";
 import { makeAutoObservable } from "mobx";
 import { TeacherFormBuilder } from "./TeacherFormBuilder";
 
-export class EditTeacherVM {
+export class ViewTeacherVM {
   get form(): IFormModel | null {
     return this._form;
   }
@@ -10,13 +10,13 @@ export class EditTeacherVM {
 
   private async _init(teacherId: number) {
     this._form = await TeacherFormBuilder.buildForm({
-      mode: "edit",
+      mode: "view",
       teacherId,
     });
   }
 
-  constructor(teacherId: number) {
-    void this._init(teacherId);
+  constructor(subjectId: number) {
+    void this._init(subjectId);
     makeAutoObservable(this);
   }
 }

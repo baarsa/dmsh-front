@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { EntitySection } from "../../../components/entity-section/EntitySection";
 import { Route, Routes } from "react-router-dom";
-import { TeachersVM } from "../../../view-models/pages/teachers/TeachersVM";
+import { TeachersVM } from "../../../view-models/pages/catalogs/teachers/TeachersVM";
 import { CreateTeacher } from "./CreateTeacher";
 import { EditTeacher } from "./EditTeacher";
 import { ViewTeacher } from "./ViewTeacher";

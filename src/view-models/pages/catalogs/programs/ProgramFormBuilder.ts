@@ -1,13 +1,13 @@
-import { FormMode, FormModel } from "../../forms/FormModel";
-import { SpecialityGroupEntity } from "../../../models/speciality-group/SpecialityGroupEntity";
-import { specialityGroupRepository } from "../../../models/speciality-group/SpecialityGroupRepository";
-import { StringFieldVM } from "../../fields/StringField";
-import { LinkFieldVM } from "../../fields/LinkField";
-import { ProgramEntity } from "../../../models/program/ProgramEntity";
-import { programRepository } from "../../../models/program/ProgramRepository";
-import { ProgramFormModel } from "../../forms/ProgramFormModel";
-import { YearPlansControlVM } from "../../forms/YearPlansControlVM";
-import { IProgram } from "../../../entities/IProgram";
+import { FormMode, FormModel } from "../../../forms/FormModel";
+import { SpecialityGroupEntity } from "../../../../models/speciality-group/SpecialityGroupEntity";
+import { specialityGroupRepository } from "../../../../models/speciality-group/SpecialityGroupRepository";
+import { StringFieldVM } from "../../../fields/StringField";
+import { LinkFieldVM } from "../../../fields/LinkField";
+import { ProgramEntity } from "../../../../models/program/ProgramEntity";
+import { programRepository } from "../../../../models/program/ProgramRepository";
+import { ProgramFormModel } from "../../../forms/ProgramFormModel";
+import { YearPlansControlVM } from "../../../forms/YearPlansControlVM";
+import { IProgram } from "../../../../entities/IProgram";
 
 type ProgramFormParameters = {
   mode: FormMode;

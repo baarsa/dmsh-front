@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreateSubjectViewModel } from "../../../view-models/pages/subjects/CreateSubjectViewModel";
+import { CreateSubjectViewModel } from "../../../view-models/pages/catalogs/subjects/CreateSubjectViewModel";
 import { Form } from "../../../components/Form";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";

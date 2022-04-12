@@ -1,5 +1,5 @@
 import { autorun, makeAutoObservable } from "mobx";
-import { teacherEntityRepository } from "../../../models/teacher/TeacherRepository";
+import { teacherEntityRepository } from "../../../../models/teacher/TeacherRepository";
 
 export class TeachersVM {
   get isLoading(): boolean {

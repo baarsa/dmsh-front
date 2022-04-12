@@ -1,15 +1,15 @@
-import { IFormModel } from "../../forms/FormModel";
+import { IFormModel } from "../../../forms/FormModel";
+import { SubjectFormBuilder } from "./SubjectFormBuilder";
 import { makeAutoObservable } from "mobx";
-import { TeacherFormBuilder } from "./TeacherFormBuilder";
 
-export class CreateTeacherVM {
+export class CreateSubjectViewModel {
   get form(): IFormModel | null {
     return this._form;
   }
   private _form: IFormModel | null = null;
 
   private async _init() {
-    this._form = await TeacherFormBuilder.buildForm({ mode: "edit" });
+    this._form = await SubjectFormBuilder.buildForm({ mode: "edit" });
   }
 
   constructor() {

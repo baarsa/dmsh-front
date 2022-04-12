@@ -1,4 +1,4 @@
-import { IFormModel } from "../../forms/FormModel";
+import { IFormModel } from "../../../forms/FormModel";
 import { makeAutoObservable } from "mobx";
 import { SubjectFormBuilder } from "./SubjectFormBuilder";
 

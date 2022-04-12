@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form } from "../../../components/Form";
-import { ViewSubjectViewModel } from "../../../view-models/pages/subjects/ViewSubjectViewModel";
+import { ViewSubjectViewModel } from "../../../view-models/pages/catalogs/subjects/ViewSubjectViewModel";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 

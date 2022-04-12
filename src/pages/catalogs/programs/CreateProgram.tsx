@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreateProgramVM } from "../../../view-models/pages/programs/CreateProgramVM";
+import { CreateProgramVM } from "../../../view-models/pages/catalogs/programs/CreateProgramVM";
 import { ProgramForm } from "../../../components/forms/ProgramForm";
 
 export const CreateProgram = observer(() => {

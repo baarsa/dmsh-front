@@ -1,8 +1,8 @@
-import { ProgramFormModel } from "../../forms/ProgramFormModel";
-import { ProgramFormBuilder } from "./ProgramFormBuilder";
 import { makeAutoObservable } from "mobx";
+import { ProgramFormModel } from "../../../forms/ProgramFormModel";
+import { ProgramFormBuilder } from "./ProgramFormBuilder";
 
-export class ViewProgramVM {
+export class EditProgramVM {
   get form(): ProgramFormModel | null {
     return this._form;
   }
@@ -10,7 +10,7 @@ export class ViewProgramVM {
 
   private async _init(programId: number) {
     this._form = await ProgramFormBuilder.buildForm({
-      mode: "view",
+      mode: "edit",
       programId,
     });
   }
