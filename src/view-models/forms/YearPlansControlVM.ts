@@ -144,7 +144,7 @@ export class YearPlansControlVM {
     yearPlans.forEach((yearPlan) => {
       this.addYearPlan(yearPlan);
     });
-    this._isLoading = false;
+    this._isLoading = false; // todo use in view
   }
 
   constructor(parentForm: IFormModel, yearPlans: IProgram["yearPlans"]) {

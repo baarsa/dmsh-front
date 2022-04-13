@@ -10,11 +10,6 @@ type Parameters = {
 };
 
 export class ProgramFormModel implements IFormModel {
-  private _basicForm: FormModel<{ name: string; specialityGroup: number }>;
-  private readonly _yearPlans: YearPlansControlVM;
-  private readonly _submitHandler?: (data: IProgram) => Promise<number>;
-  private readonly _cancelHandler?: () => void;
-
   get mode() {
     return this._basicForm.mode;
   }
@@ -51,6 +46,11 @@ export class ProgramFormModel implements IFormModel {
       this._cancelHandler();
     }
   }
+
+  private _basicForm: FormModel<{ name: string; specialityGroup: number }>;
+  private readonly _yearPlans: YearPlansControlVM;
+  private readonly _submitHandler?: (data: IProgram) => Promise<number>;
+  private readonly _cancelHandler?: () => void;
 
   constructor({
     basicForm,

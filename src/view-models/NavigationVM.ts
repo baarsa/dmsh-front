@@ -29,6 +29,11 @@ export const navigationItems = [
         url: "/programs",
         permission: null,
       },
+      {
+        text: "Расписания",
+        url: "/schedules",
+        permission: null,
+      },
     ],
   },
   {
