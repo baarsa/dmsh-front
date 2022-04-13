@@ -4,6 +4,7 @@ import { Option } from "./Option";
 
 export interface ILinkField extends IField {
   isMultiple: boolean;
+  showValuesList: boolean;
   setValues(ids: number[]): void;
   options: Option[];
   getValuesIds(): number[];

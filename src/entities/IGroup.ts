@@ -1,4 +1,4 @@
-export interface IGroup {
+export type IGroup = {
   name: string;
   pupils: number[];
-}
+};

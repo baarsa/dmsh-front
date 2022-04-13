@@ -14,6 +14,7 @@ type LinkFieldProps<T extends INamedEntity> = {
   shouldSetInitialValue?: boolean;
   hasEmptyValueOption?: boolean;
   isMultiple?: boolean;
+  showValuesList?: boolean;
 };
 
 export class LinkFieldVM<T extends INamedEntity>
@@ -22,6 +23,9 @@ export class LinkFieldVM<T extends INamedEntity>
 {
   get isMultiple(): boolean {
     return this._isMultiple;
+  }
+  get showValuesList() {
+    return this._showValuesList;
   }
   get isLoading() {
     return this._isLoading;
@@ -54,6 +58,7 @@ export class LinkFieldVM<T extends INamedEntity>
   private readonly _valueChangedCallback?: (newValue: T[]) => void;
   private readonly _hasEmptyValueOption: boolean;
   private readonly _isMultiple: boolean;
+  private readonly _showValuesList: boolean;
   // фильтрация вариантов в зависимости от значения другого поля.
   _entities: () => Stored<T>[] = () => {
     return Object.values(this.entityModel.entities);
@@ -95,6 +100,7 @@ export class LinkFieldVM<T extends INamedEntity>
       shouldSetInitialValue = false,
       hasEmptyValueOption = false,
       isMultiple = false,
+      showValuesList = false,
     }: LinkFieldProps<T>
   ) {
     super(props);
@@ -108,6 +114,7 @@ export class LinkFieldVM<T extends INamedEntity>
     this._valueChangedCallback = valueChangedCallback;
     this._hasEmptyValueOption = hasEmptyValueOption;
     this._isMultiple = isMultiple;
+    this._showValuesList = showValuesList;
     makeObservable<LinkFieldVM<T>, "_values">(this, {
       _entities: observable,
       options: computed,
