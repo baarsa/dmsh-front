@@ -154,15 +154,16 @@ export class LoadsDistributionVM {
                 entityModel: teacherEntityRepository,
                 entitiesFilter: (teacher) =>
                   teacher.subjects.includes(currentPupil.specialSubject),
-                initialValue:
+                initialValues:
                   specialityLoad === undefined
-                    ? undefined
-                    : allTeachers[specialityLoad.teacher],
+                    ? []
+                    : [allTeachers[specialityLoad.teacher]],
                 hasEmptyValueOption: true,
                 valueChangedCallback: (teacherValue) => {
                   this._onTeacherUpdate({
                     pupilId,
-                    teacherId: teacherValue === null ? null : teacherValue.id,
+                    teacherId:
+                      teacherValue.length === 0 ? null : teacherValue[0].id,
                     subjectId: currentPupil.specialSubject,
                   });
                 },
@@ -184,16 +185,16 @@ export class LoadsDistributionVM {
                     entityModel: teacherEntityRepository,
                     entitiesFilter: (teacher) =>
                       teacher.subjects.includes(Number(subjectId)),
-                    initialValue:
+                    initialValues:
                       subjectLoad === undefined
-                        ? undefined
-                        : allTeachers[subjectLoad.teacher],
+                        ? []
+                        : [allTeachers[subjectLoad.teacher]],
                     hasEmptyValueOption: true,
                     valueChangedCallback: (teacherValue) => {
                       this._onTeacherUpdate({
                         pupilId,
                         teacherId:
-                          teacherValue === null ? null : teacherValue.id,
+                          teacherValue.length === 0 ? null : teacherValue[0].id,
                         subjectId: Number(subjectId),
                       });
                     },

@@ -65,7 +65,7 @@ export class LinkFieldVM<T extends INamedEntity>
   };
   _isLoading = true;
   setValues(_ids: number[]) {
-    if (_ids.length === 0) {
+    if (_ids.length === 0 || _ids[0] === EMPTY_VALUE_ID) {
       this._values = [];
       if (this._valueChangedCallback !== undefined) {
         this._valueChangedCallback([]);
@@ -84,7 +84,9 @@ export class LinkFieldVM<T extends INamedEntity>
     }
   }
   getValuesIds(): number[] {
-    return this._values.map((value) => value.id);
+    return this._values.length === 0 && this._hasEmptyValueOption
+      ? [EMPTY_VALUE_ID]
+      : this._values.map((value) => value.id);
   }
   isValid(): boolean {
     return this._values.length > 0;
