@@ -3,10 +3,7 @@ import { createPupilEntity, PupilEntity } from "./PupilEntity";
 import { pupilService } from "../../services/pupilService";
 import { IPupil } from "../../entities/IPupil";
 
-class PupilEntityRepository extends GenericEntityRepository<
-  PupilEntity,
-  IPupil
-> {
+class PupilRepository extends GenericEntityRepository<PupilEntity, IPupil> {
   constructor() {
     //maybe: as we use only one service/creator per entity type
     super({
@@ -16,4 +13,4 @@ class PupilEntityRepository extends GenericEntityRepository<
   }
 }
 
-export const pupilEntityRepository = new PupilEntityRepository();
+export const pupilRepository = new PupilRepository();

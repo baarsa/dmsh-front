@@ -20,7 +20,7 @@ import { ConfirmSpanChangeVM } from "../modals/ConfirmSpanChangeVM";
 import { WEEK_DAY_NAMES } from "../../const";
 import { LoadsInfoVM } from "../LoadsInfoVM";
 import { ConflictsInfoVM } from "../ConflictsInfoVM";
-import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
+import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
 import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
 
@@ -169,7 +169,7 @@ export class TimeManagementVM {
   }
 
   private _getPersonsInLesson(lesson: LessonEntity) {
-    const pupils = pupilEntityRepository.entities;
+    const pupils = pupilRepository.entities;
     const groups = groupRepository.entities;
     const isPupil = Object.values(pupils).some(
       (pupil) => pupil.lessonTakerId === lesson.lessonTaker
@@ -339,7 +339,7 @@ export class TimeManagementVM {
     let spanDesc = "";
     const lessons = lessonRepository.entities;
     const teachers = teacherEntityRepository.entities;
-    const pupils = pupilEntityRepository.entities;
+    const pupils = pupilRepository.entities;
     const subjects = subjectRepository.entities;
     if (type === "lesson") {
       const lesson = lessons[id];

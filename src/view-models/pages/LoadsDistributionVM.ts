@@ -2,7 +2,7 @@ import { LinkFieldVM } from "../fields/LinkField";
 import { TeacherEntity } from "../../models/teacher/TeacherEntity";
 import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { programRepository } from "../../models/program/ProgramRepository";
-import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
+import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
 import { autorun, makeAutoObservable } from "mobx";
 import { loadRepository } from "../../models/load/LoadRepository";
@@ -121,7 +121,7 @@ export class LoadsDistributionVM {
 
   private _calculateItems() {
     // get schedule's pupils (with years)
-    const allPupils = pupilEntityRepository.entities;
+    const allPupils = pupilRepository.entities;
     const allPrograms = programRepository.entities;
     const allTeachers = teacherEntityRepository.entities;
     const allSubjects = subjectRepository.entities;

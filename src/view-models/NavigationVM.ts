@@ -20,6 +20,11 @@ export const navigationItems = [
         permission: null,
       },
       {
+        text: "Учащиеся",
+        url: "/pupils",
+        permission: null,
+      },
+      {
         text: "Группы",
         url: "/groups",
         permission: null,

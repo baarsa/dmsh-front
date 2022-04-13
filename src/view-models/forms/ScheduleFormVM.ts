@@ -2,7 +2,7 @@ import { FormModel, IFormModel } from "./FormModel";
 import { ISchedule } from "../../entities/ISchedule";
 import { PupilEntity } from "../../models/pupil/PupilEntity";
 import { LinkFieldVM } from "../fields/LinkField";
-import { pupilEntityRepository } from "../../models/pupil/PupilRepository";
+import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { makeAutoObservable } from "mobx";
 import { ProgramEntity } from "../../models/program/ProgramEntity";
@@ -117,7 +117,7 @@ export class ScheduleFormVM implements IFormModel {
       label: "Учащийся",
     },
     {
-      entityModel: pupilEntityRepository,
+      entityModel: pupilRepository,
     }
   );
   private _currentYear: number = 0;
@@ -127,7 +127,7 @@ export class ScheduleFormVM implements IFormModel {
   private async _init(schedule?: ScheduleEntity) {
     this._programs = await programRepository.getAllEntities();
     if (schedule !== undefined) {
-      const pupils = await pupilEntityRepository.getAllEntities();
+      const pupils = await pupilRepository.getAllEntities();
       this._pupilsYears = Object.entries(schedule.pupilsYears).map(
         ([pupilId, year]) => ({
           pupil: pupils[Number(pupilId)],

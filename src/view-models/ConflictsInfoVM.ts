@@ -1,7 +1,7 @@
 import { ScheduleEntity } from "../models/schedule/ScheduleEntity";
 import { WEEK_DAY_NAMES } from "../const";
 import { autorun, makeAutoObservable } from "mobx";
-import { pupilEntityRepository } from "../models/pupil/PupilRepository";
+import { pupilRepository } from "../models/pupil/PupilRepository";
 import { subjectRepository } from "../models/subject/SubjectRepository";
 import { groupRepository } from "../models/group/GroupRepository";
 
@@ -45,7 +45,7 @@ export class ConflictsInfoVM {
 
   private _calculateItems() {
     const items: ConflictItem[] = [];
-    const pupils = pupilEntityRepository.entities;
+    const pupils = pupilRepository.entities;
     const groups = groupRepository.entities;
     const subjects = subjectRepository.entities;
     const lessons = this._schedule.lessons.filter(

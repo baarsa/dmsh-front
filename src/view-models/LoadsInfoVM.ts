@@ -1,4 +1,4 @@
-import { pupilEntityRepository } from "../models/pupil/PupilRepository";
+import { pupilRepository } from "../models/pupil/PupilRepository";
 import { programRepository } from "../models/program/ProgramRepository";
 import { ACADEMIC_HOUR } from "../const";
 import { autorun, makeAutoObservable } from "mobx";
@@ -41,7 +41,7 @@ export class LoadsInfoVM {
     const lessons = this._schedule.lessons.filter(
       (lesson) => lesson.teacher === this._teacherId
     );
-    const pupils = pupilEntityRepository.entities;
+    const pupils = pupilRepository.entities;
     const groups = Object.values(groupRepository.entities);
     const subjects = subjectRepository.entities;
     const allPrograms = programRepository.entities;

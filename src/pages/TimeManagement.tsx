@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TimeManagement } from "../components/time-management/TimeManagement";
 import { groupRepository } from "../models/group/GroupRepository";
-import { pupilEntityRepository } from "../models/pupil/PupilRepository";
+import { pupilRepository } from "../models/pupil/PupilRepository";
 import { teacherEntityRepository } from "../models/teacher/TeacherRepository";
 import { LinkFieldVM } from "../view-models/fields/LinkField";
 import { TimeManagementVM } from "../view-models/pages/TimeManagementViewModel";
@@ -30,7 +30,7 @@ export const TimeManagementPage = () => {
       const pupilField = new LinkFieldVM<PupilEntity>(
         { label: "Учащийся" },
         {
-          entityModel: pupilEntityRepository,
+          entityModel: pupilRepository,
           entitiesFilter: (pupil) => true,
           shouldSetInitialValue: true,
         }

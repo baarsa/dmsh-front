@@ -4,7 +4,7 @@ import { LinkFieldVM } from "../../../fields/LinkField";
 import { GroupEntity } from "../../../../models/group/GroupEntity";
 import { groupRepository } from "../../../../models/group/GroupRepository";
 import { IGroup } from "../../../../entities/IGroup";
-import { pupilEntityRepository } from "../../../../models/pupil/PupilRepository";
+import { pupilRepository } from "../../../../models/pupil/PupilRepository";
 import { PupilEntity } from "../../../../models/pupil/PupilEntity";
 
 type GroupFormParameters = {
@@ -18,7 +18,7 @@ export class GroupFormBuilder {
     let pupils: PupilEntity[] = [];
     if (groupId !== undefined) {
       group = await groupRepository.getEntityById(groupId);
-      const allPupils = await pupilEntityRepository.getAllEntities();
+      const allPupils = await pupilRepository.getAllEntities();
       if (group === null) {
         throw new Error("Не найдена группа");
       }
@@ -35,7 +35,7 @@ export class GroupFormBuilder {
         pupils: new LinkFieldVM(
           { label: "Учащиеся" },
           {
-            entityModel: pupilEntityRepository,
+            entityModel: pupilRepository,
             isMultiple: true,
             showValuesList: true,
             initialValues: pupils,
