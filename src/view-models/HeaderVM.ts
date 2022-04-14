@@ -1,6 +1,10 @@
 import { NavigationVM } from "./NavigationVM";
+import { ActiveScheduleVM } from "./ActiveScheduleVM";
 
 export class HeaderVM {
+  get activeSchedule(): ActiveScheduleVM {
+    return this._activeSchedule;
+  }
   get navigation() {
     return this._navigation;
   }
@@ -10,8 +14,10 @@ export class HeaderVM {
   }
 
   private readonly _navigation: NavigationVM;
+  private readonly _activeSchedule: ActiveScheduleVM;
 
-  constructor(navigation: NavigationVM) {
+  constructor(navigation: NavigationVM, activeSchedule: ActiveScheduleVM) {
     this._navigation = navigation;
+    this._activeSchedule = activeSchedule;
   }
 }

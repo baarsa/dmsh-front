@@ -7,6 +7,14 @@ import { autorun, makeAutoObservable } from "mobx";
 import { IAuthStore } from "../../models/auth-store/IAuthStore";
 import { IConfigStore } from "../../models/config-store/IConfigStore";
 import { HeaderVM } from "../HeaderVM";
+import { ActiveScheduleVM } from "../ActiveScheduleVM";
+import { IScheduleContextStore } from "../../models/schedule-context-store/IScheduleContextStore";
+
+type Parameters = {
+  authStore: IAuthStore;
+  configStore: IConfigStore;
+  scheduleContextStore: IScheduleContextStore;
+};
 
 export class MainViewModel {
   get isAuth(): boolean {
@@ -24,16 +32,19 @@ export class MainViewModel {
   private _isLoading = true;
   private _authStore: IAuthStore;
   private _configStore: IConfigStore;
+  private _scheduleContextStore: IScheduleContextStore;
 
-  constructor(authStore: IAuthStore, configStore: IConfigStore) {
+  constructor({ authStore, configStore, scheduleContextStore }: Parameters) {
     this._authStore = authStore;
     this._configStore = configStore;
+    this._scheduleContextStore = scheduleContextStore;
     autorun(() => {
-      if (!this._authStore.isLoading) {
+      if (!this._authStore.isLoading && this._header === null) {
         const currentUser = this._authStore.user;
         if (currentUser !== null) {
           this._header = new HeaderVM(
-            new NavigationVM(filterItemsForUser(navigationItems, currentUser))
+            new NavigationVM(filterItemsForUser(navigationItems, currentUser)),
+            new ActiveScheduleVM(scheduleContextStore)
           );
         }
       }

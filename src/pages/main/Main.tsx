@@ -12,6 +12,7 @@ import { createCn } from "../../utils";
 import "./Main.css";
 import { LoadsDistributionPage } from "../LoadsDistribution";
 import { Catalogs } from "../Catalogs";
+import { useScheduleStore } from "../../models/schedule-context-store/use-schedule-context-store";
 
 const WrTimeManagement = withPermission(
   Permission.TimeManagementPage,
@@ -22,7 +23,10 @@ const cn = createCn("main");
 
 const MainComponent = () => {
   const navigate = useNavigate();
-  const [mainVM] = useState(() => new MainViewModel(authStore, configStore));
+  const scheduleContextStore = useScheduleStore();
+  const [mainVM] = useState(
+    () => new MainViewModel({ authStore, configStore, scheduleContextStore })
+  );
   useEffect(() => {
     if (!mainVM.isLoading && !mainVM.isAuth) {
       navigate("/login");
