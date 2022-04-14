@@ -372,6 +372,10 @@ export class TimeManagementVM {
   }
 
   constructor(params: Params) {
+    if (scheduleContextStore.currentSchedule === null) {
+      throw new Error("Не найдено текущее расписание");
+    }
+    this._schedule = scheduleContextStore.currentSchedule;
     this._canChangeTeacher = params.canChangeTeacher;
     this._teacherField = new LinkFieldVM<TeacherEntity>(
       { label: "Преподаватель", isDisabled: !params.canChangeTeacher },
@@ -536,10 +540,6 @@ export class TimeManagementVM {
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
     });
-    if (scheduleContextStore.currentSchedule === null) {
-      throw new Error("Не найдено текущее расписание");
-    }
-    this._schedule = scheduleContextStore.currentSchedule;
     this._loadsInfo = new LoadsInfoVM(this._schedule);
     this._conflictsInfo = new ConflictsInfoVM(this._schedule, (weekDay) => {
       this._selectedDay = weekDay;

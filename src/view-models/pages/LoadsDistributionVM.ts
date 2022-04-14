@@ -7,6 +7,7 @@ import { teacherEntityRepository } from "../../models/teacher/TeacherRepository"
 import { autorun, makeAutoObservable } from "mobx";
 import { loadRepository } from "../../models/load/LoadRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
+import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
 
 type PlanItem = {
   subjectName: string;
@@ -208,8 +209,17 @@ export class LoadsDistributionVM {
     });
   }
 
-  constructor(schedule: ScheduleEntity) {
-    this._schedule = schedule;
+  constructor() {
+    if (scheduleContextStore.currentSchedule === null) {
+      throw new Error("Не найдено текущее расписание");
+    }
+    this._schedule = scheduleContextStore.currentSchedule;
+    autorun(() => {
+      if (scheduleContextStore.currentSchedule === null) {
+        throw new Error("Не найдено текущее расписание");
+      }
+      this._schedule = scheduleContextStore.currentSchedule;
+    });
     makeAutoObservable(this);
     autorun(() => this._calculateItems());
   }

@@ -4,6 +4,7 @@ import { autorun, makeAutoObservable } from "mobx";
 import { pupilRepository } from "../models/pupil/PupilRepository";
 import { subjectRepository } from "../models/subject/SubjectRepository";
 import { groupRepository } from "../models/group/GroupRepository";
+import { scheduleContextStore } from "../models/schedule-context-store/ScheduleContextStore";
 
 type ConflictItem = {
   text: string;
@@ -114,6 +115,12 @@ export class ConflictsInfoVM {
     this._schedule = schedule;
     this._onWeekDayClick = onWeekDayClick;
     makeAutoObservable(this);
+    autorun(() => {
+      if (scheduleContextStore.currentSchedule === null) {
+        throw new Error("Не найдено текущее расписание");
+      }
+      this._schedule = scheduleContextStore.currentSchedule;
+    });
     autorun(() => this._calculateItems());
     autorun(() => {
       if (this._items.length === 0) {

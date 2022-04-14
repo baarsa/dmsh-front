@@ -23,9 +23,9 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
         />
         <Select
           label={"Год обучения"}
-          onChange={(value) => (vm.selectedYear = value)}
+          onChange={(values) => (vm.selectedYear = values[0])}
           options={vm.yearOptions}
-          value={vm.selectedYear}
+          values={[vm.selectedYear]}
         />
       </div>
       {vm.pupilItemsOnPage.map((item) => (
