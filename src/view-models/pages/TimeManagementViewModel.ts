@@ -23,13 +23,10 @@ import { ConflictsInfoVM } from "../ConflictsInfoVM";
 import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
 import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
+import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
 
 type Params = {
-  schedule: ScheduleEntity;
   canChangeTeacher: boolean;
-  teacherField: LinkFieldVM<TeacherEntity>;
-  pupilField: LinkFieldVM<PupilEntity>;
-  groupField: LinkFieldVM<GroupEntity>;
 };
 
 export class TimeManagementVM {
@@ -375,11 +372,42 @@ export class TimeManagementVM {
   }
 
   constructor(params: Params) {
-    this._schedule = params.schedule;
     this._canChangeTeacher = params.canChangeTeacher;
-    this._teacherField = params.teacherField;
-    this._pupilField = params.pupilField;
-    this._groupField = params.groupField;
+    this._teacherField = new LinkFieldVM<TeacherEntity>(
+      { label: "Преподаватель", isDisabled: !params.canChangeTeacher },
+      { entityModel: teacherEntityRepository, shouldSetInitialValue: true }
+    );
+    this._pupilField = new LinkFieldVM<PupilEntity>(
+      { label: "Учащийся" },
+      {
+        entityModel: pupilRepository,
+        entitiesFilter: (pupil) => {
+          return this._schedule.loads.some(
+            (load) =>
+              load.teacher === this._teacherField.value?.id &&
+              load.pupil === pupil.id
+          );
+        },
+        shouldSetInitialValue: true,
+      }
+    );
+    this._groupField = new LinkFieldVM<GroupEntity>(
+      { label: "Группа" },
+      {
+        entityModel: groupRepository,
+        entitiesFilter: (group) => {
+          return group.pupils.every((pupil) =>
+            this._schedule.loads.some(
+              (load) =>
+                load.teacher === this._teacherField.value?.id &&
+                load.pupil === pupil
+            )
+          );
+        },
+        shouldSetInitialValue: true,
+      }
+      // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
+    );
     this._teacherTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
@@ -508,19 +536,21 @@ export class TimeManagementVM {
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
     });
-    const currentTeacher = this.teacherField.value;
-    if (currentTeacher === null) {
-      throw new Error();
+    if (scheduleContextStore.currentSchedule === null) {
+      throw new Error("Не найдено текущее расписание");
     }
-    this._loadsInfo = new LoadsInfoVM(this._schedule, currentTeacher.id);
-    this._conflictsInfo = new ConflictsInfoVM(
-      this._schedule,
-      currentTeacher.id,
-      (weekDay) => {
-        this._selectedDay = weekDay;
-      }
-    );
+    this._schedule = scheduleContextStore.currentSchedule;
+    this._loadsInfo = new LoadsInfoVM(this._schedule);
+    this._conflictsInfo = new ConflictsInfoVM(this._schedule, (weekDay) => {
+      this._selectedDay = weekDay;
+    });
     makeAutoObservable(this);
+    autorun(() => {
+      if (scheduleContextStore.currentSchedule === null) {
+        throw new Error("Не найдено текущее расписание");
+      }
+      this._schedule = scheduleContextStore.currentSchedule;
+    });
     autorun(() => this.setTeacherTimelineSpans());
     autorun(() => this.setTakerTimelineSpans());
     autorun(() => this.setCommonTimelineSpans());

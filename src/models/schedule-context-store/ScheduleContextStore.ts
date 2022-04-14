@@ -5,6 +5,7 @@ import {
   scheduleContextService,
 } from "../../services/schedule-context-service";
 import { scheduleRepository } from "../schedule/ScheduleRepository";
+import { makeAutoObservable } from "mobx";
 
 class ScheduleContextStore implements IScheduleContextStore {
   get currentSchedule() {
@@ -30,6 +31,7 @@ class ScheduleContextStore implements IScheduleContextStore {
 
   constructor(service: IScheduleContextService) {
     this._service = service;
+    makeAutoObservable(this);
     void this._init();
   }
 }

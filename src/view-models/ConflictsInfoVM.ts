@@ -103,17 +103,15 @@ export class ConflictsInfoVM {
   private _items: ConflictItem[] = [];
   private _isSynchronized: boolean = false;
   private _isOpen: boolean = false;
-  private _teacherId: number;
+  private _teacherId: number | null = null;
   private _schedule: ScheduleEntity;
   private readonly _onWeekDayClick: (weekDay: number) => void;
 
   constructor(
     schedule: ScheduleEntity,
-    teacherId: number,
     onWeekDayClick: (weekDay: number) => void
   ) {
     this._schedule = schedule;
-    this._teacherId = teacherId;
     this._onWeekDayClick = onWeekDayClick;
     makeAutoObservable(this);
     autorun(() => this._calculateItems());

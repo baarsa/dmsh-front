@@ -5,6 +5,7 @@ import { autorun, makeAutoObservable } from "mobx";
 import { subjectRepository } from "../models/subject/SubjectRepository";
 import { ScheduleEntity } from "../models/schedule/ScheduleEntity";
 import { groupRepository } from "../models/group/GroupRepository";
+import { scheduleContextStore } from "../models/schedule-context-store/ScheduleContextStore";
 
 type LoadItem = {
   text: string;
@@ -91,13 +92,18 @@ export class LoadsInfoVM {
   private _isSynchronized: boolean = false;
   private _isOpen: boolean = false;
   private _title: string = "";
-  private _teacherId: number;
+  private _teacherId: number | null = null;
   private _schedule: ScheduleEntity;
 
-  constructor(schedule: ScheduleEntity, teacherId: number) {
+  constructor(schedule: ScheduleEntity) {
     this._schedule = schedule;
-    this._teacherId = teacherId;
     makeAutoObservable(this);
+    autorun(() => {
+      if (scheduleContextStore.currentSchedule === null) {
+        throw new Error("Не найдено текущее расписание");
+      }
+      this._schedule = scheduleContextStore.currentSchedule;
+    });
     autorun(() => this._calculateItems());
   }
 }
