@@ -1,4 +1,4 @@
-import { NavigationItemDescription } from "../../view-models/NavigationVM";
+import { DisplayNavigationItemDescription } from "../../view-models/NavigationVM";
 import { Link } from "react-router-dom";
 import "./NavigationItem.css";
 import { createCn } from "../../utils";
@@ -9,11 +9,15 @@ type LinkProps = {
   text: string;
   fullUrl: string;
   currentUrl: string;
+  isDisabled: boolean;
 };
 const NavigationItemLink = (props: LinkProps) => {
   return (
     <Link
-      className={cn("link", { active: props.currentUrl === props.fullUrl })}
+      className={cn("link", {
+        active: props.currentUrl === props.fullUrl,
+        disabled: props.isDisabled,
+      })}
       to={props.fullUrl}
     >
       {props.text}
@@ -25,7 +29,7 @@ type GroupProps = {
   text: string;
   fullUrl: string;
   currentUrl: string;
-  items: NavigationItemDescription[];
+  items: DisplayNavigationItemDescription[];
 };
 const NavigationItemGroup = (props: GroupProps) => {
   return (
@@ -42,6 +46,7 @@ const NavigationItemGroup = (props: GroupProps) => {
             text={item.text}
             currentUrl={props.currentUrl}
             fullUrl={`${props.fullUrl}${item.url}`}
+            isDisabled={item.isDisabled}
           />
         ))}
       </div>
@@ -53,7 +58,8 @@ type NavigationItemProps = {
   text: string;
   fullUrl: string;
   currentUrl: string;
-  childrenItems?: NavigationItemDescription[];
+  childrenItems?: DisplayNavigationItemDescription[];
+  isDisabled: boolean;
 };
 
 export const NavigationItem = (props: NavigationItemProps) => {

@@ -1,8 +1,4 @@
-import {
-  filterItemsForUser,
-  navigationItems,
-  NavigationVM,
-} from "../NavigationVM";
+import { NavigationVM } from "../NavigationVM";
 import { autorun, makeAutoObservable } from "mobx";
 import { IAuthStore } from "../../models/auth-store/IAuthStore";
 import { IConfigStore } from "../../models/config-store/IConfigStore";
@@ -43,7 +39,7 @@ export class MainViewModel {
         const currentUser = this._authStore.user;
         if (currentUser !== null) {
           this._header = new HeaderVM(
-            new NavigationVM(filterItemsForUser(navigationItems, currentUser)),
+            new NavigationVM(scheduleContextStore, currentUser),
             new ActiveScheduleVM(scheduleContextStore)
           );
         }

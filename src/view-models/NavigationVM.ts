@@ -1,14 +1,24 @@
 import { Permission } from "../models/rolesAndPermissions";
 import { IUser } from "../models/user/IUser";
+import { IScheduleContextStore } from "../models/schedule-context-store/IScheduleContextStore";
+import { makeAutoObservable } from "mobx";
 
-export type NavigationItemDescription = {
+type NavigationItemDescription = {
   text: string;
   url: string;
   permission: Permission | null;
   children?: NavigationItemDescription[];
+  needActiveSchedule?: boolean;
 };
 
-export const navigationItems = [
+export type DisplayNavigationItemDescription = {
+  text: string;
+  url: string;
+  children?: DisplayNavigationItemDescription[];
+  isDisabled: boolean;
+};
+
+const navigationItems = [
   {
     text: "Справочники",
     url: "/catalogs",
@@ -50,11 +60,13 @@ export const navigationItems = [
     text: "Составление расписания",
     url: "/time-management",
     permission: Permission.TimeManagementPage,
+    needActiveSchedule: true,
   },
   {
     text: "Распределение нагрузки",
     url: "/loads",
     permission: Permission.LoadsPage,
+    needActiveSchedule: true,
   },
   {
     text: "Администрирование",
@@ -63,30 +75,49 @@ export const navigationItems = [
   },
 ];
 
-export const filterItemsForUser = (
+const mapItems = (
   items: NavigationItemDescription[],
-  user: IUser
-): NavigationItemDescription[] => {
+  user: IUser,
+  hasActiveSchedule: boolean
+): DisplayNavigationItemDescription[] => {
   return items
     .filter((item) => user.hasPermission(item.permission))
-    .map((item) =>
-      item.children === undefined
-        ? item
+    .map((item) => {
+      const mappedItem = {
+        text: item.text,
+        url: item.url,
+        isDisabled: item.needActiveSchedule === true && !hasActiveSchedule,
+      };
+      return item.children === undefined
+        ? mappedItem
         : {
-            ...item,
-            children: filterItemsForUser(item.children, user),
-          }
-    )
-    .filter((item) => item.children === undefined || item.children.length > 1);
+            ...mappedItem,
+            children: mapItems(item.children, user, hasActiveSchedule),
+          };
+    })
+    .filter(
+      (item) =>
+        !("children" in item) ||
+        item.children === undefined ||
+        item.children.length > 1
+    );
 };
 
 export class NavigationVM {
-  get items(): NavigationItemDescription[] {
-    return this._items;
+  get items(): DisplayNavigationItemDescription[] {
+    return mapItems(
+      this._items,
+      this._user,
+      this._scheduleStore.currentSchedule !== null
+    );
   }
-  private readonly _items: NavigationItemDescription[];
+  private readonly _items: NavigationItemDescription[] = navigationItems;
+  private readonly _scheduleStore: IScheduleContextStore;
+  private readonly _user: IUser;
 
-  constructor(items: NavigationItemDescription[]) {
-    this._items = items;
+  constructor(scheduleStore: IScheduleContextStore, user: IUser) {
+    this._scheduleStore = scheduleStore;
+    this._user = user;
+    makeAutoObservable(this);
   }
 }

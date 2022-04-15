@@ -3,10 +3,11 @@ import { useLocation } from "react-router-dom";
 import { NavigationItem } from "./NavigationItem";
 import "./Navigation.css";
 import { createCn } from "../../utils";
+import { observer } from "mobx-react-lite";
 
 const cn = createCn("navigation");
 
-export const Navigation = (props: { vm: NavigationVM }) => {
+export const Navigation = observer((props: { vm: NavigationVM }) => {
   const location = useLocation();
   return (
     <nav className={cn()}>
@@ -17,8 +18,9 @@ export const Navigation = (props: { vm: NavigationVM }) => {
           fullUrl={item.url}
           currentUrl={location.pathname}
           childrenItems={item.children}
+          isDisabled={item.isDisabled}
         />
       ))}
     </nav>
   );
-};
+});

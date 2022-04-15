@@ -19,6 +19,11 @@
       background: var(--button-main);
       color: black;
     }
+    &_disabled,
+    &_disabled:visited {
+      color: grey;
+      pointer-events: none;
+    }
   }
 
   &__item-group-popup {
