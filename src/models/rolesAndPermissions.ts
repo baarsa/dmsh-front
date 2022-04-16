@@ -10,6 +10,12 @@ export enum Role {
   Deputy,
 }
 
+export const rolesNames: Record<Role, string> = {
+  [Role.Admin]: "Администратор",
+  [Role.Teacher]: "Преподаватель",
+  [Role.Deputy]: "Завуч",
+};
+
 export const rolesPermissions: Record<Role, Permission[]> = {
   [Role.Admin]: [Permission.AdminPage],
   [Role.Teacher]: [Permission.TimeManagementPage],

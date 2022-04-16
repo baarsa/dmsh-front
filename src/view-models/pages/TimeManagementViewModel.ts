@@ -22,7 +22,7 @@ import { LoadsInfoVM } from "../LoadsInfoVM";
 import { ConflictsInfoVM } from "../ConflictsInfoVM";
 import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
-import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
+import { teacherRepository } from "../../models/teacher/TeacherRepository";
 import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
 
 type Params = {
@@ -335,7 +335,7 @@ export class TimeManagementVM {
   private async _onTimelineCrossClick(id: number, type: SpanType) {
     let spanDesc = "";
     const lessons = lessonRepository.entities;
-    const teachers = teacherEntityRepository.entities;
+    const teachers = teacherRepository.entities;
     const pupils = pupilRepository.entities;
     const subjects = subjectRepository.entities;
     if (type === "lesson") {
@@ -379,7 +379,7 @@ export class TimeManagementVM {
     this._canChangeTeacher = params.canChangeTeacher;
     this._teacherField = new LinkFieldVM<TeacherEntity>(
       { label: "Преподаватель", isDisabled: !params.canChangeTeacher },
-      { entityModel: teacherEntityRepository, shouldSetInitialValue: true }
+      { entityModel: teacherRepository, shouldSetInitialValue: true }
     );
     this._pupilField = new LinkFieldVM<PupilEntity>(
       { label: "Учащийся" },

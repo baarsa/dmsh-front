@@ -3,7 +3,7 @@ import { TeacherEntity } from "../../models/teacher/TeacherEntity";
 import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { programRepository } from "../../models/program/ProgramRepository";
 import { pupilRepository } from "../../models/pupil/PupilRepository";
-import { teacherEntityRepository } from "../../models/teacher/TeacherRepository";
+import { teacherRepository } from "../../models/teacher/TeacherRepository";
 import { autorun, makeAutoObservable } from "mobx";
 import { loadRepository } from "../../models/load/LoadRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
@@ -124,7 +124,7 @@ export class LoadsDistributionVM {
     // get schedule's pupils (with years)
     const allPupils = pupilRepository.entities;
     const allPrograms = programRepository.entities;
-    const allTeachers = teacherEntityRepository.entities;
+    const allTeachers = teacherRepository.entities;
     const allSubjects = subjectRepository.entities;
     if (!programRepository.isSynchronized) {
       return;
@@ -152,7 +152,7 @@ export class LoadsDistributionVM {
             teacherField: new LinkFieldVM<TeacherEntity>(
               { label: "Преподаватель" },
               {
-                entityModel: teacherEntityRepository,
+                entityModel: teacherRepository,
                 entitiesFilter: (teacher) =>
                   teacher.subjects.includes(currentPupil.specialSubject),
                 initialValues:
@@ -183,7 +183,7 @@ export class LoadsDistributionVM {
                 teacherField: new LinkFieldVM<TeacherEntity>(
                   { label: "Преподаватель" },
                   {
-                    entityModel: teacherEntityRepository,
+                    entityModel: teacherRepository,
                     entitiesFilter: (teacher) =>
                       teacher.subjects.includes(Number(subjectId)),
                     initialValues:

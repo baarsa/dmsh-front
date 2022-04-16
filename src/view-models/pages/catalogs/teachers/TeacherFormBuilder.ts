@@ -5,7 +5,7 @@ import { BooleanFieldVM } from "../../../fields/BooleanField";
 import { StringFieldVM } from "../../../fields/StringField";
 import { LinkFieldVM } from "../../../fields/LinkField";
 import { TeacherEntity } from "../../../../models/teacher/TeacherEntity";
-import { teacherEntityRepository } from "../../../../models/teacher/TeacherRepository";
+import { teacherRepository } from "../../../../models/teacher/TeacherRepository";
 import { ITeacher } from "../../../../entities/ITeacher";
 
 type TeacherFormParameters = {
@@ -18,7 +18,7 @@ export class TeacherFormBuilder {
     let teacher: TeacherEntity | null = null;
     let subjects: SubjectEntity[] = [];
     if (teacherId !== undefined) {
-      teacher = await teacherEntityRepository.getEntityById(teacherId);
+      teacher = await teacherRepository.getEntityById(teacherId);
       if (teacher === null) {
         throw new Error("Не найден преподаватель");
       }
@@ -62,8 +62,8 @@ export class TeacherFormBuilder {
           ? undefined
           : async (data: ITeacher) => {
               return teacherId === undefined
-                ? teacherEntityRepository.addEntity(data)
-                : teacherEntityRepository.updateEntity(teacherId, data);
+                ? teacherRepository.addEntity(data)
+                : teacherRepository.updateEntity(teacherId, data);
             },
     });
   }

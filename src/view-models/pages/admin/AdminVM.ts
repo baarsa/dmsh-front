@@ -1,7 +1,7 @@
 import { autorun, makeAutoObservable } from "mobx";
-import { teacherRepository } from "../../../../models/teacher/TeacherRepository";
+import { userRepository } from "../../../models/user/UserRepository";
 
-export class TeachersVM {
+export class AdminVM {
   get isLoading(): boolean {
     return this._isLoading;
   }
@@ -17,13 +17,13 @@ export class TeachersVM {
   constructor() {
     makeAutoObservable(this);
     autorun(() => {
-      this._items = Object.values(teacherRepository.entities).map((entity) => ({
+      this._items = Object.values(userRepository.entities).map((entity) => ({
         id: entity.id,
         text: entity.name,
       }));
     });
     autorun(() => {
-      this._isLoading = !teacherRepository.isSynchronized;
+      this._isLoading = !userRepository.isSynchronized;
     });
   }
 }

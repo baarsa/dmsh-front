@@ -13,6 +13,7 @@ import "./Main.css";
 import { LoadsDistributionPage } from "../LoadsDistribution";
 import { Catalogs } from "../Catalogs";
 import { useScheduleStore } from "../../models/schedule-context-store/use-schedule-context-store";
+import { Admin } from "../admin/Admin";
 
 const WrTimeManagement = withPermission(
   Permission.TimeManagementPage,
@@ -46,6 +47,7 @@ const MainComponent = () => {
           <Route path="catalogs/*" element={<Catalogs />} />
           <Route path="time-management" element={<WrTimeManagement />} />
           <Route path="loads" element={<LoadsDistributionPage />} />
+          <Route path="admin/*" element={<Admin />} />
         </Routes>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { GenericEntityRepository } from "../shared";
 import { createTeacherEntity, TeacherEntity } from "./TeacherEntity";
 import { teacherService } from "../../services/teacherService";
 
-class TeacherEntityRepository extends GenericEntityRepository<
+class TeacherRepository extends GenericEntityRepository<
   TeacherEntity,
   ITeacher
 > {
@@ -16,4 +16,4 @@ class TeacherEntityRepository extends GenericEntityRepository<
   }
 }
 
-export const teacherEntityRepository = new TeacherEntityRepository();
+export const teacherRepository = new TeacherRepository();
