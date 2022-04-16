@@ -22,6 +22,10 @@ class AuthStore implements IAuthStore {
     return false;
   }
 
+  async logout() {
+    return this._authService.logout();
+  }
+
   private _isLoading = true;
   private _user: IUser | null = null;
   private _authService: IAuthService;

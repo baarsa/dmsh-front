@@ -36,12 +36,9 @@ const MainComponent = () => {
   if (mainVM.isLoading) {
     return <div>Loading...</div>; // TODO: spinner
   }
-  if (mainVM.header === null) {
-    throw new Error("No header");
-  }
   return (
     <div className={cn()}>
-      <Header vm={mainVM.header} />
+      {mainVM.header !== null && <Header vm={mainVM.header} />}
       <div className={cn("content")}>
         <Routes>
           <Route path="catalogs/*" element={<Catalogs />} />

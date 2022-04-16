@@ -1,5 +1,6 @@
 import { NavigationVM } from "./NavigationVM";
 import { ActiveScheduleVM } from "./ActiveScheduleVM";
+import { authStore } from "../models/auth-store/AuthStore";
 
 export class HeaderVM {
   get activeSchedule(): ActiveScheduleVM {
@@ -10,7 +11,11 @@ export class HeaderVM {
   }
 
   get userName() {
-    return "пользователь"; // TODO get from auth store
+    return authStore.user?.name;
+  }
+
+  async handleLogout() {
+    return authStore.logout();
   }
 
   private readonly _navigation: NavigationVM;

@@ -2,7 +2,7 @@ import { IEntityService } from "./shared";
 import { IUser } from "../entities/IUser";
 
 let current = 1;
-let items = [
+export let items = [
   {
     id: current++,
     name: "Агафонов Николай Алексеевич",
