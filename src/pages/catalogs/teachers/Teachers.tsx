@@ -6,6 +6,7 @@ import { TeachersVM } from "../../../view-models/pages/catalogs/teachers/Teacher
 import { CreateTeacher } from "./CreateTeacher";
 import { EditTeacher } from "./EditTeacher";
 import { ViewTeacher } from "./ViewTeacher";
+import {UploadFileModal} from "../../../components/upload-file-modal/UploadFileModal";
 
 export const Teachers = observer(() => {
   const [teachersVM] = useState(() => new TeachersVM());
@@ -19,12 +20,16 @@ export const Teachers = observer(() => {
         ...item,
         link: String(item.id),
       }))}
+      onUploadClick={() => {
+        teachersVM.openFileUploadModal();
+      }}
     >
       <Routes>
         <Route path="create" element={<CreateTeacher />} />
         <Route path=":id/edit" element={<EditTeacher />} />
         <Route path=":id" element={<ViewTeacher />} />
       </Routes>
+        { teachersVM.uploadFileModal && <UploadFileModal vm={teachersVM.uploadFileModal} /> }
     </EntitySection>
   );
 });

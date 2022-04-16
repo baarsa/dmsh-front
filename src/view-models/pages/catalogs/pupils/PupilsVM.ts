@@ -1,7 +1,12 @@
 import { autorun, makeAutoObservable } from "mobx";
 import { pupilRepository } from "../../../../models/pupil/PupilRepository";
+import {UploadFileVM} from "../../../modals/UploadFileVM";
+import {fileUploadService} from "../../../../services/fileUploadService";
 
 export class PupilsVM {
+  get uploadFileModal(): UploadFileVM | null {
+    return this._uploadFileModal;
+  }
   get isLoading(): boolean {
     return this._isLoading;
   }
@@ -13,6 +18,21 @@ export class PupilsVM {
     text: string;
   }[] = [];
   private _isLoading: boolean = true;
+  private _uploadFileModal: UploadFileVM | null = null;
+
+  openFileUploadModal() {
+    this._uploadFileModal = new UploadFileVM({
+      title: 'Загрузить список учащихся',
+      onClose: () => {
+        this._uploadFileModal = null;
+      },
+      onConfirm: async (data) => {
+        await fileUploadService.uploadPupils(data);
+        this._uploadFileModal = null;
+        document.location.reload();
+      }
+    });
+  }
 
   constructor() {
     makeAutoObservable(this);
