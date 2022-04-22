@@ -52,7 +52,11 @@ export const groupService: IEntityService<IGroup> = {
     return items;
   },
   async fetchById(_id: number) {
-    return items.find(({ id }) => id === _id) ?? null;
+    const item = items.find(({ id }) => id === _id);
+    if (item === undefined) {
+      throw new Error();
+    }
+    return item;
   },
   async saveToServer(data: IGroup) {
     const newItem = {
@@ -63,13 +67,13 @@ export const groupService: IEntityService<IGroup> = {
     items = [...items, newItem];
     return newItem;
   },
-  async update(id: number, data: IGroup) {
+  async update(id: number, data: Partial<IGroup>) {
     items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
-    return {
-      id,
-      lessonTakerId: currentLt++,
-      ...data,
-    };
+    const newItem = items.find((item) => item.id === id);
+    if (newItem === undefined) {
+      throw new Error();
+    }
+    return newItem;
   },
   async remove(_id: number) {
     items = items.filter(({ id }) => id !== _id);

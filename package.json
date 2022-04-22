@@ -12,6 +12,7 @@
     "@mui/material": "^5.5.0",
     "@types/react-notifications-component": "^3.1.1",
     "css-loader": "^6.6.0",
+    "express": "^4.17.3",
     "mobx": "6.3.13",
     "mobx-react-lite": "3.2.3",
     "postcss-preset-env": "^7.4.2",
@@ -54,7 +55,8 @@
     "webpack-dev-server": "^4.7.4"
   },
   "scripts": {
-    "start": "webpack serve --config webpack.dev.config.ts",
+    "start-dev": "webpack serve --config webpack.dev.config.ts",
+    "start": "webpack build --config webpack.prod.config.ts && node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  dmsh-front-env:
+    container_name: dmsh-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - dmsh-proxy-network
+networks:
+  dmsh-proxy-network:
+    external:
+      name: dmsh-network
