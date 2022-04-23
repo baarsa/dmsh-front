@@ -1,4 +1,4 @@
-import { items as users } from "./userService";
+import { api } from "./__api";
 
 export interface IBackendUser {
   name: string;
@@ -9,41 +9,17 @@ export interface IBackendUser {
 export interface IAuthService {
   login(username: string, password: string): Promise<IBackendUser | null>;
   logout(): Promise<void>;
-  auth(): Promise<IBackendUser | null>; // with cookie
+  auth(): Promise<IBackendUser | null>;
 }
 
-// fake
-const user = {
-  name: "Admin A. Admin",
-  roles: [0, 1, 2],
-  teacherId: 1,
-};
-
 export const authService: IAuthService = {
-  login(username: string, password: string) {
-    return new Promise((res) => {
-      setTimeout(() => {
-        const user = users.find(
-          (u) => u.login === username && u.password === password
-        );
-        res(user ?? null);
-      }, 1000);
-    });
+  async login(username: string, password: string) {
+    return await api.post('login', { username, password }) as IBackendUser | null;
   },
-  logout() {
-    return new Promise((res) => {
-      setTimeout(() => {
-        // remove cookie
-        res();
-      }, 1000);
-    });
+  async logout() {
+    await api.get('logout');
   },
-  auth() {
-    return new Promise((res) => {
-      // send request with cookie/token
-      setTimeout(() => {
-        res(user);
-      }, 500);
-    });
+  async auth() {
+    return await api.get('auth') as IBackendUser | null;
   },
 };
