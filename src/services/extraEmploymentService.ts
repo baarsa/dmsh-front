@@ -1,89 +1,22 @@
 import { IExtraEmployment } from "../entities/IExtraEmployment";
 import { IEntityService } from "./shared";
-
-// total fake
-let current = 10;
-let items = [
-  {
-    id: current++,
-    schedule: 1,
-    person: 1,
-    description: "Дворец культуры",
-    weekDay: 0,
-    start: 12.5 * 60,
-    end: 15 * 60,
-  },
-  {
-    id: current++,
-    schedule: 1,
-    person: 50,
-    description: "Общая школа",
-    weekDay: 0,
-    start: 10 * 60,
-    end: 13.5 * 60,
-  },
-  {
-    id: current++,
-    schedule: 1,
-    person: 50,
-    description: "Общая школа",
-    weekDay: 1,
-    start: 10 * 60,
-    end: 13.5 * 60,
-  },
-  {
-    id: current++,
-    schedule: 1,
-    person: 50,
-    description: "Общая школа",
-    weekDay: 2,
-    start: 10 * 60,
-    end: 13.5 * 60,
-  },
-  {
-    id: current++,
-    schedule: 1,
-    person: 50,
-    description: "Общая школа",
-    weekDay: 3,
-    start: 10 * 60,
-    end: 13.5 * 60,
-  },
-  {
-    id: current++,
-    schedule: 1,
-    person: 50,
-    description: "Общая школа",
-    weekDay: 4,
-    start: 10 * 60,
-    end: 13.5 * 60,
-  },
-];
+import {api} from "./__api";
+import {Stored} from "../models/shared";
 
 export const extraEmploymentService: IEntityService<IExtraEmployment> = {
   async fetchAll() {
-    return items;
+    return await api.get('extra-employment/all') as Stored<IExtraEmployment>[];
   },
-  async fetchById(_id: number) {
-    return items.find(({ id }) => id === _id) ?? null;
+  async fetchById(id: number) {
+    return await api.get(`extra-employment/${id}`) as Stored<IExtraEmployment>;
   },
   async saveToServer(data: IExtraEmployment) {
-    const newItem = {
-      id: current++,
-      ...data,
-    };
-    items = [...items, newItem];
-    return newItem;
+    return await api.post('extra-employment', data) as Stored<IExtraEmployment>;
   },
   async update(id: number, data: Partial<IExtraEmployment>) {
-    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
-    const newItem = items.find((item) => item.id === id);
-    if (newItem === undefined) {
-      throw new Error();
-    }
-    return newItem;
+    return await api.post(`extra-employment/${id}`, data) as Stored<IExtraEmployment>;
   },
-  async remove(_id: number) {
-    items = items.filter(({ id }) => id !== _id);
+  async remove(id: number) {
+    await api.delete(`extra-employment/${id}`);
   },
 };

@@ -22,5 +22,11 @@ export const api = {
             return response.json();
         }
         return null;
+    },
+    async delete(url: string) {
+        await fetch(`${API_URL}${url}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
     }
 }
