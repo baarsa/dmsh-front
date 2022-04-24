@@ -28,12 +28,21 @@
 
   &__item-group-popup {
     display: none;
+    z-index: 10;
     position: absolute;
     bottom: 0;
     box-sizing: border-box;
-    padding-top: 8px;
     transform: translateY(100%);
-    flex-direction: column;
+
+    &-content {
+      display: flex;
+      margin-top: var(--gap-s);
+      flex-direction: column;
+      background: var(--bg-main);
+      border: 1px solid var(--dark-grey);
+      border-radius: 4px;
+      padding: var(--gap-s);
+    }
   }
 
   &__item-group {
@@ -45,6 +54,6 @@
   }
 
   &__item-group:hover &__item-group-popup {
-    display: flex;
+    display: block;
   }
 }

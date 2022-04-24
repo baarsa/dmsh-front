@@ -40,6 +40,7 @@ const NavigationItemGroup = (props: GroupProps) => {
     >
       <div>{props.text}</div>
       <div className={cn("item-group-popup")}>
+        <div className={cn("item-group-popup-content")}>
         {props.items.map((item) => (
           <NavigationItemLink
             key={item.text}
@@ -49,6 +50,7 @@ const NavigationItemGroup = (props: GroupProps) => {
             isDisabled={item.isDisabled}
           />
         ))}
+        </div>
       </div>
     </div>
   );

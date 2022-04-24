@@ -12,6 +12,7 @@
   --font-main: 14px "Tahoma", sans-serif;
 
   --gap-xs: 4px;
+  --gap-s: 8px;
   --gap-l: 24px;
 }
 
@@ -25,5 +26,5 @@ body {
 }
 
 #root {
-  width: 1200px;
+  width: 1500px;
 }

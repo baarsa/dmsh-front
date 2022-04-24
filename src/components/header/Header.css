@@ -10,4 +10,20 @@
     height: 48px;
     background: url(./clef.svg) center center no-repeat;
   }
+
+  &__username {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  &__logout {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: var(--button-tertiary);
+    }
+  }
 }

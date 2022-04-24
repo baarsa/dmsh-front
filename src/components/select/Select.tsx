@@ -4,6 +4,8 @@ import {
   MenuItem,
   Select as MaterialSelect,
 } from "@mui/material";
+import {createCn} from "../../utils";
+import './Select.css';
 
 type Props = {
   disabled?: boolean;
@@ -15,6 +17,8 @@ type Props = {
   multiple?: boolean;
 };
 
+const cn = createCn("select");
+
 export const Select = ({
   label,
   values,
@@ -24,7 +28,7 @@ export const Select = ({
   error = false,
   multiple = false,
 }: Props) => (
-  <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+  <FormControl sx={{ m: 1, width: 300, mt: 3 }} className={cn()}>
     <InputLabel shrink={true}>{label}</InputLabel>
     <MaterialSelect
       multiple={multiple}

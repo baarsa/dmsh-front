@@ -22,6 +22,7 @@ export const Header = ({ vm }: Props) => {
       <div className={cn("username")}>
         Добрый день, {vm.userName}!
         <div
+            className={cn("logout")}
           onClick={async () => {
             await vm.handleLogout();
             navigate("/login");
