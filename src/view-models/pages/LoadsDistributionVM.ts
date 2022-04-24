@@ -33,16 +33,19 @@ const MAX_YEAR = 8;
 
 const YEAR_OPTIONS = (() => {
   const options = [];
-  for (let i = 0; i < MAX_YEAR; i++) {
+  for (let i = 1; i <= MAX_YEAR; i++) {
     options.push({
       value: i,
-      text: String(i + 1),
+      text: String(i),
     });
   }
   return options;
 })();
 
 export class LoadsDistributionVM {
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
   get selectedYear(): number {
     return this._selectedYear;
   }
@@ -90,6 +93,7 @@ export class LoadsDistributionVM {
 
   private _itemsOnPage = ITEMS_ON_PAGE_VALUES[0];
   private _currentPage = 0;
+  private _isLoading = false;
 
   private _onTeacherUpdate({
     pupilId,
@@ -120,24 +124,17 @@ export class LoadsDistributionVM {
     }
   }
 
-  private _calculateItems() {
-    // get schedule's pupils (with years)
-    const allPupils = pupilRepository.entities;
-    const allPrograms = programRepository.entities;
-    const allTeachers = teacherRepository.entities;
-    const allSubjects = subjectRepository.entities;
-    if (!programRepository.isSynchronized) {
-      return;
-    }
+  private async _calculateItems() {
+    this._isLoading = true;
     const pupilsIds = Object.keys(this._schedule.pupilsYears).map((key) =>
       Number(key)
     );
     this._items = pupilsIds.map((pupilId) => {
-      const currentPupil = allPupils[pupilId];
-      const program = allPrograms[currentPupil.program];
+      const currentPupil = pupilRepository.entities[pupilId];
+      const program = programRepository.entities[currentPupil.program];
       const plans = program.yearPlans;
       const pupilYear = this._schedule.pupilsYears[pupilId];
-      const thisYearPlan = plans[pupilYear];
+      const thisYearPlan = plans[pupilYear - 1];
       const specialityLoad = this._schedule.loads.find(
         ({ pupil, subject }) =>
           pupil === pupilId && subject === currentPupil.specialSubject
@@ -147,7 +144,7 @@ export class LoadsDistributionVM {
         year: pupilYear,
         planItems: [
           {
-            subjectName: allSubjects[currentPupil.specialSubject].name,
+            subjectName: subjectRepository.entities[currentPupil.specialSubject].name,
             halfHours: thisYearPlan.specialityHalfHours,
             teacherField: new LinkFieldVM<TeacherEntity>(
               { label: "Преподаватель" },
@@ -158,7 +155,7 @@ export class LoadsDistributionVM {
                 initialValues:
                   specialityLoad === undefined
                     ? []
-                    : [allTeachers[specialityLoad.teacher]],
+                    : [teacherRepository.entities[specialityLoad.teacher]],
                 hasEmptyValueOption: true,
                 valueChangedCallback: (teacherValue) => {
                   this._onTeacherUpdate({
@@ -178,7 +175,7 @@ export class LoadsDistributionVM {
                   pupil === pupilId && subject === Number(subjectId)
               );
               return {
-                subjectName: allSubjects[Number(subjectId)].name,
+                subjectName: subjectRepository.entities[Number(subjectId)].name,
                 halfHours,
                 teacherField: new LinkFieldVM<TeacherEntity>(
                   { label: "Преподаватель" },
@@ -189,7 +186,7 @@ export class LoadsDistributionVM {
                     initialValues:
                       subjectLoad === undefined
                         ? []
-                        : [allTeachers[subjectLoad.teacher]],
+                        : [teacherRepository.entities[subjectLoad.teacher]],
                     hasEmptyValueOption: true,
                     valueChangedCallback: (teacherValue) => {
                       this._onTeacherUpdate({
@@ -206,7 +203,20 @@ export class LoadsDistributionVM {
           ),
         ],
       };
-    });
+    }); // todo destroy the pyramid
+    this._isLoading = false;
+  }
+
+  private async _init() {
+    this._isLoading = true;
+    await Promise.all([
+      pupilRepository.getAllEntities(),
+      programRepository.getAllEntities(),
+      teacherRepository.getAllEntities(),
+      subjectRepository.getAllEntities(),
+    ]);
+    this._isLoading = false;
+    autorun(() => this._calculateItems());
   }
 
   constructor() {
@@ -221,6 +231,6 @@ export class LoadsDistributionVM {
       this._schedule = scheduleContextStore.currentSchedule;
     });
     makeAutoObservable(this);
-    autorun(() => this._calculateItems());
+    void this._init();
   }
 }

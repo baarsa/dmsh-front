@@ -5,6 +5,7 @@ import "./LoadsDistribution.css";
 import { observer } from "mobx-react-lite";
 import { Paginate } from "../paginate/Paginate";
 import { Select } from "../select/Select";
+import { CircularProgress } from "@mui/material";
 
 type Props = {
   vm: LoadsDistributionVM;
@@ -28,10 +29,11 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
           values={[vm.selectedYear]}
         />
       </div>
+        { vm.isLoading && <CircularProgress /> }
       {vm.pupilItemsOnPage.map((item) => (
         <div key={item.name} className={cn("pupil-item")}>
           <div className={cn("pupil-title")}>
-            {item.name}, {item.year + 1} класс
+            {item.name}, {item.year} класс
           </div>
           <div>
             {item.planItems.map((planItem) => (
