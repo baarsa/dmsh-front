@@ -3,8 +3,12 @@ import { ILinkField } from "./fields/ILinkField";
 import { LinkFieldVM } from "./fields/LinkField";
 import { scheduleRepository } from "../models/schedule/ScheduleRepository";
 import { ScheduleEntity } from "../models/schedule/ScheduleEntity";
+import {autorun, makeAutoObservable} from "mobx";
 
 export class ActiveScheduleVM {
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
   get scheduleField(): ILinkField {
     return this._scheduleField;
   }
@@ -24,10 +28,18 @@ export class ActiveScheduleVM {
     }
   );
 
+  private _isLoading = true;
+
   constructor(store: IScheduleContextStore) {
     this._scheduleContextStore = store;
-    this._scheduleField.setValues(
-      store.currentSchedule === null ? [] : [store.currentSchedule.id]
-    );
+    autorun(() => {
+      if (!this._scheduleContextStore.isLoading && this._isLoading) {
+        this._scheduleField.setValues(
+            store.currentSchedule === null ? [] : [store.currentSchedule.id]
+        );
+        this._isLoading = false;
+      }
+    });
+    makeAutoObservable(this);
   }
 }

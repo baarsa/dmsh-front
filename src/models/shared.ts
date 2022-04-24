@@ -30,7 +30,7 @@ export abstract class GenericEntityRepository<T, K>
   private createEntity: (props: Stored<K>) => Stored<T>;
   private _entities: Record<number, Stored<T>> = {};
   private _isSynchronized = false; // think if we need another cases (something was implicitly updated? added new child in relations?)
-  async getAllEntities() {
+  private async _getAllEntities() {
     try {
       const items = await this._entityService.fetchAll(); // todo maybe exclude ids we already have?
       items.forEach((item) => {
@@ -44,7 +44,13 @@ export abstract class GenericEntityRepository<T, K>
   }
   get entities(): Record<number, Stored<T>> {
     if (!this._isSynchronized) {
-      void this.getAllEntities();
+      void this._getAllEntities();
+    }
+    return this._entities;
+  }
+  async getAllEntities() {
+    if (!this._isSynchronized) {
+      return this._getAllEntities();
     }
     return this._entities;
   }

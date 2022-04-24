@@ -8,6 +8,9 @@ import { scheduleRepository } from "../schedule/ScheduleRepository";
 import { makeAutoObservable } from "mobx";
 
 class ScheduleContextStore implements IScheduleContextStore {
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
   get currentSchedule() {
     return this._schedule;
   }
@@ -19,6 +22,7 @@ class ScheduleContextStore implements IScheduleContextStore {
 
   private _schedule: ScheduleEntity | null = null;
   private _service: IScheduleContextService;
+  private _isLoading = true;
 
   private async _init() {
     const scheduleId = await this._service.getCurrentScheduleId();
@@ -26,7 +30,7 @@ class ScheduleContextStore implements IScheduleContextStore {
       return;
     }
     this._schedule = await scheduleRepository.getEntityById(scheduleId);
-    // maybe add loading state;
+    this._isLoading = false;
   }
 
   constructor(service: IScheduleContextService) {
