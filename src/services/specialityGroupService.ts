@@ -1,46 +1,21 @@
 import { IEntityService } from "./shared";
 import { ISpecialityGroup } from "../entities/ISpecialityGroup";
-
-let current = 1;
-let items = [
-  {
-    id: current++,
-    name: "Струнные",
-  },
-  {
-    id: current++,
-    name: "Духовые",
-  },
-];
+import {api} from "./__api";
 
 export const specialityGroupService: IEntityService<ISpecialityGroup> = {
   async fetchAll() {
-    return items;
+    return api.get('speciality-group/all');
   },
-  async fetchById(_id: number) {
-    const item = items.find(({ id }) => id === _id);
-    if (item === undefined) {
-      throw new Error();
-    }
-    return item;
+  async fetchById(id: number) {
+    return api.get(`speciality-group/${id}`);
   },
   async saveToServer(data: ISpecialityGroup) {
-    const newItem = {
-      id: current++,
-      ...data,
-    };
-    items = [...items, newItem];
-    return newItem;
+    return api.post('speciality-group', data);
   },
   async update(id: number, data: Partial<ISpecialityGroup>) {
-    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
-    const newItem = items.find((item) => item.id === id);
-    if (newItem === undefined) {
-      throw new Error();
-    }
-    return newItem;
+    return api.post(`speciality-group/${id}`, data);
   },
-  async remove(_id: number) {
-    items = items.filter(({ id }) => id !== _id);
+  async remove(id: number) {
+    await api.delete(`speciality-group/${id}`)
   },
 };

@@ -1,81 +1,21 @@
 import { IGroup } from "../entities/IGroup";
 import { IEntityService } from "./shared";
-import { INITIAL_PUPIL_ID, items as pupils } from "./pupilService";
-import { items as schedules } from "./scheduleService";
-
-// total fake
-let current = 1;
-let currentLt = 1000;
-export let items = [
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Первый класс",
-    pupils: [50, 51, 52],
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Второй класс",
-    pupils: [51, 52],
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Струнные, первый класс",
-    pupils: pupils
-      .filter((pupil) => pupil.program === 1)
-      .map((pupil) => pupil.id),
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Хор, первая группа",
-    pupils: pupils
-      .filter(
-        (pupil) =>
-          pupil.program === 1 &&
-          [0, 1, 2].includes(schedules[0].pupilsYears[pupil.id])
-      )
-      .map((pupil) => pupil.id),
-  },
-  {
-    id: current++,
-    lessonTakerId: currentLt++,
-    name: "Холопов, муз. литература",
-    pupils: [INITIAL_PUPIL_ID, INITIAL_PUPIL_ID + 1],
-  },
-];
+import {api} from "./__api";
 
 export const groupService: IEntityService<IGroup> = {
   async fetchAll() {
-    return items;
+    return api.get('group/all');
   },
-  async fetchById(_id: number) {
-    const item = items.find(({ id }) => id === _id);
-    if (item === undefined) {
-      throw new Error();
-    }
-    return item;
+  async fetchById(id: number) {
+    return api.get(`group/${id}`);
   },
   async saveToServer(data: IGroup) {
-    const newItem = {
-      id: current++,
-      lessonTakerId: currentLt++,
-      ...data,
-    };
-    items = [...items, newItem];
-    return newItem;
+    return api.post('group', data);
   },
   async update(id: number, data: Partial<IGroup>) {
-    items = items.map((item) => (item.id === id ? { ...item, ...data } : item));
-    const newItem = items.find((item) => item.id === id);
-    if (newItem === undefined) {
-      throw new Error();
-    }
-    return newItem;
+    return api.post(`group/${id}`, data);
   },
-  async remove(_id: number) {
-    items = items.filter(({ id }) => id !== _id);
+  async remove(id: number) {
+    await api.delete(`group/${id}`)
   },
 };
