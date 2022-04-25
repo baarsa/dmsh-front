@@ -30,6 +30,7 @@ type Params = {
 };
 
 export class TimeManagementVM {
+  private _isLoading = true;
   private _schedule: ScheduleEntity;
   private _selectedDay = 0;
   private _dayOptions = [
@@ -52,7 +53,6 @@ export class TimeManagementVM {
   private readonly _loadsInfo: LoadsInfoVM;
   private readonly _conflictsInfo: ConflictsInfoVM;
 
-  //modal
   private _confirmExtraEmployment: ConfirmExtraEmploymentVM | null = null;
   private _confirmLesson: ConfirmLessonVM | null = null;
   private _confirmAction: ConfirmActionVM | null = null;
@@ -99,14 +99,11 @@ export class TimeManagementVM {
     }
   }
 
-  // view handlers
   handleDayChange(day: number) {
     this._selectedDay = day;
   }
 
-  // getters for view
   get dayOptions() {
-    // try to make it real getters and hide properties
     return this._dayOptions;
   }
   get selectedDay() {
@@ -163,6 +160,10 @@ export class TimeManagementVM {
 
   get conflictsInfo() {
     return this._conflictsInfo;
+  }
+
+  get isLoading() {
+    return this._isLoading;
   }
 
   private _getPersonsInLesson(lesson: LessonEntity) {
@@ -578,6 +579,15 @@ export class TimeManagementVM {
       const currentTeacher = this._teacherField.value;
       if (currentTeacher !== null) {
         this._conflictsInfo.teacherId = currentTeacher.id;
+      }
+    });
+    autorun(() => {
+      if (
+        this._isLoading &&
+        !this._loadsInfo.isLoading &&
+        !this._conflictsInfo.isLoading
+      ) {
+        this._isLoading = false;
       }
     });
   }

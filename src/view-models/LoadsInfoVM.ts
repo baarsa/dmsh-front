@@ -38,8 +38,12 @@ export class LoadsInfoVM {
   get isDistributed() {
     return this._items.every((item) => item.assignedCount >= item.totalCount);
   }
+  get isLoading() {
+    return this._isLoading;
+  }
 
   private _calculateItems() {
+    this._isLoading = true;
     const loads = this._schedule.loads.filter(
       (load) => load.teacher === this._teacherId
     );
@@ -92,6 +96,7 @@ export class LoadsInfoVM {
       };
     });
     this._isSynchronized = true;
+    this._isLoading = false;
   }
 
   private _items: LoadItem[] = [];
@@ -100,6 +105,7 @@ export class LoadsInfoVM {
   private _title: string = "";
   private _teacherId: number | null = null;
   private _schedule: ScheduleEntity;
+  private _isLoading = true;
 
   constructor(schedule: ScheduleEntity) {
     this._schedule = schedule;

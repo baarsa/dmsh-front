@@ -1,23 +1,23 @@
 .time-management {
-  padding-left: 24px;
+  padding: 0 var(--gap-l) var(--gap-l) var(--gap-l);
+  position: relative;
 
   &__controls {
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: var(--gap-l);
   }
 
   &__taker-radio {
-    margin-top: 10px;
     margin-left: auto;
   }
 
   &__timeline-container {
-    margin-bottom: 36px;
+    margin-bottom: var(--gap-xl);
   }
 
   &__timeline-label {
     display: inline-block;
-    padding: 4px;
+    padding: var(--gap-xs);
     background: var(--button-main);
     font-weight: bold;
     border-radius: 4px 4px 0 0;

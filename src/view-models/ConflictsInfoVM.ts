@@ -44,11 +44,23 @@ export class ConflictsInfoVM {
     this._onWeekDayClick(weekDay);
   }
 
+  get isLoading() {
+    return this._isLoading;
+  }
+
   private _calculateItems() {
+    this._isLoading = true;
     const items: ConflictItem[] = [];
     const pupils = pupilRepository.entities;
     const groups = groupRepository.entities;
     const subjects = subjectRepository.entities;
+    if (
+      !pupilRepository.isSynchronized ||
+      !groupRepository.isSynchronized ||
+      !subjectRepository.isSynchronized
+    ) {
+      return;
+    }
     const lessons = this._schedule.lessons.filter(
       (lesson) => lesson.teacher === this._teacherId
     );
@@ -100,6 +112,7 @@ export class ConflictsInfoVM {
     }
     this._items = items;
     this._isSynchronized = true;
+    this._isLoading = false;
   }
   private _items: ConflictItem[] = [];
   private _isSynchronized: boolean = false;
@@ -107,6 +120,7 @@ export class ConflictsInfoVM {
   private _teacherId: number | null = null;
   private _schedule: ScheduleEntity;
   private readonly _onWeekDayClick: (weekDay: number) => void;
+  private _isLoading = true;
 
   constructor(
     schedule: ScheduleEntity,

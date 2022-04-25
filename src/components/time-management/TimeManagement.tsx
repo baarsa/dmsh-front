@@ -12,6 +12,7 @@ import { ConfirmAction } from "../confirm-action/ConfirmAction";
 import { ConfirmSpanChange } from "../confirm-span-change/ConfirmSpanChange";
 import { LoadsInfo } from "../loads-info/LoadsInfo";
 import { ConflictsInfo } from "../conflicts-info/ConflictsInfo";
+import { SpinnerOnCenter } from "../spinner-on-center/SpinnerOnCenter";
 
 const cn = createCn("time-management");
 
@@ -22,6 +23,7 @@ type Props = {
 export const TimeManagement = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
+      {vm.isLoading && <SpinnerOnCenter />}
       <LoadsInfo vm={vm.loadsInfo} />
       <ConflictsInfo vm={vm.conflictsInfo} />
       <div className={cn("controls")}>
