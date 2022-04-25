@@ -4,8 +4,8 @@ import {
   MenuItem,
   Select as MaterialSelect,
 } from "@mui/material";
-import {createCn} from "../../utils";
-import './Select.css';
+import { createCn } from "../../utils";
+import "./Select.css";
 
 type Props = {
   disabled?: boolean;

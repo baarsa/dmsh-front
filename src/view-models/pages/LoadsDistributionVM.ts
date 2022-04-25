@@ -144,7 +144,8 @@ export class LoadsDistributionVM {
         year: pupilYear,
         planItems: [
           {
-            subjectName: subjectRepository.entities[currentPupil.specialSubject].name,
+            subjectName:
+              subjectRepository.entities[currentPupil.specialSubject].name,
             halfHours: thisYearPlan.specialityHalfHours,
             teacherField: new LinkFieldVM<TeacherEntity>(
               { label: "Преподаватель" },

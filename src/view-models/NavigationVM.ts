@@ -1,7 +1,7 @@
-import {Permission} from "../models/rolesAndPermissions";
-import {IUser} from "../models/user/IUser";
-import {IScheduleContextStore} from "../models/schedule-context-store/IScheduleContextStore";
-import {makeAutoObservable} from "mobx";
+import { Permission } from "../models/rolesAndPermissions";
+import { IUser } from "../models/user/IUser";
+import { IScheduleContextStore } from "../models/schedule-context-store/IScheduleContextStore";
+import { makeAutoObservable } from "mobx";
 
 type NavigationItemDescription = {
   text: string;

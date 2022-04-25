@@ -1,7 +1,7 @@
 import { autorun, makeAutoObservable } from "mobx";
 import { pupilRepository } from "../../../../models/pupil/PupilRepository";
-import {UploadFileVM} from "../../../modals/UploadFileVM";
-import {fileUploadService} from "../../../../services/fileUploadService";
+import { UploadFileVM } from "../../../modals/UploadFileVM";
+import { fileUploadService } from "../../../../services/fileUploadService";
 
 export class PupilsVM {
   get uploadFileModal(): UploadFileVM | null {
@@ -22,7 +22,7 @@ export class PupilsVM {
 
   openFileUploadModal() {
     this._uploadFileModal = new UploadFileVM({
-      title: 'Загрузить список учащихся',
+      title: "Загрузить список учащихся",
       onClose: () => {
         this._uploadFileModal = null;
       },
@@ -30,7 +30,7 @@ export class PupilsVM {
         await fileUploadService.uploadPupils(data);
         this._uploadFileModal = null;
         document.location.reload();
-      }
+      },
     });
   }
 

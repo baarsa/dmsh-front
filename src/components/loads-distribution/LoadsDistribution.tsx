@@ -29,7 +29,7 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
           values={[vm.selectedYear]}
         />
       </div>
-        { vm.isLoading && <CircularProgress /> }
+      {vm.isLoading && <CircularProgress />}
       {vm.pupilItemsOnPage.map((item) => (
         <div key={item.name} className={cn("pupil-item")}>
           <div className={cn("pupil-title")}>

@@ -46,7 +46,13 @@ export class MainViewModel {
       }
     });
     autorun(() => {
-      if (this._isLoading && !this._authStore.isLoading && !this._configStore.isLoading && (this.header !== null && !this.header.isLoading)) {
+      if (
+        this._isLoading &&
+        !this._authStore.isLoading &&
+        !this._configStore.isLoading &&
+        this.header !== null &&
+        !this.header.isLoading
+      ) {
         this._isLoading = false;
       }
     });

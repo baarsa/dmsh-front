@@ -6,7 +6,7 @@ import { PupilsVM } from "../../../view-models/pages/catalogs/pupils/PupilsVM";
 import { EditPupil } from "./EditPupil";
 import { ViewPupil } from "./ViewPupil";
 import { CreatePupil } from "./CreatePupil";
-import {UploadFileModal} from "../../../components/upload-file-modal/UploadFileModal";
+import { UploadFileModal } from "../../../components/upload-file-modal/UploadFileModal";
 
 export const Pupils = observer(() => {
   const [pupilsVM] = useState(() => new PupilsVM());
@@ -29,7 +29,9 @@ export const Pupils = observer(() => {
         <Route path=":id/edit" element={<EditPupil />} />
         <Route path=":id" element={<ViewPupil />} />
       </Routes>
-      { pupilsVM.uploadFileModal && <UploadFileModal vm={pupilsVM.uploadFileModal} /> }
+      {pupilsVM.uploadFileModal && (
+        <UploadFileModal vm={pupilsVM.uploadFileModal} />
+      )}
     </EntitySection>
   );
 });

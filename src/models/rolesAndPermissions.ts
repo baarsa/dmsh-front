@@ -2,7 +2,7 @@ export enum Permission {
   AdminPage,
   TimeManagementPage,
   LoadsPage,
-  Catalogs
+  Catalogs,
 }
 
 export enum Role {
@@ -20,5 +20,9 @@ export const rolesNames: Record<Role, string> = {
 export const rolesPermissions: Record<Role, Permission[]> = {
   [Role.Admin]: [Permission.AdminPage, Permission.Catalogs],
   [Role.Teacher]: [Permission.TimeManagementPage],
-  [Role.Deputy]: [Permission.LoadsPage, Permission.TimeManagementPage, Permission.Catalogs],
+  [Role.Deputy]: [
+    Permission.LoadsPage,
+    Permission.TimeManagementPage,
+    Permission.Catalogs,
+  ],
 };

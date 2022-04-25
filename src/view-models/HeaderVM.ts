@@ -1,7 +1,7 @@
 import { NavigationVM } from "./NavigationVM";
 import { ActiveScheduleVM } from "./ActiveScheduleVM";
 import { authStore } from "../models/auth-store/AuthStore";
-import {makeAutoObservable} from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export class HeaderVM {
   get activeSchedule(): ActiveScheduleVM {

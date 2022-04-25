@@ -6,7 +6,7 @@ import { TeachersVM } from "../../../view-models/pages/catalogs/teachers/Teacher
 import { CreateTeacher } from "./CreateTeacher";
 import { EditTeacher } from "./EditTeacher";
 import { ViewTeacher } from "./ViewTeacher";
-import {UploadFileModal} from "../../../components/upload-file-modal/UploadFileModal";
+import { UploadFileModal } from "../../../components/upload-file-modal/UploadFileModal";
 
 export const Teachers = observer(() => {
   const [teachersVM] = useState(() => new TeachersVM());
@@ -29,7 +29,9 @@ export const Teachers = observer(() => {
         <Route path=":id/edit" element={<EditTeacher />} />
         <Route path=":id" element={<ViewTeacher />} />
       </Routes>
-        { teachersVM.uploadFileModal && <UploadFileModal vm={teachersVM.uploadFileModal} /> }
+      {teachersVM.uploadFileModal && (
+        <UploadFileModal vm={teachersVM.uploadFileModal} />
+      )}
     </EntitySection>
   );
 });

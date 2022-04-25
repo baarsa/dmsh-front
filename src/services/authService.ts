@@ -14,12 +14,15 @@ export interface IAuthService {
 
 export const authService: IAuthService = {
   async login(username: string, password: string) {
-    return await api.post('login', { username, password }) as IBackendUser | null;
+    return (await api.post("login", {
+      username,
+      password,
+    })) as IBackendUser | null;
   },
   async logout() {
-    await api.get('logout');
+    await api.get("logout");
   },
   async auth() {
-    return await api.get('auth') as IBackendUser | null;
+    return (await api.get("auth")) as IBackendUser | null;
   },
 };

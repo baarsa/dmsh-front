@@ -3,7 +3,7 @@ import { ILinkField } from "./fields/ILinkField";
 import { LinkFieldVM } from "./fields/LinkField";
 import { scheduleRepository } from "../models/schedule/ScheduleRepository";
 import { ScheduleEntity } from "../models/schedule/ScheduleEntity";
-import {autorun, makeAutoObservable} from "mobx";
+import { autorun, makeAutoObservable } from "mobx";
 
 export class ActiveScheduleVM {
   get isLoading(): boolean {
@@ -35,7 +35,7 @@ export class ActiveScheduleVM {
     autorun(() => {
       if (!this._scheduleContextStore.isLoading && this._isLoading) {
         this._scheduleField.setValues(
-            store.currentSchedule === null ? [] : [store.currentSchedule.id]
+          store.currentSchedule === null ? [] : [store.currentSchedule.id]
         );
         this._isLoading = false;
       }
