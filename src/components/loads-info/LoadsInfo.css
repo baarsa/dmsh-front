@@ -8,6 +8,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    &-left {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__icon {
@@ -23,5 +28,10 @@
     .loads-info__icon {
       transform: rotate3d(1, 0, 0, 180deg);
     }
+  }
+
+  &__load-item {
+    display: flex;
+    align-items: center;
   }
 }

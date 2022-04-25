@@ -35,6 +35,10 @@ export class LoadsInfoVM {
     }
     return this._items;
   }
+  get isDistributed() {
+    return this._items.every(item => item.assignedCount >= item.totalCount);
+  }
+
   private _calculateItems() {
     const loads = this._schedule.loads.filter(
       (load) => load.teacher === this._teacherId
@@ -77,7 +81,7 @@ export class LoadsInfoVM {
           : yearPlan.commonSubjectsHalfHours[load.subject];
 
       return {
-        text: `${subjects[load.subject].name} для ${pupils[load.pupil].name}`,
+        text: `${subjects[load.subject].name} для учащегося ${pupils[load.pupil].name}`,
         assignedCount: lessonsForLoad.reduce(
           (acc, lesson) => acc + lesson.end - lesson.start,
           0
