@@ -83,7 +83,7 @@ export class ConflictsInfoVM {
           weekDay: lesson.weekDay,
           start: lesson.start,
           end: lesson.end,
-          text: `урок ${subjects[lesson.subject].name} с ${
+          text: `урок по предмету ${subjects[lesson.subject].name} с ${
             isPupil ? "учеником" : "группой"
           } ${takerName}`,
         };
@@ -92,7 +92,7 @@ export class ConflictsInfoVM {
         weekDay: employment.weekDay,
         start: employment.start,
         end: employment.end,
-        text: employment.description,
+        text: `занятость "${employment.description}"`,
       })),
     ];
     for (let i = 1; i < spans.length; i++) {

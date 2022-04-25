@@ -34,6 +34,7 @@ export const ConflictsInfo = observer(({ vm }: Props) => {
             <div key={i}>
               {item.text} в{" "}
               <span
+                title={"Нажмите для перехода к конфликту"}
                 className={cn("weekday")}
                 onClick={() => vm.handleWeekDayClick(item.day)}
               >
