@@ -4,6 +4,8 @@
 
   &__controls {
     display: flex;
+    align-items: center;
+    margin-top: var(--gap-m);
     margin-bottom: var(--gap-l);
   }
 
