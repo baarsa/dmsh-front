@@ -3,8 +3,11 @@
     margin-bottom: 16px !important;
   }
 
+  &__info {
+    white-space: pre-line;
+  }
+
   &__content {
-    width: 360px;
     display: flex;
     flex-direction: column;
     gap: 20px;

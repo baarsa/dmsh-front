@@ -4,6 +4,7 @@ import { makeObservable, observable } from "mobx";
 
 type Parameters = {
   text: string;
+  info: string;
   start: number;
   end: number;
   onSubmit: (parameters: SubmitParameters) => void;
@@ -16,6 +17,9 @@ type SubmitParameters = {
 };
 
 export class ConfirmSpanChangeVM extends ModalVM {
+  get info(): string {
+    return this._info;
+  }
   get start(): number {
     return this._start;
   }
@@ -52,6 +56,7 @@ export class ConfirmSpanChangeVM extends ModalVM {
   }
 
   private readonly _text: string;
+  private readonly _info: string;
   private _start: number;
   private _end: number;
 
@@ -63,9 +68,10 @@ export class ConfirmSpanChangeVM extends ModalVM {
   }
   _onSubmit: (parameters: SubmitParameters) => void;
 
-  constructor({ text, start, end, onSubmit, onClose }: Parameters) {
+  constructor({ text, info, start, end, onSubmit, onClose }: Parameters) {
     super(onClose);
     this._text = text;
+    this._info = info;
     this._start = start;
     this._end = end;
     this._onSubmit = onSubmit;

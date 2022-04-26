@@ -352,11 +352,13 @@ export class TimeManagementVM {
     start: number,
     end: number
   ) {
+    const info = this._getSpanInfo(id, type);
     return new Promise<boolean>((res) => {
       this._confirmSpanChange = new ConfirmSpanChangeVM({
         text: `Изменение параметров ${
           type === "lesson" ? "урока" : "занятости"
-        }`, // TODO: добавить подробности
+        }`,
+        info,
         start,
         end,
         onSubmit: async ({ start, end }) => {
@@ -419,12 +421,21 @@ export class TimeManagementVM {
     });
   }
 
-  private async _onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType }: { start: number, end: number, personType: 'teacher' | 'pupil' }) {
+  private async _onTimelineExtraEmploymentSpanDrawingEnd({
+    start,
+    end,
+    personType,
+  }: {
+    start: number;
+    end: number;
+    personType: "teacher" | "pupil";
+  }) {
     return new Promise<void>((res) => {
       this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
         start,
         end,
-        person: personType === 'teacher'
+        person:
+          personType === "teacher"
             ? this._teacherField.value?.name ?? ""
             : this._pupilField.value?.name ?? "", // TODO: обработать случай с undefined
         weekDay: WEEK_DAY_NAMES[this._selectedDay],
@@ -432,7 +443,8 @@ export class TimeManagementVM {
           this._isSynchronized = false;
           this._confirmExtraEmployment = null;
           try {
-            const personId = personType === "teacher"
+            const personId =
+              personType === "teacher"
                 ? this._teacherField.value?.id
                 : this._pupilField.value?.id;
             if (personId === undefined) {
@@ -460,27 +472,33 @@ export class TimeManagementVM {
     });
   }
 
-  private async _onTimelineLessonDrawingEnd({ start, end }: { start: number; end: number }) {
+  private async _onTimelineLessonDrawingEnd({
+    start,
+    end,
+  }: {
+    start: number;
+    end: number;
+  }) {
     return new Promise<void>((res) => {
       this._confirmLesson = new ConfirmLessonVM({
         start,
         end,
         teacher: this._teacherField.value?.name ?? "",
         taker:
-            this._lessonTakerType === "pupil"
-                ? this._pupilField.value?.name ?? ""
-                : this._groupField.value?.name ?? "",
+          this._lessonTakerType === "pupil"
+            ? this._pupilField.value?.name ?? ""
+            : this._groupField.value?.name ?? "",
         weekDay: WEEK_DAY_NAMES[this._selectedDay],
         filterSubjects: (subject: SubjectEntity) =>
-            this._getAvailableSubjectsForAssign().includes(subject.id),
+          this._getAvailableSubjectsForAssign().includes(subject.id),
         onSubmit: async ({ start, end, subject }) => {
           this._isSynchronized = false;
           this._confirmLesson = null;
           try {
             const currentTaker =
-                this._lessonTakerType === "pupil"
-                    ? this._pupilField.value
-                    : this._groupField.value;
+              this._lessonTakerType === "pupil"
+                ? this._pupilField.value
+                : this._groupField.value;
             const currentTeacher = this._teacherField.value;
             if (currentTaker === null || currentTeacher === null) {
               throw new Error("No pupil or teacher found"); // TODO: handle errors
@@ -506,6 +524,36 @@ export class TimeManagementVM {
         },
       });
     });
+  }
+
+  private _getSpanInfo(id: number, spanType: "lesson" | "extra") {
+    if (spanType === "lesson") {
+      const lesson = lessonRepository.entities[id];
+      const isLessonForGroup = Object.values(groupRepository.entities).some(
+        (group) => group.lessonTakerId === lesson.lessonTaker
+      );
+      const takerDescription = isLessonForGroup
+        ? `Группа: "${
+            Object.values(groupRepository.entities).find(
+              (group) => group.lessonTakerId === lesson.lessonTaker
+            )?.name
+          }"`
+        : `Учащийся: ${
+            Object.values(pupilRepository.entities).find(
+              (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+            )?.name
+          }`;
+      const teacher = teacherRepository.entities[lesson.teacher].name;
+      const subject = subjectRepository.entities[lesson.subject].name;
+      return `Предмет: ${subject}\nПреподаватель: ${teacher}\n${takerDescription}`;
+    } else {
+      const employment = extraEmploymentRepository.entities[id];
+      const isPupil = pupilRepository.entities[employment.person] !== undefined;
+      const personName = isPupil
+        ? pupilRepository.entities[employment.person].name
+        : teacherRepository.entities[employment.person].name;
+      return `${personName}, "${employment.description}"`;
+    }
   }
 
   constructor(params: Params) {
@@ -552,17 +600,29 @@ export class TimeManagementVM {
     this._teacherTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
-        return this._onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType: "teacher" });
+        return this._onTimelineExtraEmploymentSpanDrawingEnd({
+          start,
+          end,
+          personType: "teacher",
+        });
       },
-      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanChange: (...args) => {
+        return this._onTimelineSpanChange(...args);
+      },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args),
     });
     this._takerTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
-        return this._onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType: "pupil" });
+        return this._onTimelineExtraEmploymentSpanDrawingEnd({
+          start,
+          end,
+          personType: "pupil",
+        });
       },
-      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanChange: (...args) => {
+        return this._onTimelineSpanChange(...args);
+      },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), //fix text
     });
     this._commonTimeline = new TimelineVM({
@@ -570,7 +630,9 @@ export class TimeManagementVM {
       onSpanDrawingEnd: ({ start, end }) => {
         return this._onTimelineLessonDrawingEnd({ start, end });
       },
-      onSpanChange: (...args) => this._onTimelineSpanChange(...args),
+      onSpanChange: (...args) => {
+        return this._onTimelineSpanChange(...args);
+      },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
     });
     this._loadsInfo = new LoadsInfoVM(this._schedule);

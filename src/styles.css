@@ -15,7 +15,8 @@
   --gap-s: 8px;
   --gap-m: 12px;
   --gap-l: 24px;
-  --gap-xl: 36px;
+  --gap-xl: 28px;
+  --gap-xxl: 36px;
 }
 
 body {

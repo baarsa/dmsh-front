@@ -17,8 +17,9 @@ export const ConfirmSpanChange = observer(
             {vm.text}
           </Typography>
           <div className={cn("content")}>
+            <div className={cn("info")}>{vm.info}</div>
             <div className={cn("time-inputs")}>
-              С
+              с
               <TimeInput
                 className={cn("time-input")}
                 value={vm.start}

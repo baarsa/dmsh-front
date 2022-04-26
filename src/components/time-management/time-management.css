@@ -14,7 +14,7 @@
   }
 
   &__timeline-container {
-    margin-bottom: var(--gap-xl);
+    margin-bottom: var(--gap-xxl);
   }
 
   &__timeline-label {
