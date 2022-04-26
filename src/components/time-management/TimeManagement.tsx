@@ -24,6 +24,7 @@ export const TimeManagement = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
       {vm.isLoading && <SpinnerOnCenter />}
+      {!vm.isSynchronized && <SpinnerOnCenter withBlur={ false } />}
       <LoadsInfo vm={vm.loadsInfo} />
       <ConflictsInfo vm={vm.conflictsInfo} />
       <div className={cn("controls")}>

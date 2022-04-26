@@ -4,8 +4,12 @@ import { CircularProgress } from "@mui/material";
 
 const cn = createCn("spinner-on-center");
 
-export const SpinnerOnCenter = () => (
-  <div className={cn()}>
+type Props = {
+    withBlur?: boolean;
+}
+
+export const SpinnerOnCenter = ({ withBlur = true }: Props) => (
+  <div className={cn({ 'with-blur': withBlur })}>
     <CircularProgress className={cn("spinner")} />
   </div>
 );

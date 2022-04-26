@@ -30,7 +30,11 @@ type Params = {
 };
 
 export class TimeManagementVM {
+  get isSynchronized(): boolean {
+    return this._isSynchronized;
+  }
   private _isLoading = true;
+  private _isSynchronized = true;
   private _schedule: ScheduleEntity;
   private _selectedDay = 0;
   private _dayOptions = [
@@ -356,13 +360,15 @@ export class TimeManagementVM {
         start,
         end,
         onSubmit: async ({ start, end }) => {
+          this._isSynchronized = false;
+          this._confirmSpanChange = null;
           if (type === "lesson") {
             await lessonRepository.updateEntity(id, { start, end });
           } else {
             await extraEmploymentRepository.updateEntity(id, { start, end });
           }
-          this._confirmSpanChange = null;
           res(true);
+          this._isSynchronized = true;
         },
         onClose: () => {
           this._confirmSpanChange = null;
@@ -401,13 +407,104 @@ export class TimeManagementVM {
         this._confirmAction = null;
       },
       onConfirm: async () => {
+        this._isSynchronized = false;
+        this._confirmAction = null;
         if (type === "lesson") {
           await lessonRepository.removeEntity(id);
         } else {
           await extraEmploymentRepository.removeEntity(id);
         }
-        this._confirmAction = null;
+        this._isSynchronized = true;
       },
+    });
+  }
+
+  private async _onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType }: { start: number, end: number, personType: 'teacher' | 'pupil' }) {
+    return new Promise<void>((res) => {
+      this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
+        start,
+        end,
+        person: personType === 'teacher'
+            ? this._teacherField.value?.name ?? ""
+            : this._pupilField.value?.name ?? "", // TODO: обработать случай с undefined
+        weekDay: WEEK_DAY_NAMES[this._selectedDay],
+        onConfirm: async ({ start, end, description }) => {
+          this._isSynchronized = false;
+          this._confirmExtraEmployment = null;
+          try {
+            const personId = personType === "teacher"
+                ? this._teacherField.value?.id
+                : this._pupilField.value?.id;
+            if (personId === undefined) {
+              throw new Error("Не найден преподаватель/учащийся");
+            }
+            await extraEmploymentRepository.addEntity({
+              schedule: this._schedule.id,
+              person: personId,
+              weekDay: this._selectedDay,
+              start,
+              end,
+              description,
+            });
+            res();
+          } catch (e) {
+            addError(getErrorMessage(e));
+          }
+          this._isSynchronized = true;
+        },
+        onClose: () => {
+          res();
+          this._confirmExtraEmployment = null;
+        },
+      });
+    });
+  }
+
+  private async _onTimelineLessonDrawingEnd({ start, end }: { start: number; end: number }) {
+    return new Promise<void>((res) => {
+      this._confirmLesson = new ConfirmLessonVM({
+        start,
+        end,
+        teacher: this._teacherField.value?.name ?? "",
+        taker:
+            this._lessonTakerType === "pupil"
+                ? this._pupilField.value?.name ?? ""
+                : this._groupField.value?.name ?? "",
+        weekDay: WEEK_DAY_NAMES[this._selectedDay],
+        filterSubjects: (subject: SubjectEntity) =>
+            this._getAvailableSubjectsForAssign().includes(subject.id),
+        onSubmit: async ({ start, end, subject }) => {
+          this._isSynchronized = false;
+          this._confirmLesson = null;
+          try {
+            const currentTaker =
+                this._lessonTakerType === "pupil"
+                    ? this._pupilField.value
+                    : this._groupField.value;
+            const currentTeacher = this._teacherField.value;
+            if (currentTaker === null || currentTeacher === null) {
+              throw new Error("No pupil or teacher found"); // TODO: handle errors
+            }
+            await lessonRepository.addEntity({
+              schedule: this._schedule.id,
+              lessonTaker: currentTaker.lessonTakerId,
+              teacher: currentTeacher.id,
+              weekDay: this._selectedDay,
+              start,
+              end,
+              subject,
+            });
+          } catch (e) {
+            addError(getErrorMessage(e));
+          }
+          this._isSynchronized = true;
+          res();
+        },
+        onClose: () => {
+          res();
+          this._confirmLesson = null;
+        },
+      });
     });
   }
 
@@ -455,38 +552,7 @@ export class TimeManagementVM {
     this._teacherTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
-        return new Promise((res) => {
-          this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
-            start,
-            end,
-            person: this._teacherField.value?.name ?? "", // TODO: обработать случай с undefined
-            weekDay: WEEK_DAY_NAMES[this._selectedDay],
-            onConfirm: async ({ start, end, description }) => {
-              try {
-                const currentTeacher = this._teacherField.value;
-                if (currentTeacher === null) {
-                  throw new Error("No teacher found"); // TODO: handle errors
-                }
-                await extraEmploymentRepository.addEntity({
-                  schedule: this._schedule.id,
-                  person: currentTeacher.id,
-                  weekDay: this._selectedDay,
-                  start,
-                  end,
-                  description,
-                });
-                res();
-                this._confirmExtraEmployment = null;
-              } catch (e) {
-                addError(getErrorMessage(e));
-              }
-            },
-            onClose: () => {
-              res();
-              this._confirmExtraEmployment = null;
-            },
-          });
-        });
+        return this._onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType: "teacher" });
       },
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args),
@@ -494,38 +560,7 @@ export class TimeManagementVM {
     this._takerTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
-        return new Promise((res) => {
-          this._confirmExtraEmployment = new ConfirmExtraEmploymentVM({
-            start,
-            end,
-            person: this._pupilField.value?.name ?? "", // TODO: обработать случай с undefined
-            weekDay: WEEK_DAY_NAMES[this._selectedDay],
-            onConfirm: async ({ start, end, description }) => {
-              try {
-                const currentPupil = this._pupilField.value;
-                if (currentPupil === null) {
-                  throw new Error("No pupil found"); // TODO: handle errors
-                }
-                await extraEmploymentRepository.addEntity({
-                  schedule: this._schedule.id,
-                  person: currentPupil.id,
-                  weekDay: this._selectedDay,
-                  start,
-                  end,
-                  description,
-                });
-              } catch (e) {
-                addError(getErrorMessage(e));
-              }
-              res();
-              this._confirmExtraEmployment = null;
-            },
-            onClose: () => {
-              res();
-              this._confirmExtraEmployment = null;
-            },
-          });
-        });
+        return this._onTimelineExtraEmploymentSpanDrawingEnd({ start, end, personType: "pupil" });
       },
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), //fix text
@@ -533,49 +568,7 @@ export class TimeManagementVM {
     this._commonTimeline = new TimelineVM({
       spans: [],
       onSpanDrawingEnd: ({ start, end }) => {
-        return new Promise((res) => {
-          this._confirmLesson = new ConfirmLessonVM({
-            start,
-            end,
-            teacher: this._teacherField.value?.name ?? "",
-            taker:
-              this._lessonTakerType === "pupil"
-                ? this._pupilField.value?.name ?? ""
-                : this._groupField.value?.name ?? "",
-            weekDay: WEEK_DAY_NAMES[this._selectedDay],
-            filterSubjects: (subject: SubjectEntity) =>
-              this._getAvailableSubjectsForAssign().includes(subject.id),
-            onSubmit: async ({ start, end, subject }) => {
-              try {
-                const currentTaker =
-                  this._lessonTakerType === "pupil"
-                    ? this._pupilField.value
-                    : this._groupField.value;
-                const currentTeacher = this._teacherField.value;
-                if (currentTaker === null || currentTeacher === null) {
-                  throw new Error("No pupil or teacher found"); // TODO: handle errors
-                }
-                await lessonRepository.addEntity({
-                  schedule: this._schedule.id,
-                  lessonTaker: currentTaker.lessonTakerId,
-                  teacher: currentTeacher.id,
-                  weekDay: this._selectedDay,
-                  start,
-                  end,
-                  subject,
-                });
-              } catch (e) {
-                addError(getErrorMessage(e));
-              }
-              res();
-              this._confirmLesson = null;
-            },
-            onClose: () => {
-              res();
-              this._confirmLesson = null;
-            },
-          });
-        });
+        return this._onTimelineLessonDrawingEnd({ start, end });
       },
       onSpanChange: (...args) => this._onTimelineSpanChange(...args),
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
