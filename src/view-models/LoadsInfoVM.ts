@@ -78,7 +78,7 @@ export class LoadsInfoVM {
       if (pupilProgram === undefined) {
         throw new Error();
       }
-      const yearPlan = pupilProgram.yearPlans[year];
+      const yearPlan = pupilProgram.yearPlans[year - 1];
       const halfHoursForSubject =
         load.subject === pupil.specialSubject
           ? yearPlan.specialityHalfHours
