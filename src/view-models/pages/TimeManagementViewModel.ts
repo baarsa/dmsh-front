@@ -213,12 +213,29 @@ export class TimeManagementVM {
 
     this._teacherTimeline.spans = [
       ...relevantLessons.map((lesson) => {
+        const isLessonForGroup = Object.values(groupRepository.entities).some(
+          (group) => group.lessonTakerId === lesson.lessonTaker
+        );
+        const takerDescription = isLessonForGroup
+          ? `группа "${
+              Object.values(groupRepository.entities).find(
+                (group) => group.lessonTakerId === lesson.lessonTaker
+              )?.name
+            }"`
+          : `учащийся ${
+              Object.values(pupilRepository.entities).find(
+                (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+              )?.name
+            }`;
         return {
           id: lesson.id,
           start: lesson.start,
           end: lesson.end,
           type: "lesson" as const,
           text: subjects[lesson.subject]?.name,
+          longText: `${subjects[lesson.subject]?.name} (преподаватель ${
+            currentTeacher.name
+          }, ${takerDescription})`,
           persons: this._getPersonsInLesson(lesson),
         };
       }),
@@ -228,6 +245,7 @@ export class TimeManagementVM {
         end: employment.end,
         type: "extra" as const,
         text: employment.description,
+        longText: `Занятость ${employment.description} преподавателя ${currentTeacher.name}`,
         persons: [employment.person],
       })),
     ];
@@ -277,20 +295,41 @@ export class TimeManagementVM {
     }
     const subjects = subjectRepository.entities;
     this._takerTimeline.spans = [
-      ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => ({
-        id: lesson.id,
-        start: lesson.start,
-        end: lesson.end,
-        type: "lesson" as const,
-        text: subjects[lesson.subject]?.name,
-        persons: this._getPersonsInLesson(lesson),
-      })),
+      ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => {
+        const teacherName = teacherRepository.entities[lesson.teacher].name;
+        const isLessonForGroup = Object.values(groupRepository.entities).some(
+          (group) => group.lessonTakerId === lesson.lessonTaker
+        );
+        const takerDescription = isLessonForGroup
+          ? `группа "${
+              Object.values(groupRepository.entities).find(
+                (group) => group.lessonTakerId === lesson.lessonTaker
+              )?.name
+            }"`
+          : `учащийся ${
+              Object.values(pupilRepository.entities).find(
+                (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+              )?.name
+            }`;
+        return {
+          id: lesson.id,
+          start: lesson.start,
+          end: lesson.end,
+          type: "lesson" as const,
+          text: subjects[lesson.subject]?.name,
+          longText: `${
+            subjects[lesson.subject]?.name
+          } (преподаватель ${teacherName}, ${takerDescription})`,
+          persons: this._getPersonsInLesson(lesson),
+        };
+      }),
       ...relevantExtraEmployments.map((employment) => ({
         id: employment.id,
         start: employment.start,
         end: employment.end,
         type: "extra" as const,
         text: employment.description,
+        longText: `Занятость "${employment.description}" учащегося ${currentTaker.name}`,
         persons: [employment.person],
       })),
     ];

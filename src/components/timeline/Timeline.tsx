@@ -276,7 +276,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
                   e.stopPropagation();
                 }}
               />
-              <Tooltip title={span.text ?? ""}>
+              <Tooltip title={span.longText ?? ""}>
                 <div className={cn("span-text")}>{span.text}</div>
               </Tooltip>
             </div>

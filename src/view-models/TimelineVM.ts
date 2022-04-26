@@ -11,6 +11,7 @@ export type Span = {
   end: number;
   type: SpanType;
   text?: string;
+  longText?: string;
   persons: number[];
 };
 

@@ -49,24 +49,24 @@ export const TimeManagement = observer(({ vm }: Props) => {
       </div>
       <div className={cn("timeline-container")}>
         <div className={cn("timeline-label")}>
-          {vm.teacherField.value?.name}
+          Преподаватель {vm.teacherField.value?.name}
         </div>
         <Timeline vm={vm.teacherTimeline} />
       </div>
       <div className={cn("timeline-container")}>
         <div className={cn("timeline-label")}>
-          {vm.teacherField.value?.name} и{" "}
+          Преподаватель {vm.teacherField.value?.name} и{" "}
           {vm.lessonTakerType === "pupil"
-            ? vm.pupilField.value?.name
-            : vm.groupField.value?.name}
+            ? `учащийся ${vm.pupilField.value?.name}`
+            : `группа "${vm.groupField.value?.name}"`}
         </div>
         <Timeline vm={vm.commonTimeline} />
       </div>
       <div className={cn("timeline-container")}>
         <div className={cn("timeline-label")}>
           {vm.lessonTakerType === "pupil"
-            ? vm.pupilField.value?.name
-            : vm.groupField.value?.name}
+            ? `Учащийся ${vm.pupilField.value?.name}`
+            : `Группа "${vm.groupField.value?.name}"`}
         </div>
         <Timeline vm={vm.takerTimeline} />
       </div>
