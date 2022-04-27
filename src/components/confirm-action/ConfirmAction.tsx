@@ -11,8 +11,9 @@ export const ConfirmAction = ({ vm }: { vm: ConfirmActionVM }) => {
     <Modal onClose={() => vm.handleClose()}>
       <div className={cn()}>
         <Typography className={cn("title")} variant="h5" component="div">
-          {vm.text}
+          {vm.title}
         </Typography>
+        <div className={cn("info")}>{vm.text}</div>
         <div className={cn("buttons")}>
           <Button variant={"contained"} onClick={() => vm.handleConfirm()}>
             OK

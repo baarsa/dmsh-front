@@ -1,15 +1,20 @@
 import { ModalVM } from "./ModalVM";
 
 type Parameters = {
+  title: string;
   text: string;
   onConfirm: () => void;
   onClose: () => void;
 };
 
 export class ConfirmActionVM extends ModalVM {
+  get title(): string {
+    return this._title;
+  }
   get text(): string {
     return this._text;
   }
+  private readonly _title: string;
   private readonly _text: string;
 
   handleConfirm() {
@@ -17,8 +22,9 @@ export class ConfirmActionVM extends ModalVM {
   }
   private readonly _onConfirm: () => void;
 
-  constructor({ text, onConfirm, onClose }: Parameters) {
+  constructor({ title, text, onConfirm, onClose }: Parameters) {
     super(onClose);
+    this._title = title;
     this._text = text;
     this._onConfirm = onConfirm;
   }

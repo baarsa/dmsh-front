@@ -14,9 +14,12 @@ export const ConfirmLesson = observer(({ vm }: { vm: ConfirmLessonVM }) => {
     <Modal onClose={() => vm.handleClose()}>
       <div className={cn()}>
         <Typography className={cn("title")} variant="h5" component="div">
-          Добавить урок: {vm.weekDay}, преподаватель {vm.teacher} для {vm.taker}
+          Добавить урок
         </Typography>
         <div className={cn("content")}>
+          <div className={cn("info")}>
+            {vm.weekDay}, преподаватель {vm.teacher} для {vm.taker}
+          </div>
           <div className={cn("time-inputs")}>
             С
             <TimeInput

@@ -1,11 +1,16 @@
 .confirm-action {
   &__title {
-    margin-bottom: 16px !important;
+    margin-bottom: var(--gap-ml) !important;
+  }
+
+  &__info {
+    margin-bottom: var(--gap-l);
+    white-space: pre-wrap;
   }
 
   &__buttons {
     display: flex;
     justify-content: flex-end;
-    gap: 24px;
+    gap: var(--gap-l);
   }
 }

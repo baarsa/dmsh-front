@@ -15,9 +15,12 @@ export const ConfirmExtraEmployment = observer(
       <Modal onClose={() => vm.handleClose()}>
         <div className={cn()}>
           <Typography className={cn("title")} variant="h5" component="div">
-            Добавить занятость: {vm.weekDay} для {vm.person}
+            Добавить занятость
           </Typography>
           <div className={cn("content")}>
+            <div className={cn("info")}>
+              {vm.weekDay}, {vm.person}
+            </div>
             <div className={cn("time-inputs")}>
               С
               <TimeInput

@@ -217,20 +217,7 @@ export class TimeManagementVM {
 
     this._teacherTimeline.spans = [
       ...relevantLessons.map((lesson) => {
-        const isLessonForGroup = Object.values(groupRepository.entities).some(
-          (group) => group.lessonTakerId === lesson.lessonTaker
-        );
-        const takerDescription = isLessonForGroup
-          ? `группа "${
-              Object.values(groupRepository.entities).find(
-                (group) => group.lessonTakerId === lesson.lessonTaker
-              )?.name
-            }"`
-          : `учащийся ${
-              Object.values(pupilRepository.entities).find(
-                (pupil) => pupil.lessonTakerId === lesson.lessonTaker
-              )?.name
-            }`;
+        const takerDescription = this._getLessonTakerDescription(lesson);
         return {
           id: lesson.id,
           start: lesson.start,
@@ -249,10 +236,27 @@ export class TimeManagementVM {
         end: employment.end,
         type: "extra" as const,
         text: employment.description,
-        longText: `Занятость ${employment.description} преподавателя ${currentTeacher.name}`,
+        longText: `Занятость "${employment.description}" преподавателя ${currentTeacher.name}`,
         persons: [employment.person],
       })),
     ];
+  }
+
+  private _getLessonTakerDescription(lesson: LessonEntity) {
+    const isLessonForGroup = Object.values(groupRepository.entities).some(
+      (group) => group.lessonTakerId === lesson.lessonTaker
+    );
+    return isLessonForGroup
+      ? `группа: "${
+          Object.values(groupRepository.entities).find(
+            (group) => group.lessonTakerId === lesson.lessonTaker
+          )?.name
+        }"`
+      : `учащийся: ${
+          Object.values(pupilRepository.entities).find(
+            (pupil) => pupil.lessonTakerId === lesson.lessonTaker
+          )?.name
+        }`;
   }
 
   async setTakerTimelineSpans() {
@@ -301,20 +305,7 @@ export class TimeManagementVM {
     this._takerTimeline.spans = [
       ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => {
         const teacherName = teacherRepository.entities[lesson.teacher].name;
-        const isLessonForGroup = Object.values(groupRepository.entities).some(
-          (group) => group.lessonTakerId === lesson.lessonTaker
-        );
-        const takerDescription = isLessonForGroup
-          ? `группа "${
-              Object.values(groupRepository.entities).find(
-                (group) => group.lessonTakerId === lesson.lessonTaker
-              )?.name
-            }"`
-          : `учащийся ${
-              Object.values(pupilRepository.entities).find(
-                (pupil) => pupil.lessonTakerId === lesson.lessonTaker
-              )?.name
-            }`;
+        const takerDescription = this._getLessonTakerDescription(lesson);
         return {
           id: lesson.id,
           start: lesson.start,
@@ -323,7 +314,7 @@ export class TimeManagementVM {
           text: subjects[lesson.subject]?.name,
           longText: `${
             subjects[lesson.subject]?.name
-          } (преподаватель ${teacherName}, ${takerDescription})`,
+          } (преподаватель: ${teacherName}, ${takerDescription})`,
           persons: this._getPersonsInLesson(lesson),
         };
       }),
@@ -390,7 +381,8 @@ export class TimeManagementVM {
       const lesson = lessons[id];
       const teacher = teachers[lesson.teacher].name;
       const subject = subjects[lesson.subject].name;
-      spanDesc = `урок преподавателя ${teacher} по предмету ${subject}`; // TODO добавить принимателя урока
+      const lessonTaker = this._getLessonTakerDescription(lesson);
+      spanDesc = `урок?\nпреподаватель: ${teacher}\nпредмет: ${subject}\n${lessonTaker}`;
     } else {
       const employment = await extraEmploymentRepository.getEntityById(id);
       const owner =
@@ -401,10 +393,11 @@ export class TimeManagementVM {
           : pupils[employment?.person ?? 0].name;
       spanDesc = `занятость "${employment?.description}" ${
         owner === "teacher" ? "преподавателя" : "учащегося"
-      } ${ownerName}`;
+      } ${ownerName}?`;
     }
     this._confirmAction = new ConfirmActionVM({
-      text: `Вы действительно хотите удалить ${spanDesc}?`,
+      title: `Удаление ${type === "lesson" ? "урока" : "занятости"}`,
+      text: `Вы действительно хотите удалить ${spanDesc}`,
       onClose: () => {
         this._confirmAction = null;
       },
@@ -486,8 +479,8 @@ export class TimeManagementVM {
         teacher: this._teacherField.value?.name ?? "",
         taker:
           this._lessonTakerType === "pupil"
-            ? this._pupilField.value?.name ?? ""
-            : this._groupField.value?.name ?? "",
+            ? `учащегося ${this._pupilField.value?.name}`
+            : `группы "${this._groupField.value?.name}"`,
         weekDay: WEEK_DAY_NAMES[this._selectedDay],
         filterSubjects: (subject: SubjectEntity) =>
           this._getAvailableSubjectsForAssign().includes(subject.id),
@@ -529,23 +522,10 @@ export class TimeManagementVM {
   private _getSpanInfo(id: number, spanType: "lesson" | "extra") {
     if (spanType === "lesson") {
       const lesson = lessonRepository.entities[id];
-      const isLessonForGroup = Object.values(groupRepository.entities).some(
-        (group) => group.lessonTakerId === lesson.lessonTaker
-      );
-      const takerDescription = isLessonForGroup
-        ? `Группа: "${
-            Object.values(groupRepository.entities).find(
-              (group) => group.lessonTakerId === lesson.lessonTaker
-            )?.name
-          }"`
-        : `Учащийся: ${
-            Object.values(pupilRepository.entities).find(
-              (pupil) => pupil.lessonTakerId === lesson.lessonTaker
-            )?.name
-          }`;
+      const takerDescription = this._getLessonTakerDescription(lesson);
       const teacher = teacherRepository.entities[lesson.teacher].name;
       const subject = subjectRepository.entities[lesson.subject].name;
-      return `Предмет: ${subject}\nПреподаватель: ${teacher}\n${takerDescription}`;
+      return `предмет: ${subject}\nпреподаватель: ${teacher}\n${takerDescription}`;
     } else {
       const employment = extraEmploymentRepository.entities[id];
       const isPupil = pupilRepository.entities[employment.person] !== undefined;
