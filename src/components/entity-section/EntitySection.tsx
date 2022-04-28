@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { createCn } from "../../utils";
 import { NavLink } from "react-router-dom";
 import "./EntitySection.css";
-import { Button } from "@mui/material";
+import { Button } from "../button/Button";
 
 type Props = {
   title: string;

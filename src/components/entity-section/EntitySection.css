@@ -1,6 +1,7 @@
 .entity-section {
   &__content {
     display: flex;
+    gap: var(--gap-xxl);
   }
 
   &__item {

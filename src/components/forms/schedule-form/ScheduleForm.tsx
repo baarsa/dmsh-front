@@ -3,8 +3,8 @@ import { ScheduleFormVM } from "../../../view-models/forms/ScheduleFormVM";
 import { LinkField } from "../../fields/link-field/LinkField";
 import NumericInput from "react-numeric-input";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button } from "@mui/material";
 import { observer } from "mobx-react-lite";
+import { Button } from "../../button/Button";
 
 type Props = {
   vm: ScheduleFormVM;

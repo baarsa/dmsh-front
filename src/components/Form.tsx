@@ -1,9 +1,9 @@
 import { IFormModel } from "../view-models/forms/FormModel"; // todo separate file
 import { Field } from "./fields/Field";
 import { observer } from "mobx-react-lite";
-import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
+import { Button } from "./button/Button";
 
 type Props = {
   form: IFormModel;

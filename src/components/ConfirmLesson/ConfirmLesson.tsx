@@ -5,7 +5,8 @@ import { LinkField } from "../fields/link-field/LinkField";
 import { TimeInput } from "../time-input/TimeInput";
 import "./ConfirmLesson.css";
 import { createCn } from "../../utils";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Button } from "../button/Button";
 
 const cn = createCn("confirm-lesson");
 
@@ -39,15 +40,12 @@ export const ConfirmLesson = observer(({ vm }: { vm: ConfirmLessonVM }) => {
           <LinkField field={vm.subject} />
           <div className={cn("buttons")}>
             <Button
-              variant={"contained"}
               onClick={() => vm.handleConfirm()}
               disabled={!vm.isFormValid()}
             >
               OK
             </Button>
-            <Button variant={"contained"} onClick={() => vm.handleClose()}>
-              Отмена
-            </Button>
+            <Button onClick={() => vm.handleClose()}>Отмена</Button>
           </div>
         </div>
       </div>

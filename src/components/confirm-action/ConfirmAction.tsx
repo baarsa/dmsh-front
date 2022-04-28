@@ -1,8 +1,9 @@
 import { ConfirmActionVM } from "../../view-models/modals/ConfirmActionVM";
 import { Modal } from "../Modal/Modal";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { createCn } from "../../utils";
 import "./ConfirmAction.css";
+import { Button } from "../button/Button";
 
 const cn = createCn("confirm-action");
 
@@ -15,12 +16,8 @@ export const ConfirmAction = ({ vm }: { vm: ConfirmActionVM }) => {
         </Typography>
         <div className={cn("info")}>{vm.text}</div>
         <div className={cn("buttons")}>
-          <Button variant={"contained"} onClick={() => vm.handleConfirm()}>
-            OK
-          </Button>
-          <Button variant={"contained"} onClick={() => vm.handleClose()}>
-            Отмена
-          </Button>
+          <Button onClick={() => vm.handleConfirm()}>OK</Button>
+          <Button onClick={() => vm.handleClose()}>Отмена</Button>
         </div>
       </div>
     </Modal>

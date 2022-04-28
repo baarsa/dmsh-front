@@ -1,10 +1,11 @@
 import { createCn } from "../../utils";
 import { observer } from "mobx-react-lite";
 import { Modal } from "../Modal/Modal";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { TimeInput } from "../time-input/TimeInput";
 import { ConfirmSpanChangeVM } from "../../view-models/modals/ConfirmSpanChangeVM";
 import "./ConfirmSpanChange.css";
+import { Button } from "../button/Button";
 
 const cn = createCn("confirm-span-change");
 
@@ -37,14 +38,11 @@ export const ConfirmSpanChange = observer(
             <div className={cn("buttons")}>
               <Button
                 disabled={!vm.isFormValid()}
-                variant={"contained"}
                 onClick={() => vm.handleSubmit()}
               >
                 OK
               </Button>
-              <Button variant={"contained"} onClick={() => vm.handleClose()}>
-                Отмена
-              </Button>
+              <Button onClick={() => vm.handleClose()}>Отмена</Button>
             </div>
           </div>
         </div>
