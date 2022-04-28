@@ -5,7 +5,7 @@ import "./LoadsDistribution.css";
 import { observer } from "mobx-react-lite";
 import { Paginate } from "../paginate/Paginate";
 import { Select } from "../select/Select";
-import { CircularProgress } from "@mui/material";
+import { SpinnerOnCenter } from "../spinner-on-center/SpinnerOnCenter";
 
 type Props = {
   vm: LoadsDistributionVM;
@@ -17,19 +17,21 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
       <div className={cn("controls")}>
-        <Paginate
-          pageCount={vm.pageCount}
-          currentPage={vm.currentPageNumber}
-          onPageChange={(selected) => (vm.currentPage = selected)}
-        />
         <Select
           label={"Год обучения"}
           onChange={(values) => (vm.selectedYear = values[0])}
           options={vm.yearOptions}
           values={[vm.selectedYear]}
         />
+        {vm.pageCount > 1 && (
+          <Paginate
+            pageCount={vm.pageCount}
+            currentPage={vm.currentPageNumber}
+            onPageChange={(selected) => (vm.currentPage = selected)}
+          />
+        )}
       </div>
-      {vm.isLoading && <CircularProgress />}
+      {vm.isLoading && <SpinnerOnCenter />}
       {vm.pupilItemsOnPage.map((item) => (
         <div key={item.name} className={cn("pupil-item")}>
           <div className={cn("pupil-title")}>
@@ -38,7 +40,12 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
           <div>
             {item.planItems.map((planItem) => (
               <div key={planItem.subjectName} className={cn("subject-item")}>
-                <div className={cn("subject-title")}>
+                <div
+                  className={cn("subject-title", {
+                    special: planItem.isSpecial,
+                  })}
+                  title={planItem.isSpecial ? "Специальность" : undefined}
+                >
                   {planItem.subjectName}, {formatHalfHours(planItem.halfHours)}
                 </div>
                 <LinkField field={planItem.teacherField} />
@@ -47,6 +54,15 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
           </div>
         </div>
       ))}
+      <div className={cn("bottom-controls")}>
+        {vm.pageCount > 1 && (
+          <Paginate
+            pageCount={vm.pageCount}
+            currentPage={vm.currentPageNumber}
+            onPageChange={(selected) => (vm.currentPage = selected)}
+          />
+        )}
+      </div>
     </div>
   );
 });

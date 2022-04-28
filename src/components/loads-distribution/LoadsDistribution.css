@@ -1,8 +1,17 @@
 .loads-distribution {
+  position: relative;
+  flex-grow: 1;
+
   &__controls {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+  }
+
+  &__bottom-controls {
+    display: flex;
+    flex-direction: row-reverse;
   }
 
   &__pupil-item {
@@ -20,5 +29,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+
+  &__subject-title {
+    &_special {
+      text-decoration: underline;
+    }
   }
 }

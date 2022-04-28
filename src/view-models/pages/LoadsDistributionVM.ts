@@ -11,6 +11,7 @@ import { scheduleContextStore } from "../../models/schedule-context-store/Schedu
 
 type PlanItem = {
   subjectName: string;
+  isSpecial: boolean;
   halfHours: number;
   teacherField: LinkFieldVM<TeacherEntity>;
 };
@@ -32,7 +33,12 @@ const ITEMS_ON_PAGE_VALUES = [5, 10, 25];
 const MAX_YEAR = 8;
 
 const YEAR_OPTIONS = (() => {
-  const options = [];
+  const options = [
+    {
+      value: 0,
+      text: "Все",
+    },
+  ];
   for (let i = 1; i <= MAX_YEAR; i++) {
     options.push({
       value: i,
@@ -52,6 +58,7 @@ export class LoadsDistributionVM {
 
   set selectedYear(value: number) {
     this._selectedYear = value;
+    this._currentPage = 0;
   }
 
   get yearOptions() {
@@ -67,7 +74,9 @@ export class LoadsDistributionVM {
   }
 
   get filteredPupilItems(): PupilItem[] {
-    return this.pupilItems.filter((item) => item.year === this._selectedYear);
+    return this._selectedYear === 0
+      ? this.pupilItems
+      : this.pupilItems.filter((item) => item.year === this._selectedYear);
   }
 
   get pupilItems(): PupilItem[] {
@@ -129,82 +138,89 @@ export class LoadsDistributionVM {
     const pupilsIds = Object.keys(this._schedule.pupilsYears).map((key) =>
       Number(key)
     );
-    this._items = pupilsIds.map((pupilId) => {
-      const currentPupil = pupilRepository.entities[pupilId];
-      const program = programRepository.entities[currentPupil.program];
-      const plans = program.yearPlans;
-      const pupilYear = this._schedule.pupilsYears[pupilId];
-      const thisYearPlan = plans[pupilYear - 1];
-      const specialityLoad = this._schedule.loads.find(
-        ({ pupil, subject }) =>
-          pupil === pupilId && subject === currentPupil.specialSubject
-      );
-      return {
-        name: currentPupil.name,
-        year: pupilYear,
-        planItems: [
-          {
-            subjectName:
-              subjectRepository.entities[currentPupil.specialSubject].name,
-            halfHours: thisYearPlan.specialityHalfHours,
-            teacherField: new LinkFieldVM<TeacherEntity>(
-              { label: "Преподаватель" },
-              {
-                entityModel: teacherRepository,
-                entitiesFilter: (teacher) =>
-                  teacher.subjects.includes(currentPupil.specialSubject),
-                initialValues:
-                  specialityLoad === undefined
-                    ? []
-                    : [teacherRepository.entities[specialityLoad.teacher]],
-                hasEmptyValueOption: true,
-                valueChangedCallback: (teacherValue) => {
-                  this._onTeacherUpdate({
-                    pupilId,
-                    teacherId:
-                      teacherValue.length === 0 ? null : teacherValue[0].id,
-                    subjectId: currentPupil.specialSubject,
-                  });
-                },
+    this._items = pupilsIds
+      .map((pupilId) => {
+        const currentPupil = pupilRepository.entities[pupilId];
+        const program = programRepository.entities[currentPupil.program];
+        const plans = program.yearPlans;
+        const pupilYear = this._schedule.pupilsYears[pupilId];
+        const thisYearPlan = plans[pupilYear - 1];
+        const specialityLoad = this._schedule.loads.find(
+          ({ pupil, subject }) =>
+            pupil === pupilId && subject === currentPupil.specialSubject
+        );
+        return {
+          name: currentPupil.name,
+          year: pupilYear,
+          planItems: [
+            {
+              subjectName:
+                subjectRepository.entities[currentPupil.specialSubject].name,
+              isSpecial: true,
+              halfHours: thisYearPlan.specialityHalfHours,
+              teacherField: new LinkFieldVM<TeacherEntity>(
+                { label: "Преподаватель" },
+                {
+                  entityModel: teacherRepository,
+                  entitiesFilter: (teacher) =>
+                    teacher.subjects.includes(currentPupil.specialSubject),
+                  initialValues:
+                    specialityLoad === undefined
+                      ? []
+                      : [teacherRepository.entities[specialityLoad.teacher]],
+                  hasEmptyValueOption: true,
+                  valueChangedCallback: (teacherValue) => {
+                    this._onTeacherUpdate({
+                      pupilId,
+                      teacherId:
+                        teacherValue.length === 0 ? null : teacherValue[0].id,
+                      subjectId: currentPupil.specialSubject,
+                    });
+                  },
+                }
+              ),
+            },
+            ...Object.entries(thisYearPlan.commonSubjectsHalfHours).map(
+              ([subjectId, halfHours]) => {
+                const subjectLoad = this._schedule.loads.find(
+                  ({ pupil, subject }) =>
+                    pupil === pupilId && subject === Number(subjectId)
+                );
+                return {
+                  subjectName:
+                    subjectRepository.entities[Number(subjectId)].name,
+                  isSpecial: false,
+                  halfHours,
+                  teacherField: new LinkFieldVM<TeacherEntity>(
+                    { label: "Преподаватель" },
+                    {
+                      entityModel: teacherRepository,
+                      entitiesFilter: (teacher) =>
+                        teacher.subjects.includes(Number(subjectId)),
+                      initialValues:
+                        subjectLoad === undefined
+                          ? []
+                          : [teacherRepository.entities[subjectLoad.teacher]],
+                      hasEmptyValueOption: true,
+                      valueChangedCallback: (teacherValue) => {
+                        this._onTeacherUpdate({
+                          pupilId,
+                          teacherId:
+                            teacherValue.length === 0
+                              ? null
+                              : teacherValue[0].id,
+                          subjectId: Number(subjectId),
+                        });
+                      },
+                    }
+                  ),
+                };
               }
             ),
-          },
-          ...Object.entries(thisYearPlan.commonSubjectsHalfHours).map(
-            ([subjectId, halfHours]) => {
-              const subjectLoad = this._schedule.loads.find(
-                ({ pupil, subject }) =>
-                  pupil === pupilId && subject === Number(subjectId)
-              );
-              return {
-                subjectName: subjectRepository.entities[Number(subjectId)].name,
-                halfHours,
-                teacherField: new LinkFieldVM<TeacherEntity>(
-                  { label: "Преподаватель" },
-                  {
-                    entityModel: teacherRepository,
-                    entitiesFilter: (teacher) =>
-                      teacher.subjects.includes(Number(subjectId)),
-                    initialValues:
-                      subjectLoad === undefined
-                        ? []
-                        : [teacherRepository.entities[subjectLoad.teacher]],
-                    hasEmptyValueOption: true,
-                    valueChangedCallback: (teacherValue) => {
-                      this._onTeacherUpdate({
-                        pupilId,
-                        teacherId:
-                          teacherValue.length === 0 ? null : teacherValue[0].id,
-                        subjectId: Number(subjectId),
-                      });
-                    },
-                  }
-                ),
-              };
-            }
-          ),
-        ],
-      };
-    }); // todo destroy the pyramid
+          ],
+        };
+      })
+      .sort((a, b) => a.year - b.year); // todo destroy the pyramid
     this._isLoading = false;
   }
 
