@@ -22,18 +22,22 @@ export const EntitySection = ({
   return (
     <div className={cn()}>
       <div className={cn("title")}>{title}</div>
-      <NavLink to="create">Создать</NavLink>
-      {onUploadClick !== undefined && (
-        <Button
-          onClick={() => {
-            onUploadClick();
-          }}
-        >
-          Загрузить файл
-        </Button>
-      )}
       <div className={cn("content")}>
         <div className={cn("item-list")}>
+          <div className={cn("buttons")}>
+            <NavLink to="create">
+              <Button>Создать</Button>
+            </NavLink>
+            {onUploadClick !== undefined && (
+              <Button
+                onClick={() => {
+                  onUploadClick();
+                }}
+              >
+                Загрузить файл
+              </Button>
+            )}
+          </div>
           {items.map((item) => (
             <NavLink
               key={item.id}
