@@ -8,7 +8,7 @@ const cn = createCn("link-field");
 
 export const LinkField = observer((props: { field: ILinkField }) => (
   <div className={cn()}>
-    {!props.field.isDisabled && (
+    {!(props.field.showValuesList && props.field.isDisabled) && (
       <Select
         multiple={props.field.isMultiple}
         error={!props.field.isValid()}

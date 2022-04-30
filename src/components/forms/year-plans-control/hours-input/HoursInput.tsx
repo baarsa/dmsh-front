@@ -34,6 +34,11 @@ export const HoursInput = ({
         step={0.5}
         min={0}
         snap
+        style={{
+          input: {
+            width: "60px",
+          },
+        }}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 .hours-input {
   display: flex;
+  justify-content: space-between;
 
   &__input {
     &_error {

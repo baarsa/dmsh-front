@@ -1,5 +1,40 @@
 .year-plans-control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+  }
+
   &__year-plan {
-    border: 1px solid black;
+    border: 1px solid grey;
+    padding: var(--gap-s);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+
+    &-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--gap-s);
+    }
+  }
+
+  &__subject-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__cross {
+    cursor: pointer;
+  }
+
+  &__add-year {
+    align-self: flex-end;
   }
 }
