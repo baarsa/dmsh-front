@@ -15,7 +15,7 @@ export const Pupils = observer(() => {
   }
   return (
     <EntitySection
-      title={"Группы"}
+      title={"Учащиеся"}
       items={pupilsVM.items.map((item) => ({
         ...item,
         link: String(item.id),
