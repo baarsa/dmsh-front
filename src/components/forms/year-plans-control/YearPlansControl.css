@@ -30,10 +30,6 @@
     justify-content: space-between;
   }
 
-  &__cross {
-    cursor: pointer;
-  }
-
   &__add-year {
     align-self: flex-end;
   }

@@ -118,6 +118,8 @@ export class ScheduleFormVM implements IFormModel {
     },
     {
       entityModel: pupilRepository,
+      entitiesFilter: (pupil) =>
+        this._pupilsYears.every((item) => item.pupil !== pupil),
     }
   );
   private _currentYear: number = 0;

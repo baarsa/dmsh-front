@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { HoursInput } from "./hours-input/HoursInput";
 import { Button } from "../../button/Button";
 import "./YearPlansControl.css";
+import { CrossButton } from "../../cross-button/CrossButton";
 
 type Props = {
   vm: YearPlansControlVM;
@@ -23,8 +24,8 @@ export const YearPlansControl = observer(({ vm }: Props) => {
             <div className={cn("year-plan-title")}>
               Год {i + 1}
               {vm.mode === "edit" && i === vm.yearPlans.length - 1 && (
-                <CloseIcon
-                  className={cn("cross")}
+                <CrossButton
+                  title={"Удалить годовой план"}
                   onClick={() => vm.removeYearPlan(i)}
                 />
               )}
@@ -44,8 +45,8 @@ export const YearPlansControl = observer(({ vm }: Props) => {
                   {formatHalfHours(subject.halfHours)}
                 </div>
                 {vm.mode === "edit" && (
-                  <CloseIcon
-                    className={cn("cross")}
+                  <CrossButton
+                    title={"Удалить предмет"}
                     onClick={() => yearPlan.removeCommonSubject(j)}
                   />
                 )}
