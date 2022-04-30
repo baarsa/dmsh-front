@@ -5,12 +5,15 @@ import { IStringField } from "../../view-models/fields/IStringField";
 import { StringField } from "./StringField";
 import { BooleanField } from "./BooleanField";
 import { LinkField } from "./link-field/LinkField";
+import { createCn } from "../../utils";
+import "./Field.css";
+
+const cn = createCn("field");
 
 export const Field = (props: {
   field: IBooleanField | IStringField | ILinkField;
 }) => (
-  <div>
-    {props.field.label}
+  <div className={cn()}>
     {props.field.fieldType === FieldType.BOOLEAN && (
       <BooleanField field={props.field} />
     )}

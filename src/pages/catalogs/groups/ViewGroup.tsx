@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Form } from "../../../components/Form";
+import { Form } from "../../../components/forms/form/Form";
 import { ViewGroupVM } from "../../../view-models/pages/catalogs/groups/ViewGroupVM";
 
 export const ViewGroup = observer(() => {

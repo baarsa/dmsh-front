@@ -1,6 +1,6 @@
 import { UserFormVM } from "../../../view-models/forms/UserFormVM";
 import { LinkField } from "../../fields/link-field/LinkField";
-import { Form } from "../../Form";
+import { Form } from "../form/Form";
 import { Select } from "../../select/Select";
 import { observer } from "mobx-react-lite";
 

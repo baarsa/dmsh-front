@@ -1,4 +1,4 @@
-import { Form } from "../Form";
+import { Form } from "./form/Form";
 import { ProgramFormModel } from "../../view-models/forms/ProgramFormModel";
 import { YearPlansControl } from "./year-plans-control/YearPlansControl";
 

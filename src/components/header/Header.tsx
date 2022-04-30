@@ -16,19 +16,21 @@ export const Header = ({ vm }: Props) => {
   const navigate = useNavigate();
   return (
     <div className={cn()}>
-      <div className={cn("logo")} />
-      <Navigation vm={vm.navigation} />
-      <ActiveSchedule vm={vm.activeSchedule} />
-      <div className={cn("username")}>
-        Добрый день, {vm.userName}!
-        <div
-          className={cn("logout")}
-          onClick={async () => {
-            await vm.handleLogout();
-            navigate("/login");
-          }}
-        >
-          Выйти <LogoutIcon />
+      <div className={cn("content")}>
+        <div className={cn("logo")} />
+        <Navigation vm={vm.navigation} />
+        <ActiveSchedule vm={vm.activeSchedule} />
+        <div className={cn("username")}>
+          Добрый день, {vm.userName}!
+          <div
+            className={cn("logout")}
+            onClick={async () => {
+              await vm.handleLogout();
+              navigate("/login");
+            }}
+          >
+            Выйти <LogoutIcon />
+          </div>
         </div>
       </div>
     </div>

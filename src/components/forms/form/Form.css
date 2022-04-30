@@ -1,0 +1,19 @@
+.form {
+  border: 1px solid grey;
+  border-radius: 4px;
+  padding: var(--gap-s);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  background: var(--bg-grey);
+
+  &__title {
+    margin-bottom: var(--gap-ml);
+  }
+
+  &__buttons {
+    align-self: end;
+    display: flex;
+    gap: var(--gap-m);
+  }
+}

@@ -28,9 +28,10 @@ export const Select = ({
   error = false,
   multiple = false,
 }: Props) => (
-  <FormControl sx={{ m: 1, width: 300, mt: 3 }} className={cn()}>
+  <FormControl className={cn()} fullWidth>
     <InputLabel shrink={true}>{label}</InputLabel>
     <MaterialSelect
+      fullWidth
       multiple={multiple}
       disabled={disabled}
       error={error}

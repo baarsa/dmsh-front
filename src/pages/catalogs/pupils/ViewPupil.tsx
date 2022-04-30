@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Form } from "../../../components/Form";
+import { Form } from "../../../components/forms/form/Form";
 import { ViewPupilVM } from "../../../view-models/pages/catalogs/pupils/ViewPupilVM";
 
 export const ViewPupil = observer(() => {

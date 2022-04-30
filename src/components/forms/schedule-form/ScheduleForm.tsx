@@ -1,4 +1,4 @@
-import { Form } from "../../Form";
+import { Form } from "../form/Form";
 import { ScheduleFormVM } from "../../../view-models/forms/ScheduleFormVM";
 import { LinkField } from "../../fields/link-field/LinkField";
 import NumericInput from "react-numeric-input";

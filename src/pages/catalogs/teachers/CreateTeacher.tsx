@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form } from "../../../components/Form";
+import { Form } from "../../../components/forms/form/Form";
 import { CreateTeacherVM } from "../../../view-models/pages/catalogs/teachers/CreateTeacherVM";
 
 export const CreateTeacher = observer(() => {

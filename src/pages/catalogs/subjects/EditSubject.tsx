@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form } from "../../../components/Form";
+import { Form } from "../../../components/forms/form/Form";
 import { useNavigate, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { EditSubjectViewModel } from "../../../view-models/pages/catalogs/subjects/EditSubjectViewModel";
