@@ -10,7 +10,8 @@
 
   &__item-list {
     background: var(--bg-dark);
-    padding: 8px;
+    min-width: 200px;
+    padding: var(--gap-s);
     & a {
       text-decoration: none;
     }

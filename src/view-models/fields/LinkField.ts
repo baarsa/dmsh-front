@@ -2,7 +2,7 @@ import { FieldConstructorProps, FieldVM } from "./Field";
 import { FieldType } from "./FieldType";
 import { ILinkField } from "./ILinkField";
 import { IEntityRepository, INamedEntity, Stored } from "../../models/shared";
-import {autorun, computed, makeObservable, observable, reaction} from "mobx";
+import { autorun, computed, makeObservable, observable, reaction } from "mobx";
 
 const EMPTY_VALUE_ID = -1;
 
@@ -134,10 +134,13 @@ export class LinkFieldVM<T extends INamedEntity>
         }
       });
     }
-    reaction(() => this.options,(options) => {
-      if (options.every(option => option.id !== this.value?.id)) {
-        this._values = [];
+    reaction(
+      () => this.options,
+      (options) => {
+        if (options.every((option) => option.id !== this.value?.id)) {
+          this._values = [];
+        }
       }
-    });
+    );
   }
 }
