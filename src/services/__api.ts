@@ -1,4 +1,4 @@
-const API_URL = "http://localhost/api/";
+const API_URL = "/api/";
 
 export const api = {
   async post(url: string, data: unknown) {
