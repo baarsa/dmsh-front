@@ -50,8 +50,7 @@ export class MainViewModel {
         this._isLoading &&
         !this._authStore.isLoading &&
         !this._configStore.isLoading &&
-        this.header !== null &&
-        !this.header.isLoading
+          ((this.header !== null && !this.header.isLoading) || (this._header === null && !this._authStore.isLoading))
       ) {
         this._isLoading = false;
       }
