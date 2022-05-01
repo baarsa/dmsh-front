@@ -27,6 +27,7 @@ class ScheduleContextStore implements IScheduleContextStore {
   private async _init() {
     const scheduleId = await this._service.getCurrentScheduleId();
     if (scheduleId === null) {
+      this._isLoading = false;
       return;
     }
     this._schedule = await scheduleRepository.getEntityById(scheduleId);
