@@ -1,10 +1,12 @@
 .time-management {
+  width: 100%;
   padding: 0 var(--gap-l) var(--gap-l) var(--gap-l);
   position: relative;
 
   &__controls {
     display: flex;
     align-items: center;
+    gap: var(--gap-ml);
     margin-top: var(--gap-m);
     margin-bottom: var(--gap-l);
   }

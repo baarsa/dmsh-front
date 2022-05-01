@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Main } from "./pages/main/Main";
 import "./styles.css";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { Login } from "./pages/Login";
+import { Login } from "./pages/login/Login";
 
 const theme = createTheme({
   palette: {

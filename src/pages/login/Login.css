@@ -1,0 +1,10 @@
+.login {
+    width: 320px;
+    border: 1px solid grey;
+    padding: var(--gap-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-s);
+    align-self: center;
+    margin-top: 36px;
+}

@@ -1,4 +1,5 @@
 .link-field {
+  min-width: 220px;
   &__list {
     margin-top: var(--gap-s);
   }
