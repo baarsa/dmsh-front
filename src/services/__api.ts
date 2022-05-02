@@ -1,4 +1,4 @@
-const API_URL = "/api/";
+const API_URL = `${process.env.API_URL}`;
 
 export const api = {
   async post(url: string, data: unknown) {

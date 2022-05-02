@@ -1,4 +1,4 @@
-import { Configuration, HotModuleReplacementPlugin } from "webpack";
+import {Configuration, DefinePlugin, HotModuleReplacementPlugin} from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
 const config: Configuration = {
@@ -47,7 +47,7 @@ const config: Configuration = {
     new HtmlWebpackPlugin({
       template: "src/index.html",
     }),
-    new HotModuleReplacementPlugin(),
+    new DefinePlugin({ 'process.env.API_URL': '"/api/"' }),
   ],
 };
 

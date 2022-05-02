@@ -1,5 +1,5 @@
 import path from "path";
-import { Configuration, HotModuleReplacementPlugin } from "webpack";
+import {Configuration, DefinePlugin, HotModuleReplacementPlugin} from "webpack";
 import type { Configuration as DevServerConfiguration } from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
@@ -50,6 +50,7 @@ const config: Configuration & { devServer: DevServerConfiguration } = {
       template: "src/index.html",
     }),
     new HotModuleReplacementPlugin(),
+    new DefinePlugin({ 'process.env.API_URL': '"http://localhost:8000/api/"' }),
   ],
   devtool: "inline-source-map",
   devServer: {
