@@ -17,11 +17,11 @@ type Parameters = {
 
 export class ScheduleFormVM implements IFormModel {
   get currentYear(): number {
-    return this._currentYear + 1;
+    return this._currentYear;
   }
 
   set currentYear(value: number) {
-    this._currentYear = value - 1;
+    this._currentYear = value;
   }
 
   get isYearSelectDisabled() {
@@ -58,7 +58,7 @@ export class ScheduleFormVM implements IFormModel {
     return this._pupilsYears.map(({ pupil, year }) => ({
       id: pupil.id,
       name: pupil.name,
-      year: year + 1,
+      year,
     }));
   }
 
@@ -75,7 +75,7 @@ export class ScheduleFormVM implements IFormModel {
       year: this._currentYear,
     });
     this._pupilField.setValues([]);
-    this._currentYear = 0;
+    this._currentYear = 1;
   }
 
   removePupil(pupilId: number) {
@@ -122,7 +122,7 @@ export class ScheduleFormVM implements IFormModel {
         this._pupilsYears.every((item) => item.pupil !== pupil),
     }
   );
-  private _currentYear: number = 0;
+  private _currentYear: number = 1;
   private _programs: Record<number, ProgramEntity> = {};
   private _isLoading: boolean = true;
 

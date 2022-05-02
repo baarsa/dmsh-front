@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
-import {createCn} from "../../utils";
+import { createCn } from "../../utils";
 import "./Login.css";
 
 const cn = createCn("login");
@@ -14,7 +14,7 @@ export const Login = observer(() => {
   const navigate = useNavigate();
   return (
     <form
-        className={cn()}
+      className={cn()}
       onSubmit={async (e) => {
         e.preventDefault();
         if (vm.isSubmitDisabled) {

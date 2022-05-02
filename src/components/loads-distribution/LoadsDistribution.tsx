@@ -17,12 +17,14 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
       <div className={cn("controls")}>
-        <Select
-          label={"Год обучения"}
-          onChange={(values) => (vm.selectedYear = values[0])}
-          options={vm.yearOptions}
-          values={[vm.selectedYear]}
-        />
+          <div className={cn("select")}>
+            <Select
+              label={"Год обучения"}
+              onChange={(values) => (vm.selectedYear = values[0])}
+              options={vm.yearOptions}
+              values={[vm.selectedYear]}
+            />
+          </div>
         {vm.pageCount > 1 && (
           <Paginate
             pageCount={vm.pageCount}

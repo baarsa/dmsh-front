@@ -7,6 +7,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: var(--gap-m);
+  }
+
+  &__select {
+    width: 300px;
   }
 
   &__bottom-controls {
@@ -16,8 +21,8 @@
 
   &__pupil-item {
     border: 1px solid grey;
-    padding: 8px;
-    margin-bottom: 12px;
+    padding: var(--gap-s);
+    margin-bottom: var(--gap-m);
   }
 
   &__pupil-title {
