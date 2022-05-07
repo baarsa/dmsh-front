@@ -8,7 +8,7 @@ type Props = {
 export const ActiveSchedule = ({ vm }: Props) => {
   return (
     <div style={{ width: "280px" }}>
-      <LinkField field={vm.scheduleField} />
+      <LinkField field={vm.scheduleField} contrast />
     </div>
   );
 };

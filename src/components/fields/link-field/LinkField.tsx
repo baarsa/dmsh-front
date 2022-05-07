@@ -7,13 +7,14 @@ import "./LinkField.css";
 const cn = createCn("link-field");
 
 export const LinkField = observer(
-  (props: { field: ILinkField; className?: string }) => {
+  (props: { field: ILinkField; className?: string; contrast?: boolean }) => {
     const className =
       props.className === undefined ? cn() : `${cn()} ${props.className}`;
     return (
       <div className={className}>
         {!(props.field.showValuesList && props.field.isDisabled) && (
           <Select
+            contrast={ props.contrast ?? false }
             multiple={props.field.isMultiple}
             error={!props.field.isValid()}
             disabled={props.field.isDisabled}

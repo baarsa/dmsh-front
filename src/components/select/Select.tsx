@@ -15,6 +15,7 @@ type Props = {
   options: Array<{ text: string; value: number }>;
   error?: boolean;
   multiple?: boolean;
+  contrast?: boolean;
 };
 
 const cn = createCn("select");
@@ -27,9 +28,10 @@ export const Select = ({
   disabled = false,
   error = false,
   multiple = false,
+  contrast = false,
 }: Props) => (
   <FormControl className={cn()} fullWidth>
-    <InputLabel shrink={true}>{label}</InputLabel>
+    <InputLabel shrink={true} sx={ contrast ? { color: 'white' } : {} }>{label}</InputLabel>
     <MaterialSelect
       fullWidth
       multiple={multiple}
@@ -45,6 +47,10 @@ export const Select = ({
             : [Number(e.target.value)]
         )
       }
+      sx={ contrast ? {
+          color: 'white',
+          "& .MuiOutlinedInput-notchedOutline": { borderColor: "white" },
+      } : {} }
     >
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>

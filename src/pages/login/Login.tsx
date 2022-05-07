@@ -1,6 +1,6 @@
 import { LoginVM } from "../../view-models/pages/LoginVM";
 import { StringField } from "../../components/fields/StringField";
-import { Button } from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
@@ -26,8 +26,11 @@ export const Login = observer(() => {
         }
       }}
     >
+      <Typography variant="h5" component="div">
+          Вход в систему
+      </Typography>
       <StringField field={vm.loginField} />
-      <StringField field={vm.passwordField} />
+      <StringField field={vm.passwordField} type="password" />
       <Button type="submit" disabled={vm.isSubmitDisabled}>
         Войти
       </Button>
