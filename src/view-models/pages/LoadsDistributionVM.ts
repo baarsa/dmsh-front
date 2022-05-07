@@ -8,6 +8,7 @@ import { autorun, makeAutoObservable } from "mobx";
 import { loadRepository } from "../../models/load/LoadRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
+import {ProgramEntity} from "../../models/program/ProgramEntity";
 
 type PlanItem = {
   subjectName: string;
@@ -49,6 +50,16 @@ const YEAR_OPTIONS = (() => {
 })();
 
 export class LoadsDistributionVM {
+  get programOptions(): { text: string; value: number }[] {
+    return this._programOptions;
+  }
+  get selectedProgram(): number {
+    return this._selectedProgram;
+  }
+
+  set selectedProgram(value: number) {
+    this._selectedProgram = value;
+  }
   get isLoading(): boolean {
     return this._isLoading;
   }
@@ -99,6 +110,14 @@ export class LoadsDistributionVM {
   private _items: PupilItem[] = [];
 
   private _selectedYear: number = 0;
+
+  private _programOptions = [
+    {
+      value: 0,
+      text: "Все",
+    }
+  ]
+  private _selectedProgram: number = 0;
 
   private _itemsOnPage = ITEMS_ON_PAGE_VALUES[0];
   private _currentPage = 0;

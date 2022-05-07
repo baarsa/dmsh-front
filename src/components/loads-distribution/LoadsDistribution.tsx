@@ -17,13 +17,23 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
   return (
     <div className={cn()}>
       <div className={cn("controls")}>
-          <div className={cn("select")}>
-            <Select
-              label={"Год обучения"}
-              onChange={(values) => (vm.selectedYear = values[0])}
-              options={vm.yearOptions}
-              values={[vm.selectedYear]}
-            />
+          <div className={cn("filters")}>
+              <div className={cn("select")}>
+                <Select
+                  label={"Год обучения"}
+                  onChange={(values) => (vm.selectedYear = values[0])}
+                  options={vm.yearOptions}
+                  values={[vm.selectedYear]}
+                />
+              </div>
+              <div className={cn("select")}>
+                  <Select
+                      label={"Программа обучения"}
+                      onChange={(values) => (vm.selectedProgram = values[0])}
+                      options={vm.programOptions}
+                      values={[vm.selectedProgram]}
+                  />
+              </div>
           </div>
         {vm.pageCount > 1 && (
           <Paginate
