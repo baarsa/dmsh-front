@@ -4,6 +4,8 @@ import { createCn } from "../../utils";
 import { UploadFileVM } from "../../view-models/modals/UploadFileVM";
 import { observer } from "mobx-react-lite";
 import { Button } from "../button/Button";
+import "./UploadFileModal.css";
+import {QuestionMark} from "@mui/icons-material";
 
 const cn = createCn("upload-file-modal");
 
@@ -14,6 +16,7 @@ export const UploadFileModal = observer(({ vm }: { vm: UploadFileVM }) => {
         <Typography className={cn("title")} variant="h5" component="div">
           {vm.title}
         </Typography>
+          <div className={cn('help')}>Требуемый формат данных в файле<QuestionMark fontSize="small" /></div>
         <input
           type="file"
           onChange={(e) => {
@@ -22,7 +25,6 @@ export const UploadFileModal = observer(({ vm }: { vm: UploadFileVM }) => {
             );
           }}
         />
-        {vm.selectedFileName}
         <div className={cn("buttons")}>
           <Button
             disabled={vm.isSubmitDisabled}
