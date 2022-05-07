@@ -7,6 +7,7 @@ import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { makeAutoObservable } from "mobx";
 import { ProgramEntity } from "../../models/program/ProgramEntity";
 import { programRepository } from "../../models/program/ProgramRepository";
+import {CopyScheduleModalVM} from "../modals/CopyScheduleModalVM";
 
 type Parameters = {
   basicForm: FormModel<{ name: string }>;
@@ -16,6 +17,9 @@ type Parameters = {
 };
 
 export class ScheduleFormVM implements IFormModel {
+  get copyScheduleModal(): CopyScheduleModalVM | null {
+    return this._copyScheduleModal;
+  }
   get currentYear(): number {
     return this._currentYear;
   }
@@ -55,7 +59,7 @@ export class ScheduleFormVM implements IFormModel {
   }
 
   get pupilsYears() {
-    return this._pupilsYears.map(({ pupil, year }) => ({
+    return this._pupilsYears.slice().sort((a, b) => a.year - b.year).map(({ pupil, year }) => ({
       id: pupil.id,
       name: pupil.name,
       year,
@@ -108,6 +112,18 @@ export class ScheduleFormVM implements IFormModel {
     }
   }
 
+  onCopyButtonClick() {
+    this._copyScheduleModal = new CopyScheduleModalVM({
+      originalName: "2021-2022", //fix
+      onConfirm: () => {
+        this._copyScheduleModal = null; //add handling
+      },
+      onClose: () => {
+        this._copyScheduleModal = null;
+      }
+    })
+  }
+
   private _basicForm: FormModel<{ name: string }>;
   private readonly _submitHandler?: (data: ISchedule) => Promise<number>;
   private readonly _cancelHandler?: () => void;
@@ -125,6 +141,8 @@ export class ScheduleFormVM implements IFormModel {
   private _currentYear: number = 1;
   private _programs: Record<number, ProgramEntity> = {};
   private _isLoading: boolean = true;
+
+  private _copyScheduleModal: CopyScheduleModalVM | null = null;
 
   private async _init(schedule?: ScheduleEntity) {
     this._programs = await programRepository.getAllEntities();

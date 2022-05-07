@@ -38,4 +38,24 @@
       color: black;
     }
   }
+
+  &__filter-input {
+    margin-bottom: var(--gap-m) !important;
+
+    .MuiInputLabel-root {
+      color: white !important;
+    }
+
+    .MuiOutlinedInput-root {
+      color: white !important;
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: white !important;
+    }
+  }
+
+  &__highlight {
+    background: var(--button-secondary);
+  }
 }
