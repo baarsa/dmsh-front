@@ -36,6 +36,10 @@
     justify-content: space-between;
   }
 
+  &__teacher-field {
+    width: 360px;
+  }
+
   &__subject-title {
     &_special {
       text-decoration: underline;

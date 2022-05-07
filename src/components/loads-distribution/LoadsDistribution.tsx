@@ -50,7 +50,9 @@ export const LoadsDistribution = observer(({ vm }: Props) => {
                 >
                   {planItem.subjectName}, {formatHalfHours(planItem.halfHours)}
                 </div>
-                <LinkField field={planItem.teacherField} />
+                <div className={cn("teacher-field")}>
+                  <LinkField field={planItem.teacherField} />
+                </div>
               </div>
             ))}
           </div>
