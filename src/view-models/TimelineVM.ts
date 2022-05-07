@@ -13,6 +13,7 @@ export type Span = {
   text?: string;
   longText?: string;
   persons: number[];
+  subItem?: { start: number; end: number; text: string }
 };
 
 export type DrawingSpan = {

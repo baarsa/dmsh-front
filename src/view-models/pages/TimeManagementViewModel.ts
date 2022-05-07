@@ -228,6 +228,13 @@ export class TimeManagementVM {
             currentTeacher.name
           }, ${takerDescription})`,
           persons: this._getPersonsInLesson(lesson),
+          subItem: lesson.assistance === undefined
+              ? undefined
+              : {
+                start: lesson.assistance.start,
+                end: lesson.assistance.end,
+                text: "Концертмейстер Львова Инна Леонидовна"//`${lesson.assistance.teacher}`, //map
+              }
         };
       }),
       ...relevantExtraEmployments.map((employment) => ({

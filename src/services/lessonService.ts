@@ -4,7 +4,10 @@ import { api } from "./__api";
 
 export const lessonService: IEntityService<ILesson> = {
   async fetchAll() {
-    return api.get("lesson/all");
+    //return api.get("lesson/all");
+    const items = await api.get("lesson/all");
+    items[0].assistance = { teacher: 9, start: 0, end: 30 };
+    return items;
   },
   async fetchById(id: number) {
     return api.get(`lesson/${id}`);

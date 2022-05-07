@@ -10,6 +10,11 @@ export class LessonEntity implements ILesson {
   lessonTaker: number;
   teacher: number;
   subject: number;
+  assistance?: {
+    teacher: number;
+    start: number;
+    end: number;
+  }
 
   constructor(props: Stored<ILesson>) {
     this.id = props.id;
@@ -20,6 +25,7 @@ export class LessonEntity implements ILesson {
     this.lessonTaker = props.lessonTaker;
     this.teacher = props.teacher;
     this.subject = props.subject;
+    this.assistance = props.assistance;
   }
 }
 export const createLessonEntity = (props: Stored<ILesson>) =>

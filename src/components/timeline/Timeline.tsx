@@ -1,6 +1,7 @@
 import { DrawingSpan, TimelineVM } from "../../view-models/TimelineVM";
 import { MouseEventHandler, useMemo, useRef } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from '@mui/icons-material/Add';
 
 import "./Timeline.css";
 import { observer } from "mobx-react-lite";
@@ -100,6 +101,12 @@ export const Timeline = observer(({ vm, className }: Props) => {
     const width = right - left;
     return { left: `${left}%`, width: `${width}%` };
   };
+  const getSubItemStyle = (span: { start: number; end: number }, subItem: { start: number; end: number }) => {
+    const spanWidth = span.end - span.start;
+    const subItemPercentWidth = 100 * (subItem.end - subItem.start) / spanWidth;
+    const subItemLeft = 100 * subItem.start / spanWidth;
+    return { left: `${subItemLeft}%`, width: `${subItemPercentWidth}%` };
+  }
   const getDrawingSpanInMinutes = (
     ribbonElement: HTMLDivElement,
     span: DrawingSpan
@@ -276,9 +283,29 @@ export const Timeline = observer(({ vm, className }: Props) => {
                   e.stopPropagation();
                 }}
               />
+              {
+                span.type === "lesson" && span.subItem === undefined &&
+                <Tooltip title={"Добавить иллюстратора/концертмейстера"}>
+                  <AddIcon
+                      className={cn("span-plus")}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                  />
+                </Tooltip>
+              }
               <Tooltip title={span.longText ?? ""}>
-                <div className={cn("span-text")}>{span.text}</div>
+                <div className={cn("span-text", { "with-sub-item": span.subItem !== undefined })}>{span.text}</div>
               </Tooltip>
+              {
+                span.subItem !== undefined &&
+                <Tooltip title={span.subItem.text} placement={"top"}>
+                  <div
+                      className={cn("sub-item")}
+                      style={getSubItemStyle(span, span.subItem)}
+                  />
+                </Tooltip>
+              }
             </div>
           );
         })}

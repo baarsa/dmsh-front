@@ -42,6 +42,10 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      &_with-sub-item {
+        margin-top: calc(-1 * var(--gap-m));
+      }
     }
 
     &-cross {
@@ -53,11 +57,24 @@
       height: 16px;
     }
 
+    &-plus {
+      display: none !important;
+      position: absolute;
+      top: 22px;
+      right: 4px;
+      width: 16px;
+      height: 16px;
+    }
+
     &:hover {
       opacity: 1;
       z-index: 10;
 
       .timeline__span-cross {
+        display: block !important;
+      }
+
+      .timeline__span-plus {
         display: block !important;
       }
     }
@@ -74,6 +91,14 @@
       background: var(--button-main);
       opacity: 1;
     }
+  }
+
+  &__sub-item {
+    height: 38%;
+    position: absolute;
+    bottom: 0;
+    border-radius: 4px;
+    background: var(--button-quaternary);
   }
 
   &__labels {
