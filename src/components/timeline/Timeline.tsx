@@ -1,5 +1,5 @@
 import { DrawingSpan, TimelineVM } from "../../view-models/TimelineVM";
-import { MouseEventHandler, useMemo, useRef } from "react";
+import { MouseEventHandler, useRef } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from '@mui/icons-material/Add';
 
@@ -290,6 +290,7 @@ export const Timeline = observer(({ vm, className }: Props) => {
                       className={cn("span-plus")}
                       onMouseDown={(e) => {
                         e.stopPropagation();
+                        vm.handleAddAssistanceClick(span.id);
                       }}
                   />
                 </Tooltip>

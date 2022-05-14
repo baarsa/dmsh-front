@@ -24,12 +24,16 @@ import { pupilRepository } from "../../models/pupil/PupilRepository";
 import { LessonEntity } from "../../models/lesson/LessonEntity";
 import { teacherRepository } from "../../models/teacher/TeacherRepository";
 import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
+import {ConfirmAssistanceVM} from "../modals/ConfirmAssistanceVM";
 
 type Params = {
   canChangeTeacher: boolean;
 };
 
 export class TimeManagementVM {
+  get confirmAssistance(): ConfirmAssistanceVM | null {
+    return this._confirmAssistance;
+  }
   get isSynchronized(): boolean {
     return this._isSynchronized;
   }
@@ -61,6 +65,7 @@ export class TimeManagementVM {
   private _confirmLesson: ConfirmLessonVM | null = null;
   private _confirmAction: ConfirmActionVM | null = null;
   private _confirmSpanChange: ConfirmSpanChangeVM | null = null;
+  private _confirmAssistance: ConfirmAssistanceVM | null = null;
 
   private _getAvailableSubjectsForAssign() {
     const currentTeacher = this._teacherField.value;
@@ -214,6 +219,7 @@ export class TimeManagementVM {
       return;
     }
     const subjects = subjectRepository.entities;
+    const teachers = teacherRepository.entities;
 
     this._teacherTimeline.spans = [
       ...relevantLessons.map((lesson) => {
@@ -233,7 +239,7 @@ export class TimeManagementVM {
               : {
                 start: lesson.assistance.start,
                 end: lesson.assistance.end,
-                text: "Концертмейстер Львова Инна Леонидовна"//`${lesson.assistance.teacher}`, //map
+                text: `Концертмейстер ${teachers[lesson.assistance.teacher].name}`,
               }
         };
       }),
@@ -309,6 +315,7 @@ export class TimeManagementVM {
       return;
     }
     const subjects = subjectRepository.entities;
+    const teachers = teacherRepository.entities;
     this._takerTimeline.spans = [
       ...[...relevantLessons, ...groupLessonsForPupil].map((lesson) => {
         const teacherName = teacherRepository.entities[lesson.teacher].name;
@@ -323,6 +330,13 @@ export class TimeManagementVM {
             subjects[lesson.subject]?.name
           } (преподаватель: ${teacherName}, ${takerDescription})`,
           persons: this._getPersonsInLesson(lesson),
+          subItem: lesson.assistance === undefined
+              ? undefined
+              : {
+                start: lesson.assistance.start,
+                end: lesson.assistance.end,
+                text: `Концертмейстер ${teachers[lesson.assistance.teacher].name}`,
+              }
         };
       }),
       ...relevantExtraEmployments.map((employment) => ({
@@ -526,6 +540,38 @@ export class TimeManagementVM {
     });
   }
 
+  private async _onLessonAddAssistanceClick(lessonId: number) {
+    const lesson = await lessonRepository.getEntityById(lessonId);
+    if (lesson === null) {
+      throw new Error("Не найден урок");
+    }
+    const mainTeacher = teacherRepository.entities[lesson.teacher];
+    const taker = this._getLessonTakerDescription(lesson);
+    const subject = subjectRepository.entities[lesson.subject];
+    const weekDay = WEEK_DAY_NAMES[lesson.weekDay];
+    this._confirmAssistance = new ConfirmAssistanceVM({
+      lessonStart: lesson.start,
+      lessonEnd: lesson.end,
+      mainTeacher: mainTeacher.name,
+      taker,
+      subject: subject.name,
+      weekDay,
+      onClose: () => {
+        this._confirmAssistance = null;
+      },
+      onSubmit: async ({ start, end, teacher }) => {
+        await lessonRepository.updateEntity(lessonId, {
+          assistance: {
+            start,
+            end,
+            teacher,
+          }
+        });
+        this._confirmAssistance = null;
+      }
+    })
+  }
+
   private _getSpanInfo(id: number, spanType: "lesson" | "extra") {
     if (spanType === "lesson") {
       const lesson = lessonRepository.entities[id];
@@ -582,7 +628,6 @@ export class TimeManagementVM {
         },
         shouldSetInitialValue: true,
       }
-      // TODO filter: length of loads for (schedule, selectedTeacher, pupil) > 0 for every pupil of group
     );
     this._teacherTimeline = new TimelineVM({
       spans: [],
@@ -597,6 +642,7 @@ export class TimeManagementVM {
         return this._onTimelineSpanChange(...args);
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args),
+      onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
     });
     this._takerTimeline = new TimelineVM({
       spans: [],
@@ -611,6 +657,7 @@ export class TimeManagementVM {
         return this._onTimelineSpanChange(...args);
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), //fix text
+      onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
     });
     this._commonTimeline = new TimelineVM({
       spans: [],
@@ -621,6 +668,7 @@ export class TimeManagementVM {
         return this._onTimelineSpanChange(...args);
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
+      onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
     });
     this._loadsInfo = new LoadsInfoVM(this._schedule);
     this._conflictsInfo = new ConflictsInfoVM(this._schedule, (weekDay) => {

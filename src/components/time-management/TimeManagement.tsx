@@ -13,6 +13,7 @@ import { ConfirmSpanChange } from "../confirm-span-change/ConfirmSpanChange";
 import { LoadsInfo } from "../loads-info/LoadsInfo";
 import { ConflictsInfo } from "../conflicts-info/ConflictsInfo";
 import { SpinnerOnCenter } from "../spinner-on-center/SpinnerOnCenter";
+import {ConfirmAssistance} from "../confirm-assistance/ConfirmAssistance";
 
 const cn = createCn("time-management");
 
@@ -77,6 +78,7 @@ export const TimeManagement = observer(({ vm }: Props) => {
       {vm.confirmLesson && <ConfirmLesson vm={vm.confirmLesson} />}
       {vm.confirmAction && <ConfirmAction vm={vm.confirmAction} />}
       {vm.confirmSpanChange && <ConfirmSpanChange vm={vm.confirmSpanChange} />}
+      {vm.confirmAssistance && <ConfirmAssistance vm={vm.confirmAssistance} />}
     </div>
   );
 });

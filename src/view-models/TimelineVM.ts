@@ -81,6 +81,7 @@ export class TimelineVM {
     start: number,
     end: number
   ) => Promise<boolean>;
+  private readonly _onAddAssistanceClick: (lessonId: number) => void;
   private _canDrawSpan = true;
   private _draggingSpan: DraggingSpan | null = null;
 
@@ -118,6 +119,10 @@ export class TimelineVM {
     }
   }
 
+  handleAddAssistanceClick(id: number) {
+    this._onAddAssistanceClick(id);
+  }
+
   constructor(params: {
     spans: Span[];
     onSpanDrawingEnd: (params: { start: number; end: number }) => Promise<void>;
@@ -128,11 +133,13 @@ export class TimelineVM {
       newStart: number,
       newEnd: number
     ) => Promise<boolean>;
+    onAddAssistanceClick: (lessonId: number) => void;
   }) {
     this._spans = params.spans;
     this._onSpanDrawingEnd = params.onSpanDrawingEnd;
     this._onSpanCrossClick = params.onSpanCrossClick ?? (() => {});
     this._onSpanChange = params.onSpanChange ?? (() => Promise.resolve(true));
+    this._onAddAssistanceClick = params.onAddAssistanceClick;
     makeObservable<TimelineVM, "_spans">(this, {
       _spans: observable,
       spans: computed,
