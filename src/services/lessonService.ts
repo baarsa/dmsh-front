@@ -1,8 +1,13 @@
 import { ILesson } from "../entities/ILesson";
 import { IEntityService } from "./shared";
 import { api } from "./__api";
+import {Stored} from "../models/shared";
 
-export const lessonService: IEntityService<ILesson> = {
+export interface LessonService extends IEntityService<ILesson> {
+  deleteAssistance: (id: number) => Promise<Stored<ILesson>>;
+}
+
+export const lessonService: LessonService = {
   async fetchAll() {
     return api.get("lesson/all");
   },
@@ -17,5 +22,8 @@ export const lessonService: IEntityService<ILesson> = {
   },
   async remove(id: number) {
     await api.delete(`lesson/${id}`);
+  },
+  async deleteAssistance(id: number) {
+    return api.get(`lesson/${id}/delete-assistance`);
   },
 };

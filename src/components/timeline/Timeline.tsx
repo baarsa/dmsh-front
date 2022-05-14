@@ -304,7 +304,17 @@ export const Timeline = observer(({ vm, className }: Props) => {
                   <div
                       className={cn("sub-item")}
                       style={getSubItemStyle(span, span.subItem)}
-                  />
+                  >
+                    <CloseIcon
+                        className={cn("sub-item-cross")}
+                        onClick={() => {
+                          vm.handleAssistanceCrossClick(span.id);
+                        }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                        }}
+                    />
+                  </div>
                 </Tooltip>
               }
             </div>

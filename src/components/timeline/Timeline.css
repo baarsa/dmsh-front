@@ -99,6 +99,20 @@
     bottom: 0;
     border-radius: 4px;
     background: var(--button-quaternary);
+
+    &-cross {
+      display: none !important;
+      position: absolute;
+      top: 50%;
+      right: 4px;
+      transform: translateY(-50%);
+      width: 12px !important;
+      height: 12px !important;
+    }
+
+    &:hover &-cross {
+      display: block !important;
+    }
   }
 
   &__labels {

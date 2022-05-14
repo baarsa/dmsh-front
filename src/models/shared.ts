@@ -26,9 +26,9 @@ export interface IEntityRepository<T, K> {
 export abstract class GenericEntityRepository<T, K>
   implements IEntityRepository<T, K>
 {
-  private _entityService: IEntityService<K>;
-  private createEntity: (props: Stored<K>) => Stored<T>;
-  private _entities: Record<number, Stored<T>> = {};
+  protected _entityService: IEntityService<K>;
+  protected createEntity: (props: Stored<K>) => Stored<T>;
+  protected _entities: Record<number, Stored<T>> = {};
   private _isSynchronized = false; // think if we need another cases (something was implicitly updated? added new child in relations?)
   private async _getAllEntities() {
     try {

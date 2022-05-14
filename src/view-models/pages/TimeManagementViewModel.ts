@@ -572,6 +572,20 @@ export class TimeManagementVM {
     })
   }
 
+  private _onLessonAssistanceCrossClick(idLesson: number) {
+    this._confirmAction = new ConfirmActionVM({
+      title: 'Удаление концертмейстера/иллюстратора',
+      text: 'Удалить концертмейстера/иллюстратора с данного урока?',
+      onConfirm: async () => {
+        await lessonRepository.deleteAssistance(idLesson);
+        this._confirmAction = null;
+      },
+      onClose: () => {
+        this._confirmAction = null;
+      }
+    })
+  }
+
   private _getSpanInfo(id: number, spanType: "lesson" | "extra") {
     if (spanType === "lesson") {
       const lesson = lessonRepository.entities[id];
@@ -643,6 +657,7 @@ export class TimeManagementVM {
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args),
       onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
+      onAssistanceCrossClick: (...args) => this._onLessonAssistanceCrossClick(...args),
     });
     this._takerTimeline = new TimelineVM({
       spans: [],
@@ -658,6 +673,7 @@ export class TimeManagementVM {
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), //fix text
       onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
+      onAssistanceCrossClick: (...args) => this._onLessonAssistanceCrossClick(...args),
     });
     this._commonTimeline = new TimelineVM({
       spans: [],
@@ -669,6 +685,7 @@ export class TimeManagementVM {
       },
       onSpanCrossClick: (...args) => this._onTimelineCrossClick(...args), // fix text?
       onAddAssistanceClick: (...args) => this._onLessonAddAssistanceClick(...args),
+      onAssistanceCrossClick: (...args) => this._onLessonAssistanceCrossClick(...args),
     });
     this._loadsInfo = new LoadsInfoVM(this._schedule);
     this._conflictsInfo = new ConflictsInfoVM(this._schedule, (weekDay) => {
