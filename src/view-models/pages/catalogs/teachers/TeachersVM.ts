@@ -2,6 +2,7 @@ import { autorun, makeAutoObservable } from "mobx";
 import { teacherRepository } from "../../../../models/teacher/TeacherRepository";
 import { UploadFileVM } from "../../../modals/UploadFileVM";
 import { fileUploadService } from "../../../../services/fileUploadService";
+import {addError} from "../../../../notifications";
 
 export class TeachersVM {
   get uploadFileModal(): UploadFileVM | null {
@@ -21,9 +22,13 @@ export class TeachersVM {
         this._uploadFileModal = null;
       },
       onConfirm: async (data) => {
-        await fileUploadService.uploadTeachers(data);
-        this._uploadFileModal = null;
-        document.location.reload();
+        try {
+          await fileUploadService.uploadTeachers(data);
+          this._uploadFileModal = null;
+          document.location.reload();
+        } catch (e) {
+          addError("Не удалось добавить данные. Проверьте формат загружаемого файла.");
+        }
       },
     });
   }

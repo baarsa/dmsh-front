@@ -2,6 +2,7 @@ import { autorun, makeAutoObservable } from "mobx";
 import { pupilRepository } from "../../../../models/pupil/PupilRepository";
 import { UploadFileVM } from "../../../modals/UploadFileVM";
 import { fileUploadService } from "../../../../services/fileUploadService";
+import { addError } from "../../../../notifications";
 
 export class PupilsVM {
   get uploadFileModal(): UploadFileVM | null {
@@ -27,9 +28,13 @@ export class PupilsVM {
         this._uploadFileModal = null;
       },
       onConfirm: async (data) => {
-        await fileUploadService.uploadPupils(data);
-        this._uploadFileModal = null;
-        document.location.reload();
+        try {
+          await fileUploadService.uploadPupils(data);
+          this._uploadFileModal = null;
+          document.location.reload();
+        } catch (e) {
+          addError("Не удалось добавить данные. Проверьте формат загружаемого файла.");
+        }
       },
     });
   }

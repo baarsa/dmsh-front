@@ -13,6 +13,12 @@ export const api = {
     });
     return response.json();
   },
+  async postFormData(url: string, data: FormData) {
+    return fetch(`${API_URL}${url}`, {
+      method: "POST",
+      body: data,
+    });
+  },
   async get(url: string) {
     const response = await fetch(`${API_URL}${url}`, {
       credentials: "include",

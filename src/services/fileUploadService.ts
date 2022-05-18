@@ -1,16 +1,10 @@
+import {api} from "./__api";
+
 export const fileUploadService = {
   uploadPupils(data: FormData) {
-    return new Promise<void>((res) => {
-      setTimeout(() => {
-        res();
-      }, 500);
-    });
+    return api.postFormData('pupil/upload', data);
   },
   uploadTeachers(data: FormData) {
-    return new Promise<void>((res) => {
-      setTimeout(() => {
-        res();
-      }, 500);
-    });
+    return api.postFormData('teacher/upload', data);
   },
 };
