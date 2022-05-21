@@ -9,6 +9,7 @@ type Props = {
   title: string;
   items: Array<{ id: number; text: string; link: string }>;
   children: ReactNode;
+  withFilter?: boolean;
   onUploadClick?: () => void;
 };
 
@@ -18,6 +19,7 @@ export const EntitySection = ({
   title,
   items,
   children,
+  withFilter = false,
   onUploadClick,
 }: Props) => {
   const [value, setValue] = useState("");
@@ -40,20 +42,24 @@ export const EntitySection = ({
               </Button>
             )}
           </div>
-          <TextField
-              className={cn("filter-input")}
-              spellCheck={ false }
-              sx={ {
-                color: 'white',
-                "& .MuiFormLabel-root-MuiInputLabel-root": { color: "white" },
-                "& .MuiInputBase-root-MuiOutlinedInput-root": { color: "white" },
-                "& .MuiOutlinedInput-notchedOutline": { borderColor: "white" },
-              }}
-              label={"Фильтр по ФИО"}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-          />
-          {items
+            {
+                withFilter && <TextField
+                    className={cn("filter-input")}
+                    spellCheck={false}
+                    sx={{
+                        color: 'white',
+                        "& .MuiFormLabel-root-MuiInputLabel-root": {color: "white"},
+                        "& .MuiInputBase-root-MuiOutlinedInput-root": {color: "white"},
+                        "& .MuiOutlinedInput-notchedOutline": {borderColor: "white"},
+                    }}
+                    label={"Фильтр по ФИО"}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                />
+            }
+          {
+              withFilter ?
+              items
               .filter(item => item.text.toLowerCase().includes(value.toLowerCase()))
               .map((item) => {
                 const isFiltering = value.length > 0;
@@ -70,7 +76,17 @@ export const EntitySection = ({
                       { isFiltering ? <>{ firstPart }<span className={cn("highlight")}>{ middlePart }</span>{ lastPart }</> : item.text }
                     </NavLink>
                 );
-              })}
+              })
+                  : items.map((item) => (
+                      <NavLink
+                          key={item.id}
+                          to={item.link}
+                          className={({ isActive }) => cn("item", { active: isActive })}
+                      >
+                          {item.text}
+                      </NavLink>
+                  ))
+          }
         </div>
         <div className={cn("children")}>{children}</div>
       </div>

@@ -20,6 +20,7 @@ export const Pupils = observer(() => {
         ...item,
         link: String(item.id),
       }))}
+      withFilter={ true }
       onUploadClick={() => {
         pupilsVM.openFileUploadModal();
       }}
