@@ -64,6 +64,12 @@ export class SubjectFormBuilder {
                 ? subjectRepository.addEntity(data)
                 : subjectRepository.updateEntity(subjectId, data);
             },
+      deleteHandler:
+          subjectId === undefined
+              ? undefined
+              : async () => {
+                return subjectRepository.removeEntity(subjectId);
+              },
     });
   }
 }

@@ -112,6 +112,10 @@ export class ScheduleFormVM implements IFormModel {
     }
   }
 
+  handleDelete() {
+    this._basicForm.handleDelete();
+  }
+
   onCopyButtonClick() {
     this._copyScheduleModal = new CopyScheduleModalVM({
       originalName: "2021-2022", //fix

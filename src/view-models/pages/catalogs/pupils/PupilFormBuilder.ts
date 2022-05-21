@@ -69,6 +69,12 @@ export class PupilFormBuilder {
                 ? pupilRepository.addEntity(data)
                 : pupilRepository.updateEntity(pupilId, data);
             },
+      deleteHandler:
+          pupilId === undefined
+              ? undefined
+              : async () => {
+                return pupilRepository.removeEntity(pupilId);
+              },
     });
   }
 }

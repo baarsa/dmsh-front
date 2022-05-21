@@ -54,6 +54,12 @@ export class GroupFormBuilder {
                 ? groupRepository.addEntity(data)
                 : groupRepository.updateEntity(groupId, data);
             },
+      deleteHandler:
+          groupId === undefined
+              ? undefined
+              : async () => {
+                return groupRepository.removeEntity(groupId);
+              },
     });
   }
 }

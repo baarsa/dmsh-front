@@ -47,6 +47,10 @@ export class ProgramFormModel implements IFormModel {
     }
   }
 
+  handleDelete() {
+      this._basicForm.handleDelete();
+  }
+
   private _basicForm: FormModel<{ name: string; specialityGroup: number }>;
   private readonly _yearPlans: YearPlansControlVM;
   private readonly _submitHandler?: (data: IProgram) => Promise<number>;

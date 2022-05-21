@@ -69,7 +69,8 @@ export const Form = observer(
             </Button>
             <Button
                 onClick={() => {
-                    navigate("");
+                    form.handleDelete();
+                    navigate("..");
                 }}
             >
                 Удалить
