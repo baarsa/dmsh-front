@@ -6,10 +6,11 @@ import {createCn} from "../../utils";
 import "./CopyScheduleModal.css";
 import { StringField } from "../fields/StringField";
 import { BooleanField } from "../fields/BooleanField";
+import {observer} from "mobx-react-lite";
 
 const cn = createCn("copy-schedule-modal");
 
-export const CopyScheduleModal = ({ vm }: { vm: CopyScheduleModalVM }) =>  (
+export const CopyScheduleModal = observer(({ vm }: { vm: CopyScheduleModalVM }) =>  (
     <Modal onClose={() => vm.handleClose()}>
         <div className={cn()}>
             <Typography className={cn("title")} variant="h5" component="div">
@@ -30,4 +31,4 @@ export const CopyScheduleModal = ({ vm }: { vm: CopyScheduleModalVM }) =>  (
             </div>
         </div>
     </Modal>
-);
+));

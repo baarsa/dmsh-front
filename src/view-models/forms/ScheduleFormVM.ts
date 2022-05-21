@@ -8,6 +8,7 @@ import { makeAutoObservable } from "mobx";
 import { ProgramEntity } from "../../models/program/ProgramEntity";
 import { programRepository } from "../../models/program/ProgramRepository";
 import {CopyScheduleModalVM} from "../modals/CopyScheduleModalVM";
+import {scheduleRepository} from "../../models/schedule/ScheduleRepository";
 
 type Parameters = {
   basicForm: FormModel<{ name: string }>;
@@ -117,10 +118,15 @@ export class ScheduleFormVM implements IFormModel {
   }
 
   onCopyButtonClick() {
+    const scheduleId = this._scheduleId;
+    if (scheduleId === undefined) {
+      throw new Error('Не найдено расписание');
+    }
     this._copyScheduleModal = new CopyScheduleModalVM({
-      originalName: "2021-2022", //fix
-      onConfirm: () => {
-        this._copyScheduleModal = null; //add handling
+      originalName: this._basicForm.fields.name.value,
+      onConfirm: async ({ name, nextYear }) => {
+        await scheduleRepository.copy(scheduleId, name, nextYear);
+        this._copyScheduleModal = null;
       },
       onClose: () => {
         this._copyScheduleModal = null;
@@ -145,6 +151,7 @@ export class ScheduleFormVM implements IFormModel {
   private _currentYear: number = 1;
   private _programs: Record<number, ProgramEntity> = {};
   private _isLoading: boolean = true;
+  private _scheduleId?: number;
 
   private _copyScheduleModal: CopyScheduleModalVM | null = null;
 
@@ -158,6 +165,7 @@ export class ScheduleFormVM implements IFormModel {
           year,
         })
       );
+      this._scheduleId = schedule.id;
     }
     this._isLoading = false; // todo use in view
   }

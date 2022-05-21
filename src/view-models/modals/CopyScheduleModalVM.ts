@@ -1,6 +1,7 @@
 import { ModalVM } from "./ModalVM";
 import {StringFieldVM} from "../fields/StringField";
 import {BooleanFieldVM} from "../fields/BooleanField";
+import { computed, makeObservable } from "mobx";
 
 type SubmitParameters = {
     name: string;
@@ -43,5 +44,8 @@ export class CopyScheduleModalVM extends ModalVM {
         this._originalName = originalName;
         this._name.value = `${originalName} — копия`;
         this._onConfirm = onConfirm;
+        makeObservable<CopyScheduleModalVM>(this, {
+            isValid: computed,
+        });
     }
 }
