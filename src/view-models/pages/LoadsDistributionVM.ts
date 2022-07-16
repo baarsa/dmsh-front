@@ -8,7 +8,6 @@ import { autorun, makeAutoObservable } from "mobx";
 import { loadRepository } from "../../models/load/LoadRepository";
 import { subjectRepository } from "../../models/subject/SubjectRepository";
 import { scheduleContextStore } from "../../models/schedule-context-store/ScheduleContextStore";
-import {ProgramEntity} from "../../models/program/ProgramEntity";
 
 type PlanItem = {
   subjectName: string;
@@ -20,6 +19,7 @@ type PlanItem = {
 type PupilItem = {
   name: string;
   year: number;
+  program: number;
   planItems: PlanItem[];
 };
 
@@ -85,9 +85,10 @@ export class LoadsDistributionVM {
   }
 
   get filteredPupilItems(): PupilItem[] {
-    return this._selectedYear === 0
-      ? this.pupilItems
-      : this.pupilItems.filter((item) => item.year === this._selectedYear);
+    return this.pupilItems.filter((item) => (
+        (this._selectedYear === 0 ? true : item.year === this._selectedYear) &&
+        (this._selectedProgram === 0 ? true : item.program === this._selectedProgram)
+    ));
   }
 
   get pupilItems(): PupilItem[] {
@@ -171,6 +172,7 @@ export class LoadsDistributionVM {
         return {
           name: currentPupil.name,
           year: pupilYear,
+          program: program.id,
           planItems: [
             {
               subjectName:
@@ -251,6 +253,13 @@ export class LoadsDistributionVM {
       teacherRepository.getAllEntities(),
       subjectRepository.getAllEntities(),
     ]);
+    this._programOptions = [
+        ...this._programOptions,
+        ...Object.values(programRepository.entities).map(program => ({
+          value: program.id,
+          text: program.name,
+        }))
+    ];
     this._isLoading = false;
     autorun(() => this._calculateItems());
   }

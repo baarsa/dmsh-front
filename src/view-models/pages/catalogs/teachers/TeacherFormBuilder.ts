@@ -65,6 +65,12 @@ export class TeacherFormBuilder {
                 ? teacherRepository.addEntity(data)
                 : teacherRepository.updateEntity(teacherId, data);
             },
+      deleteHandler:
+          teacherId === undefined
+              ? undefined
+              : async () => {
+                return teacherRepository.removeEntity(teacherId);
+              },
     });
   }
 }

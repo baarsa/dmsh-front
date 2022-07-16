@@ -6,9 +6,15 @@
   &__controls {
     display: flex;
     align-items: center;
-    gap: var(--gap-ml);
+    justify-content: space-between;
     margin-top: var(--gap-m);
     margin-bottom: var(--gap-l);
+  }
+
+  &__right-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-ml);
   }
 
   &__taker-radio {

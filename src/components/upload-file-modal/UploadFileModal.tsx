@@ -19,6 +19,7 @@ export const UploadFileModal = observer(({ vm }: { vm: UploadFileVM }) => {
           <div className={cn('help')}>Требуемый формат данных в файле<QuestionMark fontSize="small" /></div>
         <input
           type="file"
+          accept=".xlsx,.csv"
           onChange={(e) => {
             vm.handleFileChange(
               e.target.files === null ? null : e.target.files[0]

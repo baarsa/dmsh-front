@@ -7,6 +7,9 @@ import { Button } from "../../button/Button";
 import { createCn } from "../../../utils";
 import "./ScheduleForm.css";
 import { CrossButton } from "../../cross-button/CrossButton";
+import {Menu, MenuItem} from "@mui/material";
+import React, {useState} from "react";
+import {CopyScheduleModal} from "../../copy-schedule-modal/CopyScheduleModal";
 
 type Props = {
   vm: ScheduleFormVM;
@@ -18,7 +21,14 @@ const cn = createCn("schedule-form");
 
 export const ScheduleForm = observer(({ vm, onSubmit, onCancel }: Props) => {
   return (
-    <Form form={vm} onSubmit={onSubmit} onCancel={onCancel}>
+    <Form
+        form={vm}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+        additionalButtons={
+                <Button onClick={() => { vm.onCopyButtonClick() }}>Копировать...</Button>
+        }
+    >
       <div className={cn()}>
         {vm.pupilsYears.map(({ id, name, year }) => (
           <div className={cn("pupil-item")} key={id}>
@@ -60,6 +70,7 @@ export const ScheduleForm = observer(({ vm, onSubmit, onCancel }: Props) => {
           </>
         )}
       </div>
+      { vm.copyScheduleModal && <CopyScheduleModal vm={vm.copyScheduleModal} /> }
     </Form>
   );
 });

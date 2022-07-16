@@ -1,0 +1,21 @@
+.copy-schedule-modal {
+    &__title {
+        margin-bottom: var(--gap-ml) !important;
+    }
+
+    &__info {
+        white-space: pre-line;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-s);
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--gap-l);
+    }
+}

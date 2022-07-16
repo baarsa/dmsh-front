@@ -25,6 +25,7 @@ export interface IFormModel {
   isValid(): boolean;
   handleSubmit(): Promise<number>;
   handleCancel(): void;
+  handleDelete(): void;
 }
 
 export class FormModel<T extends Record<string, unknown>>
@@ -50,6 +51,7 @@ export class FormModel<T extends Record<string, unknown>>
   }
   private readonly submitHandler?: (data: T) => Promise<number>;
   private readonly cancelHandler?: () => void;
+  private readonly deleteHandler?: () => void;
   async handleSubmit() {
     if (this.submitHandler === undefined) {
       throw new Error("Обработчик формы не определен");
@@ -61,12 +63,18 @@ export class FormModel<T extends Record<string, unknown>>
       this.cancelHandler();
     }
   }
+  handleDelete() {
+    if (this.deleteHandler !== undefined) {
+      this.deleteHandler();
+    }
+  }
   constructor(props: {
     title: string;
     mode: FormMode;
     fields: RelevantFields<T>;
     mapFieldsToProps: (fields: RelevantFields<T>) => T;
     submitHandler?: (data: T) => Promise<number>;
+    deleteHandler?: () => Promise<void>;
     cancelHandler?: () => void;
   }) {
     this.title = props.title;
@@ -76,6 +84,7 @@ export class FormModel<T extends Record<string, unknown>>
     this.mapFieldsToProps = props.mapFieldsToProps;
     this.submitHandler = props.submitHandler;
     this.cancelHandler = props.cancelHandler;
+    this.deleteHandler = props.deleteHandler;
     makeAutoObservable(this);
   }
 }

@@ -7,6 +7,8 @@ import { ScheduleEntity } from "../../models/schedule/ScheduleEntity";
 import { makeAutoObservable } from "mobx";
 import { ProgramEntity } from "../../models/program/ProgramEntity";
 import { programRepository } from "../../models/program/ProgramRepository";
+import {CopyScheduleModalVM} from "../modals/CopyScheduleModalVM";
+import {scheduleRepository} from "../../models/schedule/ScheduleRepository";
 
 type Parameters = {
   basicForm: FormModel<{ name: string }>;
@@ -16,6 +18,9 @@ type Parameters = {
 };
 
 export class ScheduleFormVM implements IFormModel {
+  get copyScheduleModal(): CopyScheduleModalVM | null {
+    return this._copyScheduleModal;
+  }
   get currentYear(): number {
     return this._currentYear;
   }
@@ -55,7 +60,7 @@ export class ScheduleFormVM implements IFormModel {
   }
 
   get pupilsYears() {
-    return this._pupilsYears.map(({ pupil, year }) => ({
+    return this._pupilsYears.slice().sort((a, b) => a.year - b.year).map(({ pupil, year }) => ({
       id: pupil.id,
       name: pupil.name,
       year,
@@ -108,6 +113,27 @@ export class ScheduleFormVM implements IFormModel {
     }
   }
 
+  handleDelete() {
+    this._basicForm.handleDelete();
+  }
+
+  onCopyButtonClick() {
+    const scheduleId = this._scheduleId;
+    if (scheduleId === undefined) {
+      throw new Error('Не найдено расписание');
+    }
+    this._copyScheduleModal = new CopyScheduleModalVM({
+      originalName: this._basicForm.fields.name.value,
+      onConfirm: async ({ name, nextYear }) => {
+        await scheduleRepository.copy(scheduleId, name, nextYear);
+        this._copyScheduleModal = null;
+      },
+      onClose: () => {
+        this._copyScheduleModal = null;
+      }
+    })
+  }
+
   private _basicForm: FormModel<{ name: string }>;
   private readonly _submitHandler?: (data: ISchedule) => Promise<number>;
   private readonly _cancelHandler?: () => void;
@@ -125,6 +151,9 @@ export class ScheduleFormVM implements IFormModel {
   private _currentYear: number = 1;
   private _programs: Record<number, ProgramEntity> = {};
   private _isLoading: boolean = true;
+  private _scheduleId?: number;
+
+  private _copyScheduleModal: CopyScheduleModalVM | null = null;
 
   private async _init(schedule?: ScheduleEntity) {
     this._programs = await programRepository.getAllEntities();
@@ -136,6 +165,7 @@ export class ScheduleFormVM implements IFormModel {
           year,
         })
       );
+      this._scheduleId = schedule.id;
     }
     this._isLoading = false; // todo use in view
   }

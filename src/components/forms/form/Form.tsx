@@ -12,12 +12,13 @@ type Props = {
   onSubmit?: (newId: number) => void;
   onCancel?: () => void;
   children?: ReactNode;
+  additionalButtons?: ReactNode;
 };
 
 const cn = createCn("form");
 
 export const Form = observer(
-  ({ form, onSubmit, onCancel, children }: Props) => {
+  ({ form, onSubmit, onCancel, children, additionalButtons }: Props) => {
     const navigate = useNavigate();
     return (
       <div className={cn()}>
@@ -55,6 +56,10 @@ export const Form = observer(
             </>
           )}
           {form.mode === "view" && (
+            <>
+                {
+                    additionalButtons
+                }
             <Button
               onClick={() => {
                 navigate("edit");
@@ -62,6 +67,15 @@ export const Form = observer(
             >
               Редактировать
             </Button>
+            <Button
+                onClick={() => {
+                    form.handleDelete();
+                    navigate("..");
+                }}
+            >
+                Удалить
+            </Button>
+            </>
           )}
         </div>
       </div>

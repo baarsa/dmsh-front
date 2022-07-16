@@ -34,6 +34,12 @@ export class ScheduleFormBuilder {
       mapFieldsToProps: (fields) => ({
         name: fields.name.value,
       }),
+      deleteHandler:
+          scheduleId === undefined
+              ? undefined
+              : async () => {
+                return scheduleRepository.removeEntity(scheduleId);
+              },
     });
     return new ScheduleFormVM({
       basicForm,

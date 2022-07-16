@@ -35,6 +35,7 @@ export const TimeManagement = observer(({ vm }: Props) => {
           onChange={(values) => vm.handleDayChange(values[0])}
           options={vm.dayOptions}
         />
+      <div className={cn('right-controls')}>
         <LinkField field={vm.teacherField} />
         <RadioGroup
           className={cn("taker-radio")}
@@ -48,6 +49,7 @@ export const TimeManagement = observer(({ vm }: Props) => {
         </RadioGroup>
         {vm.lessonTakerType === "pupil" && <LinkField field={vm.pupilField} />}
         {vm.lessonTakerType === "group" && <LinkField field={vm.groupField} />}
+      </div>
       </div>
       <div className={cn("timeline-container")}>
         <div className={cn("timeline-label")}>

@@ -52,6 +52,12 @@ export class ProgramFormBuilder {
         name: fields.name.value,
         specialityGroup: fields.specialityGroup.getValuesIds()[0],
       }),
+      deleteHandler:
+          programId === undefined
+              ? undefined
+              : async () => {
+                return programRepository.removeEntity(programId);
+              },
     });
     return new ProgramFormModel({
       basicForm,

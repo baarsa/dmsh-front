@@ -5,7 +5,6 @@ import { IPupil } from "../../entities/IPupil";
 
 class PupilRepository extends GenericEntityRepository<PupilEntity, IPupil> {
   constructor() {
-    //maybe: as we use only one service/creator per entity type
     super({
       entityService: pupilService,
       createEntity: createPupilEntity,
